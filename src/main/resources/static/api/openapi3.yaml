@@ -23,8 +23,48 @@ paths:
       responses:
         "204":
           description: "204"
+  /auth/logout:
+    post:
+      tags:
+      - auth
+      operationId: 로그아웃하기
+      responses:
+        "204":
+          description: "204"
+  /auth/register:
+    post:
+      tags:
+      - auth
+      operationId: 회원가입하기
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/auth-register1438833550'
+            examples:
+              회원가입하기:
+                value: "{\"id\":\"id\",\"password\":\"password\",\"region\":\"EMPTY\"\
+                  ,\"company\":\"company\"}"
+      responses:
+        "201":
+          description: "201"
 components:
   schemas:
+    auth-register1438833550:
+      type: object
+      properties:
+        password:
+          type: string
+          description: "비밀번호, 공백 제외 8 ~ 30"
+        company:
+          type: string
+          description: 회사
+        id:
+          type: string
+          description: "아이디, 공백 제외 6 ~ 20"
+        region:
+          type: string
+          description: 지역
     auth-login411925107:
       type: object
       properties:
