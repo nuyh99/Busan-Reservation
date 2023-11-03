@@ -1,0 +1,29 @@
+version: '3.1'
+
+services:
+  db:
+    container_name: busan_db
+    image: mysql
+    ports:
+      - '20000:3306'
+    volumes:
+      - busan_db:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: busan
+      MYSQL_ROOT_PASSWORD: password
+      DEFAULT_CHARACTER_SET: utf8mb4
+      CHARACTER_SET_SERVER: utf8mb4
+      COLLATION_SERVER: utf8mb4_general_ci
+      TZ: Asia/Seoul
+
+  spring:
+    build: .
+    ports:
+      - '80:8080'
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://busan_db:3306/busan
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: password
+
+volumes:
+  busan_db:

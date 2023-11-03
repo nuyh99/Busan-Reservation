@@ -1,0 +1,36 @@
+openapi: 3.0.1
+info:
+  title: 회의실 대관 서비스 API
+  description: 회의실 대관 서비스입니다.
+  version: 1.0.0
+servers:
+- url: http://localhost/
+tags: []
+paths:
+  /auth/login:
+    post:
+      tags:
+      - auth
+      operationId: 로그인하기
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/auth-login411925107'
+            examples:
+              로그인하기:
+                value: "{\"id\":\"id\",\"password\":\"password\"}"
+      responses:
+        "204":
+          description: "204"
+components:
+  schemas:
+    auth-login411925107:
+      type: object
+      properties:
+        password:
+          type: string
+          description: 비밀번호
+        id:
+          type: string
+          description: 아이디
