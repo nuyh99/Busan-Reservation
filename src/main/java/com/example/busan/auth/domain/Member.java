@@ -1,5 +1,6 @@
 package com.example.busan.auth.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -19,10 +20,14 @@ public class Member {
     public static final int PASSWORD_MAXIMUM_LENGTH = 30;
 
     @Id
+    @Column(nullable = false)
     private String id;
+    @Column(nullable = false)
     private String password;
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Region region;
+    @Column(nullable = false)
     private String company;
 
     protected Member() {
