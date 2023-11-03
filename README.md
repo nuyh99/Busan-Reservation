@@ -1,9 +1,8 @@
-## 로컬에 스프링 띄우기
+# 로컬에 스프링 띄우기
 
-최상위 디렉토리(`/busan`)에서
+1. 터미널에서 프로젝트 최상위 디렉토리(`/busan`)로 이동한다.
+2. 아래의 명령어를 입력한다.
 
 ```bash
-sudo docker compose up -d
-docker build -t busan/app .
-docker run -p 80:8080 
+sudo docker compose up
 ```
