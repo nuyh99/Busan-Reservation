@@ -29,14 +29,16 @@ public class Member {
     private Region region;
     @Column(nullable = false)
     private String company;
+    private Role role;
 
     protected Member() {
     }
 
-    public Member(final String id, final String password, final Region region, final String company) {
+    public Member(final String id, final String password, final Region region, final String company,
+                  final PasswordEncoder passwordEncoder) {
         validate(id, password, region, company);
         this.id = id;
-        this.password = password;
+        this.password = passwordEncoder.encode(password);
         this.region = region;
         this.company = company;
     }
@@ -56,6 +58,10 @@ public class Member {
         Assert.notNull(company, "회사가 필요합니다.");
     }
 
+    public void checkPassword(final String password, final PasswordEncoder passwordEncoder) {
+        passwordEncoder.validateEquals(password, this.password);
+    }
+
     public String getId() {
         return id;
     }
@@ -70,5 +76,9 @@ public class Member {
 
     public String getCompany() {
         return company;
+    }
+
+    public Role getRole() {
+        return role;
     }
 }
