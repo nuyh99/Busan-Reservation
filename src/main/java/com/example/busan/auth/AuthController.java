@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthController {
 
+    public static final String AUTHORIZATION = "Authorzation";
+
     private final AuthService authService;
 
     public AuthController(final AuthService authService) {
@@ -22,7 +24,13 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<Void> login(@RequestBody final LoginRequest request, final HttpSession session) {
         final Auth auth = authService.login(request);
-        session.setAttribute(auth.id(), auth);
+        session.setAttribute(AUTHORIZATION, auth);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(final HttpSession session) {
+        session.removeAttribute(AUTHORIZATION);
         return ResponseEntity.noContent().build();
     }
 }
