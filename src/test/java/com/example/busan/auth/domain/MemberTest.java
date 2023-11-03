@@ -1,5 +1,7 @@
 package com.example.busan.auth.domain;
 
+import com.example.busan.member.domain.Member;
+import com.example.busan.member.domain.Region;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

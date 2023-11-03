@@ -1,6 +1,6 @@
 package com.example.busan.auth;
 
-import com.example.busan.auth.domain.Auth;
+import com.example.busan.auth.dto.Authentication;
 import com.example.busan.auth.dto.LoginRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthController {
 
-    public static final String AUTHORIZATION = "Authorzation";
+    public static final String AUTHORIZATION = "Authorization";
 
     private final AuthService authService;
 
@@ -23,8 +23,8 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<Void> login(@RequestBody final LoginRequest request, final HttpSession session) {
-        final Auth auth = authService.login(request);
-        session.setAttribute(AUTHORIZATION, auth);
+        final Authentication authentication = authService.login(request);
+        session.setAttribute(AUTHORIZATION, authentication);
         return ResponseEntity.noContent().build();
     }
 

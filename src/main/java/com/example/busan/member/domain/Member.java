@@ -1,5 +1,6 @@
-package com.example.busan.auth.domain;
+package com.example.busan.member.domain;
 
+import com.example.busan.auth.domain.PasswordEncoder;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

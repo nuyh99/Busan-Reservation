@@ -1,11 +1,11 @@
 package com.example.busan.auth;
 
-import com.example.busan.auth.domain.Auth;
-import com.example.busan.auth.domain.Member;
 import com.example.busan.auth.domain.PasswordEncoder;
-import com.example.busan.auth.domain.Region;
-import com.example.busan.auth.domain.repository.MemberRepository;
+import com.example.busan.auth.dto.Authentication;
 import com.example.busan.auth.dto.LoginRequest;
+import com.example.busan.member.domain.Member;
+import com.example.busan.member.domain.MemberRepository;
+import com.example.busan.member.domain.Region;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
-class AuthServiceTest {
+class AuthenticationServiceTest {
 
     @Autowired
     private AuthService authService;
@@ -34,7 +34,7 @@ class AuthServiceTest {
         final LoginRequest request = new LoginRequest("ididididid", "password1234");
 
         //when
-        final Auth login = authService.login(request);
+        final Authentication login = authService.login(request);
 
         //then
         assertThat(login.id()).isEqualTo("ididididid");

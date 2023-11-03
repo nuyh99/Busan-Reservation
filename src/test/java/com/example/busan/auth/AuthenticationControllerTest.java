@@ -1,9 +1,9 @@
 package com.example.busan.auth;
 
 import com.example.busan.ApiTest;
-import com.example.busan.auth.domain.Auth;
-import com.example.busan.auth.domain.Role;
+import com.example.busan.auth.dto.Authentication;
 import com.example.busan.auth.dto.LoginRequest;
+import com.example.busan.member.domain.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,7 +22,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-class AuthControllerTest extends ApiTest {
+class AuthenticationControllerTest extends ApiTest {
 
     @MockBean
     private AuthService authService;
@@ -37,9 +37,9 @@ class AuthControllerTest extends ApiTest {
     @DisplayName("로그인하기")
     void login() throws Exception {
         //given
-        final Auth auth = new Auth("id", Role.USER);
+        final Authentication authentication = new Authentication("id", Role.USER);
         given(authService.login(any()))
-                .willReturn(auth);
+                .willReturn(authentication);
         final String request = objectMapper.writeValueAsString(new LoginRequest("id", "password"));
 
         //when
@@ -59,15 +59,15 @@ class AuthControllerTest extends ApiTest {
         //then
         assertSoftly(softAssertions -> {
             softAssertions.assertThat(response.getStatus()).isEqualTo(HttpStatus.NO_CONTENT.value());
-            softAssertions.assertThat(httpSession.getAttribute(AuthController.AUTHORIZATION)).isEqualTo(auth);
+            softAssertions.assertThat(httpSession.getAttribute(AuthController.AUTHORIZATION)).isEqualTo(authentication);
         });
     }
 
     @Test
     @DisplayName("로그아웃 하기")
     void logout() throws Exception {
-        final Auth auth = new Auth("id", Role.USER);
-        httpSession.setAttribute(AuthController.AUTHORIZATION, auth);
+        final Authentication authentication = new Authentication("id", Role.USER);
+        httpSession.setAttribute(AuthController.AUTHORIZATION, authentication);
 
         //when
         final MockHttpServletResponse response = mockMvc.perform(
