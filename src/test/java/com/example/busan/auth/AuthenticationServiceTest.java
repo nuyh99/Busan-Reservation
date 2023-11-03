@@ -1,11 +1,14 @@
 package com.example.busan.auth;
 
+import com.example.busan.DatabaseCleaner;
 import com.example.busan.auth.domain.PasswordEncoder;
 import com.example.busan.auth.dto.Authentication;
 import com.example.busan.auth.dto.LoginRequest;
+import com.example.busan.auth.dto.RegisterRequest;
 import com.example.busan.member.domain.Member;
 import com.example.busan.member.domain.MemberRepository;
 import com.example.busan.member.domain.Region;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,14 @@ class AuthenticationServiceTest {
     private MemberRepository memberRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private DatabaseCleaner databaseCleaner;
+
+    @BeforeEach
+    void initDatabase() {
+        databaseCleaner.truncate();
+    }
 
     @Test
     @DisplayName("로그인하기")
@@ -49,5 +60,18 @@ class AuthenticationServiceTest {
         //when, then
         assertThatThrownBy(() -> authService.login(request))
                 .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    @DisplayName("회원가입 하기")
+    void register() {
+        //given
+        final RegisterRequest request = new RegisterRequest("idididi", "password1234", Region.EMPTY, "company");
+
+        //when
+        authService.register(request);
+
+        //then
+        assertThat(memberRepository.findAll()).hasSize(1);
     }
 }

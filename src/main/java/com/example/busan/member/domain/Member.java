@@ -30,6 +30,7 @@ public class Member {
     private Region region;
     @Column(nullable = false)
     private String company;
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     protected Member() {
@@ -42,6 +43,7 @@ public class Member {
         this.password = passwordEncoder.encode(password);
         this.region = region;
         this.company = company;
+        this.role = Role.USER;
     }
 
     private void validate(final String id, final String password, final Region region, final String company) {

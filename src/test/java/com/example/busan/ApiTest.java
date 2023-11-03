@@ -23,6 +23,8 @@ public abstract class ApiTest {
     protected MockMvc mockMvc;
     @Autowired
     protected ObjectMapper objectMapper;
+    @Autowired
+    private DatabaseCleaner databaseCleaner;
 
     @BeforeEach
     void setUp(final WebApplicationContext webApplicationContext,
@@ -30,5 +32,10 @@ public abstract class ApiTest {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .apply(documentationConfiguration(restDocumentation))
                 .build();
+    }
+
+    @BeforeEach
+    void initDatabase() {
+        databaseCleaner.truncate();
     }
 }

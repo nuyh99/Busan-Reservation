@@ -3,6 +3,7 @@ package com.example.busan.auth;
 import com.example.busan.auth.domain.PasswordEncoder;
 import com.example.busan.auth.dto.Authentication;
 import com.example.busan.auth.dto.LoginRequest;
+import com.example.busan.auth.dto.RegisterRequest;
 import com.example.busan.member.domain.Member;
 import com.example.busan.member.domain.MemberRepository;
 import org.springframework.stereotype.Service;
@@ -26,5 +27,17 @@ public class AuthService {
         passwordEncoder.validateEquals(request.password(), member.getPassword());
 
         return Authentication.from(member);
+    }
+
+    @Transactional
+    public void register(final RegisterRequest request) {
+        final Member member = new Member(
+                request.id(),
+                request.password(),
+                request.region(),
+                request.company(),
+                passwordEncoder);
+
+        memberRepository.save(member);
     }
 }

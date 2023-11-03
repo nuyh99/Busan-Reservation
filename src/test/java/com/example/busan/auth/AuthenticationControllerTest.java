@@ -3,6 +3,9 @@ package com.example.busan.auth;
 import com.example.busan.ApiTest;
 import com.example.busan.auth.dto.Authentication;
 import com.example.busan.auth.dto.LoginRequest;
+import com.example.busan.auth.dto.RegisterRequest;
+import com.example.busan.member.domain.Member;
+import com.example.busan.member.domain.Region;
 import com.example.busan.member.domain.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,6 +17,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockHttpSession;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.given;
@@ -82,5 +86,30 @@ class AuthenticationControllerTest extends ApiTest {
             softAssertions.assertThat(response.getStatus()).isEqualTo(HttpStatus.NO_CONTENT.value());
             softAssertions.assertThat(httpSession.getAttribute(AuthController.AUTHORIZATION)).isNull();
         });
+    }
+
+    @Test
+    @DisplayName("회원가입 하기")
+    void register() throws Exception {
+        //given
+        final String request = objectMapper.writeValueAsString(
+                new RegisterRequest("id", "password", Region.EMPTY, "company"));
+
+        //when
+        final MockHttpServletResponse response = mockMvc.perform(post("/auth/register")
+                        .content(request)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("회원가입하기",
+                        requestFields(
+                                fieldWithPath("id").description("아이디, 공백 제외 " + Member.ID_MINIMUM_LENGTH + " ~ " + Member.ID_MAXIMUM_LENGTH),
+                                fieldWithPath("password").description("비밀번호, 공백 제외 " + Member.PASSWORD_MINIMUM_LENGTH + " ~ " + Member.PASSWORD_MAXIMUM_LENGTH),
+                                fieldWithPath("region").description("지역"),
+                                fieldWithPath("company").description("회사"))))
+                .andReturn()
+                .getResponse();
+
+        //then
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.CREATED.value());
     }
 }
