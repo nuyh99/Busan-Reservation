@@ -17,6 +17,8 @@ services:
       TZ: Asia/Seoul
 
   spring:
+    depends_on:
+      - db
     build: .
     ports:
       - '80:8080'
