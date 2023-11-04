@@ -52,7 +52,7 @@ class AuthenticationServiceTest {
         final Authentication login = authService.login(request);
 
         //then
-        assertThat(login.email()).isEqualTo("ididididid");
+        assertThat(login.email()).isEqualTo("test@naver.com");
     }
 
     @Test
@@ -70,9 +70,9 @@ class AuthenticationServiceTest {
     @DisplayName("회원가입 하기")
     void register() {
         //given
-        given(phoneAuthenticator.getPhone("idididi"))
+        given(phoneAuthenticator.getPhone("test@naver.com"))
                 .willReturn("01012345678");
-        final RegisterRequest request = new RegisterRequest("idididi", "password1234", "name", Region.GANGNEUNG, "company");
+        final RegisterRequest request = new RegisterRequest("test@naver.com", "password1234", "name", Region.GANGNEUNG, "company");
 
         //when
         authService.register(request);
@@ -95,7 +95,7 @@ class AuthenticationServiceTest {
     }
 
     private Member createMember() {
-        final Member member = new Member("ididididid", "name", "password1234", Region.GANGNEUNG, "01012345678", "부경대", passwordEncoder);
+        final Member member = new Member("test@naver.com", "name", "password1234", Region.GANGNEUNG, "01012345678", "부경대", passwordEncoder);
         return memberRepository.save(member);
     }
 }

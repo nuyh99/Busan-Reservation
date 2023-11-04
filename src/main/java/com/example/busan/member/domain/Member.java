@@ -58,16 +58,14 @@ public class Member {
         this.name = name;
     }
 
-    private void validate(final String id,
+    private void validate(final String email,
                           final String name,
                           final String password,
                           final String phone,
                           final Region region,
                           final String company) {
-        if (isBlank(id) || containsWhitespace(id) ||
-                id.length() < ID_MINIMUM_LENGTH ||
-                id.length() > ID_MAXIMUM_LENGTH) {
-            throw new IllegalArgumentException(format("이메일은 공백을 제외하고 %d ~ %d 글자입니다.", ID_MINIMUM_LENGTH, ID_MAXIMUM_LENGTH));
+        if (isBlank(email) || containsWhitespace(email) || !email.matches(EMAIL_REGEX)) {
+            throw new IllegalArgumentException("이메일 형식이 필요합니다.");
         }
         if (isBlank(password) || containsWhitespace(password) ||
                 password.length() < PASSWORD_MINIMUM_LENGTH ||
