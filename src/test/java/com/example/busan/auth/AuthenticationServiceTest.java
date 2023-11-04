@@ -39,7 +39,7 @@ class AuthenticationServiceTest {
     @DisplayName("로그인하기")
     void login() {
         //given
-        final Member member = new Member("ididididid", "password1234", Region.EMPTY, "부경대", passwordEncoder);
+        final Member member = new Member("ididididid", "password1234", Region.GANGNEUNG, "부경대", passwordEncoder);
         memberRepository.save(member);
 
         final LoginRequest request = new LoginRequest("ididididid", "password1234");
@@ -66,7 +66,7 @@ class AuthenticationServiceTest {
     @DisplayName("회원가입 하기")
     void register() {
         //given
-        final RegisterRequest request = new RegisterRequest("idididi", "password1234", Region.EMPTY, "company");
+        final RegisterRequest request = new RegisterRequest("idididi", "password1234", Region.GANGNEUNG, "company");
 
         //when
         authService.register(request);

@@ -93,7 +93,7 @@ class AuthenticationControllerTest extends ApiTest {
     void register() throws Exception {
         //given
         final String request = objectMapper.writeValueAsString(
-                new RegisterRequest("id", "password", Region.EMPTY, "company"));
+                new RegisterRequest("id", "password", Region.GANGNEUNG, "company"));
 
         //when
         final MockHttpServletResponse response = mockMvc.perform(post("/auth/register")

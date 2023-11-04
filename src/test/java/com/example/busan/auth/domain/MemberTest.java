@@ -17,7 +17,7 @@ class MemberTest {
     @ValueSource(strings = {"", "  ", "         ", "tests  ", "dslfjaskldfjklsafjlkasjfkleajsklefjsaklfjkl"})
     @DisplayName("아이디 검증")
     void validateId(final String invalidId) {
-        assertThatThrownBy(() -> new Member(invalidId, "password", Region.EMPTY, "company", passwordEncoder))
+        assertThatThrownBy(() -> new Member(invalidId, "password", Region.GANGNEUNG, "company", passwordEncoder))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -25,7 +25,7 @@ class MemberTest {
     @ValueSource(strings = {"", "  ", "         ", "testsfd  ", "dslfjaskldfjklsafjlkasjfkleajsklefjsaklfjkl"})
     @DisplayName("비밀번호 검증")
     void validatePassword(final String invalidPassword) {
-        assertThatThrownBy(() -> new Member("idididid", invalidPassword, Region.EMPTY, "company", passwordEncoder))
+        assertThatThrownBy(() -> new Member("idididid", invalidPassword, Region.GANGNEUNG, "company", passwordEncoder))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -39,7 +39,7 @@ class MemberTest {
     @Test
     @DisplayName("회사가 없으면 예외가 발생한다")
     void validateCompany() {
-        assertThatThrownBy(() -> new Member("idididid", "passwordpasswo", Region.EMPTY, null, passwordEncoder))
+        assertThatThrownBy(() -> new Member("idididid", "passwordpasswo", Region.GANGNEUNG, null, passwordEncoder))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -47,7 +47,7 @@ class MemberTest {
     @DisplayName("비밀번호가 다르면 예외가 발생한다")
     void checkPassword() {
         //given
-        final Member member = new Member("ididididid", "password1234", Region.EMPTY, "company", passwordEncoder);
+        final Member member = new Member("ididididid", "password1234", Region.GANGNEUNG, "company", passwordEncoder);
 
         //when, then
         assertThatThrownBy(() -> member.checkPassword("password12345", passwordEncoder))
