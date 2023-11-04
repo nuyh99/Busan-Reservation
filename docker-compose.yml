@@ -26,6 +26,9 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://busan_db:3306/busan
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: password
+      PHONE_KEY: testesttstset
+      PHONE_SECRET: testsetsetsetstsetsetsets
+      PHONE_SENDER: 01012345678
 
 volumes:
   busan_db:
