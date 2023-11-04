@@ -11,3 +11,7 @@ spring:
     url: jdbc:mysql://localhost:20000/busan
     username: root
     password: password
+
+phone:
+  key: testesttstset
+  secret: testsetsetsetstsetsetsets

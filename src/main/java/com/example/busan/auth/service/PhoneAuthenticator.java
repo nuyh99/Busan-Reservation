@@ -1,7 +1,9 @@
 package com.example.busan.auth.service;
 
 public interface PhoneAuthenticator {
-    void authenticate(String phone);
+    void sendCode(String phone);
+
+    void authenticate(String code);
 
     void isAuthenticated(String phone);
 }

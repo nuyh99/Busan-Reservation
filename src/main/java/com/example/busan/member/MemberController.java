@@ -63,7 +63,7 @@ public class MemberController {
     @PutMapping("/phone")
     public ResponseEntity<Void> updatePhone(@RequestBody final UpdatePhoneRequest request,
                                             @Authorized final Authentication authentication) {
-        phoneAuthenticator.authenticate(request.phone());
+        phoneAuthenticator.sendCode(request.phone());
         memberService.updatePhone(authentication.email(), request.phone());
         return ResponseEntity.noContent().build();
     }
