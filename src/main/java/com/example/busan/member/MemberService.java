@@ -22,14 +22,14 @@ public class MemberService {
     }
 
     @Transactional
-    public void register(final RegisterRequest request, final String phone) {
+    public void register(final RegisterRequest request) {
         final Member member = new Member(
                 request.email(),
                 request.name(),
                 request.password(),
                 request.region(),
                 request.company(),
-                phone,
+                request.phone(),
                 passwordEncoder);
 
         memberRepository.save(member);

@@ -39,10 +39,10 @@ class MemberServiceTest {
     @DisplayName("회원가입 하기")
     void register() {
         //given
-        final RegisterRequest request = new RegisterRequest("test@naver.com", "@password1234", "name", Region.GANGNEUNG, "company");
+        final RegisterRequest request = new RegisterRequest("test@naver.com", "@password1234", "name", "0101234", Region.GANGNEUNG, "company");
 
         //when
-        memberService.register(request, "01012345678");
+        memberService.register(request);
 
         //then
         assertThat(memberRepository.findAll()).hasSize(1);

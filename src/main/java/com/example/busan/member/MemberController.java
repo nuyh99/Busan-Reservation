@@ -35,8 +35,8 @@ public class MemberController {
 
     @PostMapping
     public ResponseEntity<Void> register(@RequestBody final RegisterRequest request) {
-        final String phone = phoneAuthenticator.getPhone(request.email());
-        memberService.register(request, phone);
+        phoneAuthenticator.isAuthenticated(request.phone());
+        memberService.register(request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

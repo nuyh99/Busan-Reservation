@@ -11,7 +11,7 @@ public class InMemoryPhoneAuthenticator implements PhoneAuthenticator {
     }
 
     @Override
-    public String getPhone(final String id) {
+    public void isAuthenticated(final String phone) {
         throw new UnsupportedOperationException();
     }
 }

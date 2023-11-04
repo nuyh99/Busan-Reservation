@@ -53,7 +53,7 @@ class MemberControllerTest extends ApiTest {
     void register() throws Exception {
         //given
         final String request = objectMapper.writeValueAsString(
-                new RegisterRequest("email@naver.com", "password", "name", Region.GANGNEUNG, "company"));
+                new RegisterRequest("email@naver.com", "password", "name", "0101234", Region.GANGNEUNG, "company"));
 
         //when
         final MockHttpServletResponse response = mockMvc.perform(
@@ -65,6 +65,7 @@ class MemberControllerTest extends ApiTest {
                         requestFields(
                                 fieldWithPath("email").description("이메일 형식"),
                                 fieldWithPath("name").description("이름"),
+                                fieldWithPath("phone").description("인증 완료된 휴대폰 번호"),
                                 fieldWithPath("password").description(String.format("특수문자 1개 이상, 영문과 숫자 조합 %d ~ %d", Member.PASSWORD_MINIMUM_LENGTH, Member.PASSWORD_MAXIMUM_LENGTH)),
                                 fieldWithPath("region").description("지역"),
                                 fieldWithPath("company").description("회사"))))
