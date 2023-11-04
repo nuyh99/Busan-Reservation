@@ -55,7 +55,7 @@ class InMemoryPhoneAuthenticatorTest {
         phoneAuthenticator.authenticate("192473");
 
         //then
-        assertDoesNotThrow(() -> phoneAuthenticator.isAuthenticated(phone));
+        assertDoesNotThrow(() -> phoneAuthenticator.validateAuthenticated(phone));
     }
 
     @Test

@@ -7,9 +7,11 @@ import com.example.busan.auth.service.AuthService;
 import com.example.busan.auth.service.PhoneAuthenticator;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -40,8 +42,14 @@ public class AuthController {
     }
 
     @PostMapping("/phone")
-    public ResponseEntity<Void> authenticatePhone(@RequestBody final AuthenticatePhoneRequest request) {
+    public ResponseEntity<Void> sendCode(@RequestBody final AuthenticatePhoneRequest request) {
         phoneAuthenticator.sendCode(request.phone());
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/phone")
+    public ResponseEntity<Void> authenticate(@RequestParam("code") String code) {
+        phoneAuthenticator.authenticate(code);
+        return ResponseEntity.noContent().build();
     }
 }

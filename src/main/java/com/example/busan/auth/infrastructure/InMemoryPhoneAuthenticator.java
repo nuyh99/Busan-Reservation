@@ -62,7 +62,7 @@ public class InMemoryPhoneAuthenticator implements PhoneAuthenticator {
     }
 
     @Override
-    public void isAuthenticated(final String phone) {
+    public void validateAuthenticated(final String phone) {
         if (!AUTHENTICATED.containsKey(phone)) {
             throw new IllegalArgumentException("휴대폰 인증이 필요합니다.");
         }

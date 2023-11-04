@@ -5,5 +5,5 @@ public interface PhoneAuthenticator {
 
     void authenticate(String code);
 
-    void isAuthenticated(String phone);
+    void validateAuthenticated(String phone);
 }

@@ -22,9 +22,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 class AuthControllerTest extends ApiTest {
@@ -110,5 +113,21 @@ class AuthControllerTest extends ApiTest {
 
         //then
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+    }
+
+    @Test
+    @DisplayName("휴대폰 번호 인증 완료하기")
+    void authenticatePhone2() throws Exception {
+        //when
+        final MockHttpServletResponse response = mockMvc.perform(
+                        get("/auth/phone").queryParam("code", "132452"))
+                .andDo(print())
+                .andDo(document("휴대폰으로 받은 인증 코드로 인증 완료하기",
+                        queryParameters(parameterWithName("code").description("인증 코드"))))
+                .andReturn()
+                .getResponse();
+
+        //then
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.NO_CONTENT.value());
     }
 }
