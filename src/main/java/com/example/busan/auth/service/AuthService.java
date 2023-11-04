@@ -26,7 +26,7 @@ public class AuthService {
     }
 
     public Authentication login(final LoginRequest request) {
-        final Member member = memberRepository.findById(request.id())
+        final Member member = memberRepository.findById(request.email())
                 .orElseThrow(() -> new IllegalArgumentException("잘못된 회원 정보입니다."));
         passwordEncoder.validateEquals(request.password(), member.getPassword());
 
@@ -36,11 +36,11 @@ public class AuthService {
     @Transactional
     public void register(final RegisterRequest request) {
         final Member member = new Member(
-                request.id(),
+                request.email(),
                 request.password(),
                 request.region(),
                 request.company(),
-                phoneAuthenticator.getPhone(request.id()),
+                phoneAuthenticator.getPhone(request.email()),
                 passwordEncoder);
 
         memberRepository.save(member);

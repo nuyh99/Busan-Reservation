@@ -90,7 +90,7 @@ class AuthenticationServiceTest {
         final Member member = createMember();
 
         //when
-        authService.deleteById(member.getId());
+        authService.deleteById(member.getEmail());
 
         //then
         assertThat(memberRepository.findAll()).isEmpty();

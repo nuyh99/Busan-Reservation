@@ -6,6 +6,6 @@ import com.example.busan.member.domain.Role;
 public record Authentication(String id, Role role) {
 
     public static Authentication from(final Member member) {
-        return new Authentication(member.getId(), member.getRole());
+        return new Authentication(member.getEmail(), member.getRole());
     }
 }

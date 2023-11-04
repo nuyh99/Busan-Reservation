@@ -21,8 +21,9 @@ public class Member {
     public static final int PASSWORD_MAXIMUM_LENGTH = 30;
 
     @Id
+    private String email;
     @Column(nullable = false)
-    private String id;
+    private String name;
     @Column(nullable = false)
     private String password;
     @Enumerated(EnumType.STRING)
@@ -38,14 +39,15 @@ public class Member {
     protected Member() {
     }
 
-    public Member(final String id,
+    public Member(final String email,
+                  final String name,
                   final String password,
                   final Region region,
                   final String phone,
                   final String company,
                   final PasswordEncoder passwordEncoder) {
-        validate(id, password, phone, region, company);
-        this.id = id;
+        validate(email, name, password, phone, region, company);
+        this.email = email;
         this.password = passwordEncoder.encode(password);
         this.region = region;
         this.company = company;
@@ -53,17 +55,23 @@ public class Member {
         this.phone = phone;
     }
 
-    private void validate(final String id, final String password, final String phone, final Region region, final String company) {
+    private void validate(final String id,
+                          final String name,
+                          final String password,
+                          final String phone,
+                          final Region region,
+                          final String company) {
         if (isBlank(id) || containsWhitespace(id) ||
                 id.length() < ID_MINIMUM_LENGTH ||
                 id.length() > ID_MAXIMUM_LENGTH) {
-            throw new IllegalArgumentException(format("아이디는 공백을 제외하고 %d ~ %d 글자입니다.", ID_MINIMUM_LENGTH, ID_MAXIMUM_LENGTH));
+            throw new IllegalArgumentException(format("이메일은 공백을 제외하고 %d ~ %d 글자입니다.", ID_MINIMUM_LENGTH, ID_MAXIMUM_LENGTH));
         }
         if (isBlank(password) || containsWhitespace(password) ||
                 password.length() < PASSWORD_MINIMUM_LENGTH ||
                 password.length() > PASSWORD_MAXIMUM_LENGTH) {
             throw new IllegalArgumentException(format("비밀번호는 %d ~ %d 글자입니다.", PASSWORD_MINIMUM_LENGTH, PASSWORD_MAXIMUM_LENGTH));
         }
+        Assert.notNull(name, "이름이 필요합니다.");
         Assert.notNull(phone, "휴대폰 번호가 필요합니다.");
         Assert.notNull(region, "지역이 필요합니다.");
         Assert.notNull(company, "회사가 필요합니다.");
@@ -73,8 +81,8 @@ public class Member {
         passwordEncoder.validateEquals(password, this.password);
     }
 
-    public String getId() {
-        return id;
+    public String getEmail() {
+        return email;
     }
 
     public String getPassword() {
@@ -91,5 +99,13 @@ public class Member {
 
     public Role getRole() {
         return role;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPhone() {
+        return phone;
     }
 }

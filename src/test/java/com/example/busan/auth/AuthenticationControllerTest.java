@@ -41,7 +41,7 @@ class AuthenticationControllerTest extends ApiTest {
     }
 
     @Test
-    @DisplayName("로그인하기")
+    @DisplayName("로그인 하기")
     void login() throws Exception {
         //given
         final Authentication authentication = new Authentication("id", Role.USER);
@@ -56,7 +56,7 @@ class AuthenticationControllerTest extends ApiTest {
                                 .content(request)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andDo(document("로그인하기",
+                .andDo(document("로그인 하기",
                         requestFields(
                                 fieldWithPath("id").description("아이디"),
                                 fieldWithPath("password").description("비밀번호"))))
@@ -80,7 +80,7 @@ class AuthenticationControllerTest extends ApiTest {
         final MockHttpServletResponse response = mockMvc.perform(
                         post("/auth/logout").session(httpSession))
                 .andDo(print())
-                .andDo(document("로그아웃하기"))
+                .andDo(document("로그아웃 하기"))
                 .andReturn()
                 .getResponse();
 
@@ -92,7 +92,7 @@ class AuthenticationControllerTest extends ApiTest {
     }
 
     @Test
-    @DisplayName("회원가입 하기")
+    @DisplayName("회원 가입 하기")
     void register() throws Exception {
         //given
         final String request = objectMapper.writeValueAsString(
@@ -104,7 +104,7 @@ class AuthenticationControllerTest extends ApiTest {
                                 .content(request)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andDo(document("회원가입하기",
+                .andDo(document("회원 가입 하기",
                         requestFields(
                                 fieldWithPath("id").description("아이디, 공백 제외 " + Member.ID_MINIMUM_LENGTH + " ~ " + Member.ID_MAXIMUM_LENGTH),
                                 fieldWithPath("password").description("비밀번호, 공백 제외 " + Member.PASSWORD_MINIMUM_LENGTH + " ~ " + Member.PASSWORD_MAXIMUM_LENGTH),
@@ -118,7 +118,7 @@ class AuthenticationControllerTest extends ApiTest {
     }
 
     @Test
-    @DisplayName("회원탈퇴 하기")
+    @DisplayName("회원 탈퇴 하기")
     void withdraw() throws Exception {
         //given
         httpSession.setAttribute(AUTHORIZATION, new Authentication("id", Role.USER));
@@ -127,7 +127,7 @@ class AuthenticationControllerTest extends ApiTest {
         final MockHttpServletResponse response = mockMvc.perform(
                         delete("/auth").session(httpSession))
                 .andDo(print())
-                .andDo(document("회원탈퇴 하기"))
+                .andDo(document("회원 탈퇴 하기"))
                 .andReturn()
                 .getResponse();
 
