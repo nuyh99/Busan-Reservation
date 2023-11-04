@@ -8,6 +8,7 @@ import com.example.busan.member.domain.Member;
 import com.example.busan.member.domain.MemberRepository;
 import com.example.busan.member.domain.Region;
 import com.example.busan.member.dto.EmailDuplicateResponse;
+import com.example.busan.member.dto.UpdateProfileRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.BDDMockito.given;
 
 @SpringBootTest
@@ -71,7 +73,7 @@ class MemberServiceTest {
     void isDuplicated() {
         //when
         final EmailDuplicateResponse duplicated = memberService.isDuplicated("test@naver.com");
-        
+
         //then
         assertThat(duplicated.isDuplicated()).isFalse();
     }
@@ -81,4 +83,23 @@ class MemberServiceTest {
         return memberRepository.save(member);
     }
 
+    @Test
+    @DisplayName("회원 정보 수정하기 - 이름, 회사명, 이메일")
+    void updateProfile() {
+        //given
+        final Member member = createMember();
+        final UpdateProfileRequest request = new UpdateProfileRequest("updated", "updated", "test@apple.com");
+
+        //when
+        memberService.updateProfile(member.getEmail(), request);
+
+        //then
+        final Member updated = memberRepository.findById("test@apple.com").get();
+        assertSoftly(softAssertions -> {
+            softAssertions.assertThat(updated.getEmail()).isEqualTo("test@apple.com");
+            softAssertions.assertThat(updated.getCompany()).isEqualTo("updated");
+            softAssertions.assertThat(updated.getName()).isEqualTo("updated");
+            softAssertions.assertThat(memberRepository.findById(member.getEmail())).isEmpty();
+        });
+    }
 }

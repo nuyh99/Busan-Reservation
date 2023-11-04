@@ -7,6 +7,7 @@ import com.example.busan.member.domain.Member;
 import com.example.busan.member.domain.Region;
 import com.example.busan.member.domain.Role;
 import com.example.busan.member.dto.EmailDuplicateResponse;
+import com.example.busan.member.dto.UpdateProfileRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -96,7 +98,7 @@ class MemberControllerTest extends ApiTest {
         //given
         given(memberService.isDuplicated("test@gmail.com"))
                 .willReturn(new EmailDuplicateResponse(false));
-        
+
         //when
         final MockHttpServletResponse response = mockMvc.perform(
                         get("/members/{email}", "test@gmail.com"))
@@ -109,5 +111,31 @@ class MemberControllerTest extends ApiTest {
 
         //then
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+    }
+
+    @Test
+    @DisplayName("회원 정보 수정하기 - 이름, 회사명, 이메일")
+    void changeProfile() throws Exception {
+        //given
+        httpSession.setAttribute(AUTHORIZATION, new Authentication("test@gmail.com", Role.ADMIN));
+        final String request = objectMapper.writeValueAsString(
+                new UpdateProfileRequest("name", "company", "test@naver.com"));
+
+        //when
+        final MockHttpServletResponse response = mockMvc.perform(
+                        put("/members/profile").session(httpSession)
+                                .content(request)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("회원 정보 수정하기 - 이름, 회사명, 이메일",
+                        requestFields(
+                                fieldWithPath("name").description("이름"),
+                                fieldWithPath("company").description("회사명"),
+                                fieldWithPath("email").description("이메일"))))
+                .andReturn()
+                .getResponse();
+
+        //then
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.NO_CONTENT.value());
     }
 }

@@ -6,6 +6,7 @@ import com.example.busan.auth.service.PhoneAuthenticator;
 import com.example.busan.member.domain.Member;
 import com.example.busan.member.domain.MemberRepository;
 import com.example.busan.member.dto.EmailDuplicateResponse;
+import com.example.busan.member.dto.UpdateProfileRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,5 +46,15 @@ public class MemberService {
     public EmailDuplicateResponse isDuplicated(final String email) {
         final boolean duplicated = memberRepository.existsById(email);
         return new EmailDuplicateResponse(duplicated);
+    }
+
+    @Transactional
+    public void updateProfile(final String email, final UpdateProfileRequest request) {
+        final Member member = memberRepository.findById(email)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+
+        final Member updated = member.updateProfile(request.email(), request.company(), request.name());
+        memberRepository.save(updated);
+        memberRepository.delete(member);
     }
 }

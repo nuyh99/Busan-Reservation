@@ -41,6 +41,22 @@ public class Member {
     protected Member() {
     }
 
+    private Member(final String email,
+                   final String name,
+                   final String password,
+                   final Region region,
+                   final String company,
+                   final String phone,
+                   final Role role) {
+        this.email = email;
+        this.name = name;
+        this.password = password;
+        this.region = region;
+        this.company = company;
+        this.phone = phone;
+        this.role = role;
+    }
+
     public Member(final String email,
                   final String name,
                   final String password,
@@ -64,9 +80,9 @@ public class Member {
                           final String phone,
                           final Region region,
                           final String company) {
-        if (isBlank(email) || containsWhitespace(email) || !email.matches(EMAIL_REGEX)) {
-            throw new IllegalArgumentException("이메일 형식이 필요합니다.");
-        }
+        validateEmail(email);
+        validateName(name);
+        validateCompany(company);
         if (isBlank(password) || containsWhitespace(password) || !password.matches(PASSWORD_REGEX) ||
                 password.length() < PASSWORD_MINIMUM_LENGTH ||
                 password.length() > PASSWORD_MAXIMUM_LENGTH) {
@@ -75,9 +91,21 @@ public class Member {
                             PASSWORD_MINIMUM_LENGTH,
                             PASSWORD_MAXIMUM_LENGTH));
         }
-        Assert.notNull(name, "이름이 필요합니다.");
         Assert.notNull(phone, "휴대폰 번호가 필요합니다.");
         Assert.notNull(region, "지역이 필요합니다.");
+    }
+
+    private void validateEmail(final String email) {
+        if (isBlank(email) || containsWhitespace(email) || !email.matches(EMAIL_REGEX)) {
+            throw new IllegalArgumentException("이메일 형식이 필요합니다.");
+        }
+    }
+
+    private void validateName(final String name) {
+        Assert.notNull(name, "이름이 필요합니다.");
+    }
+
+    private void validateCompany(final String company) {
         Assert.notNull(company, "회사가 필요합니다.");
     }
 
@@ -111,5 +139,12 @@ public class Member {
 
     public String getPhone() {
         return phone;
+    }
+
+    public Member updateProfile(final String email, final String company, final String name) {
+        validateEmail(email);
+        validateCompany(company);
+        validateName(name);
+        return new Member(email, name, password, region, company, phone, role);
     }
 }
