@@ -41,7 +41,8 @@ public class AuthService {
         memberRepository.save(member);
     }
 
+    @Transactional
     public void deleteById(final String memberId) {
-        throw new UnsupportedOperationException();
+        memberRepository.deleteById(memberId);
     }
 }

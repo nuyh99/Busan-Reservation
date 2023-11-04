@@ -74,4 +74,22 @@ class AuthenticationServiceTest {
         //then
         assertThat(memberRepository.findAll()).hasSize(1);
     }
+
+    @Test
+    @DisplayName("회원탈퇴 하기")
+    void withdraw() {
+        //given
+        final Member member = createMember();
+
+        //when
+        authService.deleteById(member.getId());
+
+        //then
+        assertThat(memberRepository.findAll()).isEmpty();
+    }
+
+    private Member createMember() {
+        final Member member = new Member("ididididid", "password1234", Region.GANGNEUNG, "부경대", passwordEncoder);
+        return memberRepository.save(member);
+    }
 }
