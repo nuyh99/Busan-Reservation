@@ -40,4 +40,8 @@ public class AuthService {
 
         memberRepository.save(member);
     }
+
+    public void deleteById(final String memberId) {
+        throw new UnsupportedOperationException();
+    }
 }

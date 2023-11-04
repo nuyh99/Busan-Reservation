@@ -17,10 +17,12 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockHttpSession;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
+import static com.example.busan.auth.AuthController.AUTHORIZATION;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
@@ -30,11 +32,11 @@ class AuthenticationControllerTest extends ApiTest {
 
     @MockBean
     private AuthService authService;
-    private MockHttpSession httpSession;
+    private final MockHttpSession httpSession = new MockHttpSession();
 
     @BeforeEach
     void clearSession() {
-        httpSession = new MockHttpSession();
+        httpSession.clearAttributes();
     }
 
     @Test
@@ -63,7 +65,7 @@ class AuthenticationControllerTest extends ApiTest {
         //then
         assertSoftly(softAssertions -> {
             softAssertions.assertThat(response.getStatus()).isEqualTo(HttpStatus.NO_CONTENT.value());
-            softAssertions.assertThat(httpSession.getAttribute(AuthController.AUTHORIZATION)).isEqualTo(authentication);
+            softAssertions.assertThat(httpSession.getAttribute(AUTHORIZATION)).isEqualTo(authentication);
         });
     }
 
@@ -71,7 +73,7 @@ class AuthenticationControllerTest extends ApiTest {
     @DisplayName("로그아웃 하기")
     void logout() throws Exception {
         final Authentication authentication = new Authentication("id", Role.USER);
-        httpSession.setAttribute(AuthController.AUTHORIZATION, authentication);
+        httpSession.setAttribute(AUTHORIZATION, authentication);
 
         //when
         final MockHttpServletResponse response = mockMvc.perform(
@@ -84,7 +86,7 @@ class AuthenticationControllerTest extends ApiTest {
         //then
         assertSoftly(softAssertions -> {
             softAssertions.assertThat(response.getStatus()).isEqualTo(HttpStatus.NO_CONTENT.value());
-            softAssertions.assertThat(httpSession.getAttribute(AuthController.AUTHORIZATION)).isNull();
+            softAssertions.assertThat(httpSession.getAttribute(AUTHORIZATION)).isNull();
         });
     }
 
@@ -96,9 +98,10 @@ class AuthenticationControllerTest extends ApiTest {
                 new RegisterRequest("id", "password", Region.GANGNEUNG, "company"));
 
         //when
-        final MockHttpServletResponse response = mockMvc.perform(post("/auth/register")
-                        .content(request)
-                        .contentType(MediaType.APPLICATION_JSON))
+        final MockHttpServletResponse response = mockMvc.perform(
+                        post("/auth/register")
+                                .content(request)
+                                .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andDo(document("회원가입하기",
                         requestFields(
@@ -111,5 +114,26 @@ class AuthenticationControllerTest extends ApiTest {
 
         //then
         assertThat(response.getStatus()).isEqualTo(HttpStatus.CREATED.value());
+    }
+
+    @Test
+    @DisplayName("회원탈퇴 하기")
+    void withdraw() throws Exception {
+        //given
+        httpSession.setAttribute(AUTHORIZATION, new Authentication("id", Role.USER));
+
+        //when
+        final MockHttpServletResponse response = mockMvc.perform(
+                        delete("/auth").session(httpSession))
+                .andDo(print())
+                .andDo(document("회원탈퇴 하기"))
+                .andReturn()
+                .getResponse();
+
+        //then
+        assertSoftly(softAssertions -> {
+            softAssertions.assertThat(response.getStatus()).isEqualTo(HttpStatus.NO_CONTENT.value());
+            softAssertions.assertThat(httpSession.getAttribute(AUTHORIZATION)).isNull();
+        });
     }
 }
