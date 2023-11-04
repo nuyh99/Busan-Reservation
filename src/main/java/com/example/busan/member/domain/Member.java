@@ -91,8 +91,12 @@ public class Member {
                             PASSWORD_MINIMUM_LENGTH,
                             PASSWORD_MAXIMUM_LENGTH));
         }
-        Assert.notNull(phone, "휴대폰 번호가 필요합니다.");
+        validatePhone(phone);
         Assert.notNull(region, "지역이 필요합니다.");
+    }
+
+    private void validatePhone(final String phone) {
+        Assert.notNull(phone, "휴대폰 번호가 필요합니다.");
     }
 
     private void validateEmail(final String email) {
@@ -111,6 +115,18 @@ public class Member {
 
     public void checkPassword(final String password, final PasswordEncoder passwordEncoder) {
         passwordEncoder.validateEquals(password, this.password);
+    }
+
+    public Member updateProfile(final String email, final String company, final String name) {
+        validateEmail(email);
+        validateCompany(company);
+        validateName(name);
+        return new Member(email, name, password, region, company, phone, role);
+    }
+
+    public void updatePhone(final String phone) {
+        validatePhone(phone);
+        this.phone = phone;
     }
 
     public String getEmail() {
@@ -139,12 +155,5 @@ public class Member {
 
     public String getPhone() {
         return phone;
-    }
-
-    public Member updateProfile(final String email, final String company, final String name) {
-        validateEmail(email);
-        validateCompany(company);
-        validateName(name);
-        return new Member(email, name, password, region, company, phone, role);
     }
 }

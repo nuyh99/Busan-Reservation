@@ -3,7 +3,6 @@ package com.example.busan.member;
 import com.example.busan.DatabaseCleaner;
 import com.example.busan.auth.domain.PasswordEncoder;
 import com.example.busan.auth.dto.RegisterRequest;
-import com.example.busan.auth.service.PhoneAuthenticator;
 import com.example.busan.member.domain.Member;
 import com.example.busan.member.domain.MemberRepository;
 import com.example.busan.member.domain.Region;
@@ -14,11 +13,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
-import static org.mockito.BDDMockito.given;
 
 @SpringBootTest
 class MemberServiceTest {
@@ -29,8 +26,6 @@ class MemberServiceTest {
     private MemberRepository memberRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @MockBean
-    private PhoneAuthenticator phoneAuthenticator;
 
     @Autowired
     private DatabaseCleaner databaseCleaner;
@@ -44,12 +39,10 @@ class MemberServiceTest {
     @DisplayName("회원가입 하기")
     void register() {
         //given
-        given(phoneAuthenticator.getPhone("test@naver.com"))
-                .willReturn("01012345678");
         final RegisterRequest request = new RegisterRequest("test@naver.com", "@password1234", "name", Region.GANGNEUNG, "company");
 
         //when
-        memberService.register(request);
+        memberService.register(request, "01012345678");
 
         //then
         assertThat(memberRepository.findAll()).hasSize(1);

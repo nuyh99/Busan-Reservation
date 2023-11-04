@@ -3,10 +3,12 @@ package com.example.busan.member;
 import com.example.busan.ApiTest;
 import com.example.busan.auth.dto.Authentication;
 import com.example.busan.auth.dto.RegisterRequest;
+import com.example.busan.auth.service.PhoneAuthenticator;
 import com.example.busan.member.domain.Member;
 import com.example.busan.member.domain.Region;
 import com.example.busan.member.domain.Role;
 import com.example.busan.member.dto.EmailDuplicateResponse;
+import com.example.busan.member.dto.UpdatePhoneRequest;
 import com.example.busan.member.dto.UpdateProfileRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -38,6 +40,8 @@ class MemberControllerTest extends ApiTest {
     private final MockHttpSession httpSession = new MockHttpSession();
     @MockBean
     private MemberService memberService;
+    @MockBean
+    private PhoneAuthenticator phoneAuthenticator;
 
     @BeforeEach
     void clearSession() {
@@ -132,6 +136,28 @@ class MemberControllerTest extends ApiTest {
                                 fieldWithPath("name").description("이름"),
                                 fieldWithPath("company").description("회사명"),
                                 fieldWithPath("email").description("이메일"))))
+                .andReturn()
+                .getResponse();
+
+        //then
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.NO_CONTENT.value());
+    }
+
+    @Test
+    @DisplayName("회원 휴대폰 번호 변경하기")
+    void changePhone() throws Exception {
+        //given
+        httpSession.setAttribute(AUTHORIZATION, new Authentication("test@gmail.com", Role.ADMIN));
+        final String request = objectMapper.writeValueAsString(new UpdatePhoneRequest("01012341234"));
+
+        //when
+        final MockHttpServletResponse response = mockMvc.perform(
+                        put("/members/phone").session(httpSession)
+                                .content(request)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("회원 휴대폰 번호 변경하기",
+                        requestFields(fieldWithPath("phone").description("변경할 휴대폰 번호"))))
                 .andReturn()
                 .getResponse();
 

@@ -3,7 +3,9 @@ package com.example.busan.member;
 import com.example.busan.auth.domain.Authorized;
 import com.example.busan.auth.dto.Authentication;
 import com.example.busan.auth.dto.RegisterRequest;
+import com.example.busan.auth.service.PhoneAuthenticator;
 import com.example.busan.member.dto.EmailDuplicateResponse;
+import com.example.busan.member.dto.UpdatePhoneRequest;
 import com.example.busan.member.dto.UpdateProfileRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
@@ -24,14 +26,17 @@ import static com.example.busan.auth.AuthController.AUTHORIZATION;
 public class MemberController {
 
     private final MemberService memberService;
+    private final PhoneAuthenticator phoneAuthenticator;
 
-    public MemberController(final MemberService memberService) {
+    public MemberController(final MemberService memberService, final PhoneAuthenticator phoneAuthenticator) {
         this.memberService = memberService;
+        this.phoneAuthenticator = phoneAuthenticator;
     }
 
     @PostMapping
     public ResponseEntity<Void> register(@RequestBody final RegisterRequest request) {
-        memberService.register(request);
+        final String phone = phoneAuthenticator.getPhone(request.email());
+        memberService.register(request, phone);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -52,6 +57,14 @@ public class MemberController {
     public ResponseEntity<Void> updateProfile(@RequestBody final UpdateProfileRequest request,
                                               @Authorized final Authentication authentication) {
         memberService.updateProfile(authentication.email(), request);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/phone")
+    public ResponseEntity<Void> updatePhone(@RequestBody final UpdatePhoneRequest request,
+                                            @Authorized final Authentication authentication) {
+        phoneAuthenticator.authenticate(request.phone());
+        memberService.updatePhone(authentication.email(), request.phone());
         return ResponseEntity.noContent().build();
     }
 }
