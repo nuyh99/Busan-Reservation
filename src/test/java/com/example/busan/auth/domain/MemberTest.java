@@ -1,12 +1,12 @@
 package com.example.busan.auth.domain;
 
 import com.example.busan.member.domain.Member;
-import com.example.busan.member.domain.Region;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import static com.example.busan.member.domain.Region.GANGNEUNG;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class MemberTest {
@@ -17,7 +17,7 @@ class MemberTest {
     @ValueSource(strings = {"", "  ", "         ", "tests  ", "dslfjaskldfjklsafjlkasjfkleajsklefjsaklfjkl"})
     @DisplayName("아이디 검증")
     void validateId(final String invalidId) {
-        assertThatThrownBy(() -> new Member(invalidId, "password", Region.GANGNEUNG, "company", passwordEncoder))
+        assertThatThrownBy(() -> new Member(invalidId, "password", GANGNEUNG, "01012345678", "company", passwordEncoder))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -25,21 +25,28 @@ class MemberTest {
     @ValueSource(strings = {"", "  ", "         ", "testsfd  ", "dslfjaskldfjklsafjlkasjfkleajsklefjsaklfjkl"})
     @DisplayName("비밀번호 검증")
     void validatePassword(final String invalidPassword) {
-        assertThatThrownBy(() -> new Member("idididid", invalidPassword, Region.GANGNEUNG, "company", passwordEncoder))
+        assertThatThrownBy(() -> new Member("idididid", invalidPassword, GANGNEUNG, "01012345678", "company", passwordEncoder))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     @DisplayName("지역이 없으면 예외가 발생한다")
     void validateRegion() {
-        assertThatThrownBy(() -> new Member("idididid", "passwordpasswo", null, "company", passwordEncoder))
+        assertThatThrownBy(() -> new Member("idididid", "passwordpasswo", null, "01012345678", "company", passwordEncoder))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     @DisplayName("회사가 없으면 예외가 발생한다")
     void validateCompany() {
-        assertThatThrownBy(() -> new Member("idididid", "passwordpasswo", Region.GANGNEUNG, null, passwordEncoder))
+        assertThatThrownBy(() -> new Member("idididid", "passwordpasswo", GANGNEUNG, "01012345678", null, passwordEncoder))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    @DisplayName("휴대폰 번호가 없으면 예외가 발생한다")
+    void validatePhone() {
+        assertThatThrownBy(() -> new Member("idididid", "passwordpasswo", GANGNEUNG, null, "company", passwordEncoder))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -47,7 +54,7 @@ class MemberTest {
     @DisplayName("비밀번호가 다르면 예외가 발생한다")
     void checkPassword() {
         //given
-        final Member member = new Member("ididididid", "password1234", Region.GANGNEUNG, "company", passwordEncoder);
+        final Member member = new Member("ididididid", "password1234", GANGNEUNG, "01012345678", "company", passwordEncoder);
 
         //when, then
         assertThatThrownBy(() -> member.checkPassword("password12345", passwordEncoder))

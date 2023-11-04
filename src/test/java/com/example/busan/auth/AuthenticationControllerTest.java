@@ -4,6 +4,7 @@ import com.example.busan.ApiTest;
 import com.example.busan.auth.dto.Authentication;
 import com.example.busan.auth.dto.LoginRequest;
 import com.example.busan.auth.dto.RegisterRequest;
+import com.example.busan.auth.service.AuthService;
 import com.example.busan.member.domain.Member;
 import com.example.busan.member.domain.Region;
 import com.example.busan.member.domain.Role;

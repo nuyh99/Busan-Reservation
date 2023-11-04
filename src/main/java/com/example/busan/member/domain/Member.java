@@ -30,23 +30,30 @@ public class Member {
     private Region region;
     @Column(nullable = false)
     private String company;
+    @Column(nullable = false)
+    private String phone;
     @Enumerated(EnumType.STRING)
     private Role role;
 
     protected Member() {
     }
 
-    public Member(final String id, final String password, final Region region, final String company,
+    public Member(final String id,
+                  final String password,
+                  final Region region,
+                  final String phone,
+                  final String company,
                   final PasswordEncoder passwordEncoder) {
-        validate(id, password, region, company);
+        validate(id, password, phone, region, company);
         this.id = id;
         this.password = passwordEncoder.encode(password);
         this.region = region;
         this.company = company;
         this.role = Role.USER;
+        this.phone = phone;
     }
 
-    private void validate(final String id, final String password, final Region region, final String company) {
+    private void validate(final String id, final String password, final String phone, final Region region, final String company) {
         if (isBlank(id) || containsWhitespace(id) ||
                 id.length() < ID_MINIMUM_LENGTH ||
                 id.length() > ID_MAXIMUM_LENGTH) {
@@ -57,6 +64,7 @@ public class Member {
                 password.length() > PASSWORD_MAXIMUM_LENGTH) {
             throw new IllegalArgumentException(format("비밀번호는 %d ~ %d 글자입니다.", PASSWORD_MINIMUM_LENGTH, PASSWORD_MAXIMUM_LENGTH));
         }
+        Assert.notNull(phone, "휴대폰 번호가 필요합니다.");
         Assert.notNull(region, "지역이 필요합니다.");
         Assert.notNull(company, "회사가 필요합니다.");
     }

@@ -4,6 +4,7 @@ import com.example.busan.auth.domain.Authorized;
 import com.example.busan.auth.dto.Authentication;
 import com.example.busan.auth.dto.LoginRequest;
 import com.example.busan.auth.dto.RegisterRequest;
+import com.example.busan.auth.service.AuthService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package com.example.busan.auth;
+package com.example.busan.auth.service;
 
 import com.example.busan.auth.domain.PasswordEncoder;
 import com.example.busan.auth.dto.Authentication;
@@ -15,10 +15,14 @@ public class AuthService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final PhoneAuthenticator phoneAuthenticator;
 
-    public AuthService(final MemberRepository memberRepository, final PasswordEncoder passwordEncoder) {
+    public AuthService(final MemberRepository memberRepository,
+                       final PasswordEncoder passwordEncoder,
+                       final PhoneAuthenticator phoneAuthenticator) {
         this.memberRepository = memberRepository;
         this.passwordEncoder = passwordEncoder;
+        this.phoneAuthenticator = phoneAuthenticator;
     }
 
     public Authentication login(final LoginRequest request) {
@@ -36,6 +40,7 @@ public class AuthService {
                 request.password(),
                 request.region(),
                 request.company(),
+                phoneAuthenticator.getPhone(request.id()),
                 passwordEncoder);
 
         memberRepository.save(member);
