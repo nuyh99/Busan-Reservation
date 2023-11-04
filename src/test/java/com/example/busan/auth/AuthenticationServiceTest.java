@@ -46,7 +46,7 @@ class AuthenticationServiceTest {
     void login() {
         //given
         final Member member = createMember();
-        final LoginRequest request = new LoginRequest(member.getEmail(), "password1234");
+        final LoginRequest request = new LoginRequest(member.getEmail(), "@password1234");
 
         //when
         final Authentication login = authService.login(request);
@@ -59,7 +59,7 @@ class AuthenticationServiceTest {
     @DisplayName("로그인 실패")
     void login_fail() {
         //given
-        final LoginRequest request = new LoginRequest("ididididid", "password1234");
+        final LoginRequest request = new LoginRequest("ididididid", "@password1234");
 
         //when, then
         assertThatThrownBy(() -> authService.login(request))
@@ -72,7 +72,7 @@ class AuthenticationServiceTest {
         //given
         given(phoneAuthenticator.getPhone("test@naver.com"))
                 .willReturn("01012345678");
-        final RegisterRequest request = new RegisterRequest("test@naver.com", "password1234", "name", Region.GANGNEUNG, "company");
+        final RegisterRequest request = new RegisterRequest("test@naver.com", "@password1234", "name", Region.GANGNEUNG, "company");
 
         //when
         authService.register(request);
@@ -95,7 +95,7 @@ class AuthenticationServiceTest {
     }
 
     private Member createMember() {
-        final Member member = new Member("test@naver.com", "name", "password1234", Region.GANGNEUNG, "01012345678", "부경대", passwordEncoder);
+        final Member member = new Member("test@naver.com", "name", "@password1234", Region.GANGNEUNG, "01012345678", "부경대", passwordEncoder);
         return memberRepository.save(member);
     }
 }

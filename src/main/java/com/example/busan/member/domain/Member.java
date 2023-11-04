@@ -15,12 +15,12 @@ import static org.springframework.util.StringUtils.containsWhitespace;
 @Entity
 public class Member {
 
-    public static final int ID_MINIMUM_LENGTH = 6;
-    public static final int ID_MAXIMUM_LENGTH = 20;
     public static final int PASSWORD_MINIMUM_LENGTH = 8;
-    public static final int PASSWORD_MAXIMUM_LENGTH = 30;
+    public static final int PASSWORD_MAXIMUM_LENGTH = 15;
     private static final String EMAIL_REGEX =
             "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+    private static final String PASSWORD_REGEX =
+            "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]+$";
 
     @Id
     private String email;
@@ -67,10 +67,13 @@ public class Member {
         if (isBlank(email) || containsWhitespace(email) || !email.matches(EMAIL_REGEX)) {
             throw new IllegalArgumentException("이메일 형식이 필요합니다.");
         }
-        if (isBlank(password) || containsWhitespace(password) ||
+        if (isBlank(password) || containsWhitespace(password) || !password.matches(PASSWORD_REGEX) ||
                 password.length() < PASSWORD_MINIMUM_LENGTH ||
                 password.length() > PASSWORD_MAXIMUM_LENGTH) {
-            throw new IllegalArgumentException(format("비밀번호는 %d ~ %d 글자입니다.", PASSWORD_MINIMUM_LENGTH, PASSWORD_MAXIMUM_LENGTH));
+            throw new IllegalArgumentException(
+                    format("비밀번호는 특수문자 1개 이상 포함하고 영문, 숫자 조합의 %d ~ %d 글자입니다.",
+                            PASSWORD_MINIMUM_LENGTH,
+                            PASSWORD_MAXIMUM_LENGTH));
         }
         Assert.notNull(name, "이름이 필요합니다.");
         Assert.notNull(phone, "휴대폰 번호가 필요합니다.");
