@@ -48,7 +48,7 @@ public class AuthController {
     @DeleteMapping
     public ResponseEntity<Void> withdraw(@Authorized final Authentication authentication, final HttpSession session) {
         session.removeAttribute(AUTHORIZATION);
-        authService.deleteById(authentication.id());
+        authService.deleteById(authentication.email());
         return ResponseEntity.noContent().build();
     }
 }

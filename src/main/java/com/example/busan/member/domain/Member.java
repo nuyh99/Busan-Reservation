@@ -19,6 +19,8 @@ public class Member {
     public static final int ID_MAXIMUM_LENGTH = 20;
     public static final int PASSWORD_MINIMUM_LENGTH = 8;
     public static final int PASSWORD_MAXIMUM_LENGTH = 30;
+    private static final String EMAIL_REGEX =
+            "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
 
     @Id
     private String email;
@@ -53,6 +55,7 @@ public class Member {
         this.company = company;
         this.role = Role.USER;
         this.phone = phone;
+        this.name = name;
     }
 
     private void validate(final String id,

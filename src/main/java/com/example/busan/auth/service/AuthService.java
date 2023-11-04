@@ -37,6 +37,7 @@ public class AuthService {
     public void register(final RegisterRequest request) {
         final Member member = new Member(
                 request.email(),
+                request.name(),
                 request.password(),
                 request.region(),
                 request.company(),

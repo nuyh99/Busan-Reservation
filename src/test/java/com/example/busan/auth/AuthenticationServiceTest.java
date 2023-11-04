@@ -45,16 +45,14 @@ class AuthenticationServiceTest {
     @DisplayName("로그인하기")
     void login() {
         //given
-        final Member member = new Member("ididididid", "password1234", Region.GANGNEUNG, "01012345678", "부경대", passwordEncoder);
-        memberRepository.save(member);
-
-        final LoginRequest request = new LoginRequest("ididididid", "password1234");
+        final Member member = createMember();
+        final LoginRequest request = new LoginRequest(member.getEmail(), "password1234");
 
         //when
         final Authentication login = authService.login(request);
 
         //then
-        assertThat(login.id()).isEqualTo("ididididid");
+        assertThat(login.email()).isEqualTo("ididididid");
     }
 
     @Test
@@ -74,7 +72,7 @@ class AuthenticationServiceTest {
         //given
         given(phoneAuthenticator.getPhone("idididi"))
                 .willReturn("01012345678");
-        final RegisterRequest request = new RegisterRequest("idididi", "password1234", Region.GANGNEUNG, "company");
+        final RegisterRequest request = new RegisterRequest("idididi", "password1234", "name", Region.GANGNEUNG, "company");
 
         //when
         authService.register(request);
@@ -97,7 +95,7 @@ class AuthenticationServiceTest {
     }
 
     private Member createMember() {
-        final Member member = new Member("ididididid", "password1234", Region.GANGNEUNG, "01012345678", "부경대", passwordEncoder);
+        final Member member = new Member("ididididid", "name", "password1234", Region.GANGNEUNG, "01012345678", "부경대", passwordEncoder);
         return memberRepository.save(member);
     }
 }

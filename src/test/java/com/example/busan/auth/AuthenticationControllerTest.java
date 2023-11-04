@@ -44,10 +44,10 @@ class AuthenticationControllerTest extends ApiTest {
     @DisplayName("로그인 하기")
     void login() throws Exception {
         //given
-        final Authentication authentication = new Authentication("id", Role.USER);
+        final Authentication authentication = new Authentication("email@naver.com", Role.USER);
         given(authService.login(any()))
                 .willReturn(authentication);
-        final String request = objectMapper.writeValueAsString(new LoginRequest("id", "password"));
+        final String request = objectMapper.writeValueAsString(new LoginRequest("email@naver.com", "password"));
 
         //when
         final MockHttpServletResponse response = mockMvc.perform(
@@ -58,7 +58,7 @@ class AuthenticationControllerTest extends ApiTest {
                 .andDo(print())
                 .andDo(document("로그인 하기",
                         requestFields(
-                                fieldWithPath("id").description("아이디"),
+                                fieldWithPath("email").description("이메일"),
                                 fieldWithPath("password").description("비밀번호"))))
                 .andReturn()
                 .getResponse();
@@ -73,7 +73,7 @@ class AuthenticationControllerTest extends ApiTest {
     @Test
     @DisplayName("로그아웃 하기")
     void logout() throws Exception {
-        final Authentication authentication = new Authentication("id", Role.USER);
+        final Authentication authentication = new Authentication("email@naver.com", Role.USER);
         httpSession.setAttribute(AUTHORIZATION, authentication);
 
         //when
@@ -96,7 +96,7 @@ class AuthenticationControllerTest extends ApiTest {
     void register() throws Exception {
         //given
         final String request = objectMapper.writeValueAsString(
-                new RegisterRequest("id", "password", Region.GANGNEUNG, "company"));
+                new RegisterRequest("email@naver.com", "password", "name", Region.GANGNEUNG, "company"));
 
         //when
         final MockHttpServletResponse response = mockMvc.perform(
@@ -106,7 +106,8 @@ class AuthenticationControllerTest extends ApiTest {
                 .andDo(print())
                 .andDo(document("회원 가입 하기",
                         requestFields(
-                                fieldWithPath("id").description("아이디, 공백 제외 " + Member.ID_MINIMUM_LENGTH + " ~ " + Member.ID_MAXIMUM_LENGTH),
+                                fieldWithPath("email").description("이메일 형식"),
+                                fieldWithPath("name").description("이름"),
                                 fieldWithPath("password").description("비밀번호, 공백 제외 " + Member.PASSWORD_MINIMUM_LENGTH + " ~ " + Member.PASSWORD_MAXIMUM_LENGTH),
                                 fieldWithPath("region").description("지역"),
                                 fieldWithPath("company").description("회사"))))
@@ -121,7 +122,7 @@ class AuthenticationControllerTest extends ApiTest {
     @DisplayName("회원 탈퇴 하기")
     void withdraw() throws Exception {
         //given
-        httpSession.setAttribute(AUTHORIZATION, new Authentication("id", Role.USER));
+        httpSession.setAttribute(AUTHORIZATION, new Authentication("email@naver.com", Role.USER));
 
         //when
         final MockHttpServletResponse response = mockMvc.perform(
