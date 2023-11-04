@@ -25,7 +25,7 @@ public class GlobalControllerAdvice {
 
     @ExceptionHandler
     public ResponseEntity<String> handle(final Exception e) {
-        log.error("Internal Server Error: {0}", e);
+        log.error("Error: ", e);
         return ResponseEntity.internalServerError().build();
     }
 }

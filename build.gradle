@@ -37,6 +37,10 @@ tasks.named('test') {
 }
 
 openapi3 {
+    afterEvaluate {
+        tasks.clean
+        tasks.test
+    }
     server = 'http://localhost/'
     title = '회의실 대관 서비스 API'
     description = '회의실 대관 서비스입니다.'
@@ -44,3 +48,4 @@ openapi3 {
     format = 'yaml'
     outputDirectory = 'src/main/resources/static/api/'
 }
+
