@@ -6,6 +6,7 @@ import com.example.busan.auth.dto.RegisterRequest;
 import com.example.busan.member.domain.Member;
 import com.example.busan.member.domain.Region;
 import com.example.busan.member.domain.Role;
+import com.example.busan.member.dto.EmailDuplicateResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,10 +20,15 @@ import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.docume
 import static com.example.busan.auth.AuthController.AUTHORIZATION;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 class MemberControllerTest extends ApiTest {
@@ -82,5 +88,26 @@ class MemberControllerTest extends ApiTest {
             softAssertions.assertThat(response.getStatus()).isEqualTo(HttpStatus.NO_CONTENT.value());
             softAssertions.assertThat(httpSession.getAttribute(AUTHORIZATION)).isNull();
         });
+    }
+
+    @Test
+    @DisplayName("이메일 중복 확인하기")
+    void isDuplicatedEmail() throws Exception {
+        //given
+        given(memberService.isDuplicated("test@gmail.com"))
+                .willReturn(new EmailDuplicateResponse(false));
+        
+        //when
+        final MockHttpServletResponse response = mockMvc.perform(
+                        get("/members/{email}", "test@gmail.com"))
+                .andDo(print())
+                .andDo(document("이메일 중복 확인하기",
+                        pathParameters(parameterWithName("email").description("확인할 이메일")),
+                        responseFields(fieldWithPath("isDuplicated").description("중복 여부"))))
+                .andReturn()
+                .getResponse();
+
+        //then
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
     }
 }

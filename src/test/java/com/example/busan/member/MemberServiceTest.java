@@ -7,6 +7,7 @@ import com.example.busan.auth.service.PhoneAuthenticator;
 import com.example.busan.member.domain.Member;
 import com.example.busan.member.domain.MemberRepository;
 import com.example.busan.member.domain.Region;
+import com.example.busan.member.dto.EmailDuplicateResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -63,6 +64,16 @@ class MemberServiceTest {
 
         //then
         assertThat(memberRepository.findAll()).isEmpty();
+    }
+
+    @Test
+    @DisplayName("이메일 중복 확인하기")
+    void isDuplicated() {
+        //when
+        final EmailDuplicateResponse duplicated = memberService.isDuplicated("test@naver.com");
+        
+        //then
+        assertThat(duplicated.isDuplicated()).isFalse();
     }
 
     private Member createMember() {

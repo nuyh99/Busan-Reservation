@@ -5,6 +5,7 @@ import com.example.busan.auth.dto.RegisterRequest;
 import com.example.busan.auth.service.PhoneAuthenticator;
 import com.example.busan.member.domain.Member;
 import com.example.busan.member.domain.MemberRepository;
+import com.example.busan.member.dto.EmailDuplicateResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,4 +42,8 @@ public class MemberService {
         memberRepository.deleteById(memberId);
     }
 
+    public EmailDuplicateResponse isDuplicated(final String email) {
+        final boolean duplicated = memberRepository.existsById(email);
+        return new EmailDuplicateResponse(duplicated);
+    }
 }
