@@ -122,7 +122,7 @@ class AuthControllerTest extends ApiTest {
         final MockHttpServletResponse response = mockMvc.perform(
                         get("/auth/phone").queryParam("code", "132452"))
                 .andDo(print())
-                .andDo(document("휴대폰으로 받은 인증 코드로 인증 완료하기",
+                .andDo(document("받은 인증 코드로 인증 완료하기",
                         queryParameters(parameterWithName("code").description("인증 코드"))))
                 .andReturn()
                 .getResponse();

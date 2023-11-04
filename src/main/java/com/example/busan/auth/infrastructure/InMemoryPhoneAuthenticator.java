@@ -6,6 +6,7 @@ import com.example.busan.auth.service.PhoneAuthenticator;
 import net.nurigo.sdk.message.model.Message;
 import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
 import net.nurigo.sdk.message.service.DefaultMessageService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -21,10 +22,14 @@ public class InMemoryPhoneAuthenticator implements PhoneAuthenticator {
 
     private final DefaultMessageService messageService;
     private final AuthorizationCodeGenerator codeGenerator;
+    private final String sender;
 
-    public InMemoryPhoneAuthenticator(final DefaultMessageService messageService, final AuthorizationCodeGenerator codeGenerator) {
+    public InMemoryPhoneAuthenticator(final DefaultMessageService messageService,
+                                      final AuthorizationCodeGenerator codeGenerator,
+                                      @Value("${phone.sender}") final String sender) {
         this.messageService = messageService;
         this.codeGenerator = codeGenerator;
+        this.sender = sender;
     }
 
     @Override
@@ -53,7 +58,7 @@ public class InMemoryPhoneAuthenticator implements PhoneAuthenticator {
         final String authorizationCode = codeGenerator.generate();
 
         Message message = new Message();
-        message.setFrom("01012341234");
+        message.setFrom(sender);
         message.setTo(phone);
         message.setText("인증번호: " + authorizationCode);
 

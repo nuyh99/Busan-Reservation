@@ -19,6 +19,6 @@ public class PhoneAuthenticatorConfig {
 
     @Bean
     public DefaultMessageService messageService() {
-        return new DefaultMessageService(key, secret, "http://test");
+        return new DefaultMessageService(key, secret, "https://api.coolsms.co.kr");
     }
 }
