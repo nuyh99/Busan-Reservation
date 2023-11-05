@@ -21,7 +21,7 @@ services:
       - db
     build: .
     ports:
-      - '80:8080'
+      - '8080:8080'
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://busan_db:3306/busan
       SPRING_DATASOURCE_USERNAME: root

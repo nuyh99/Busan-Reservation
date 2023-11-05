@@ -39,7 +39,7 @@ openapi3 {
         tasks.clean
         tasks.test
     }
-    server = 'http://localhost/'
+    server = 'http://localhost:8080'
     title = '회의실 대관 서비스 API'
     description = '회의실 대관 서비스입니다.'
     version = '1.0.0'
