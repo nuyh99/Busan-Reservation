@@ -16,6 +16,7 @@ import static org.springframework.web.context.request.RequestAttributes.SCOPE_SE
 
 @Component
 public class AuthorizationArgumentResolver implements HandlerMethodArgumentResolver {
+
     @Override
     public boolean supportsParameter(final MethodParameter parameter) {
         final boolean hasAnnotation = parameter.hasParameterAnnotation(Authorized.class);
