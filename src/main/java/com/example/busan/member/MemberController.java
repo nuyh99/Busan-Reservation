@@ -5,6 +5,7 @@ import com.example.busan.auth.dto.Authentication;
 import com.example.busan.auth.dto.RegisterRequest;
 import com.example.busan.auth.service.PhoneAuthenticator;
 import com.example.busan.member.dto.EmailDuplicateResponse;
+import com.example.busan.member.dto.UpdatePasswordRequest;
 import com.example.busan.member.dto.UpdatePhoneRequest;
 import com.example.busan.member.dto.UpdateProfileRequest;
 import jakarta.servlet.http.HttpSession;
@@ -65,6 +66,13 @@ public class MemberController {
                                             @Authorized final Authentication authentication) {
         phoneAuthenticator.validateAuthenticated(request.phone());
         memberService.updatePhone(authentication.email(), request.phone());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/password")
+    public ResponseEntity<Void> updatePassword(@RequestBody final UpdatePasswordRequest request) {
+        phoneAuthenticator.validateAuthenticated(request.phone());
+        memberService.updatePassword(request);
         return ResponseEntity.noContent().build();
     }
 }

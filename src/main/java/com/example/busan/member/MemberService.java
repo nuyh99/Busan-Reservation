@@ -5,6 +5,7 @@ import com.example.busan.auth.dto.RegisterRequest;
 import com.example.busan.member.domain.Member;
 import com.example.busan.member.domain.MemberRepository;
 import com.example.busan.member.dto.EmailDuplicateResponse;
+import com.example.busan.member.dto.UpdatePasswordRequest;
 import com.example.busan.member.dto.UpdateProfileRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,5 +64,13 @@ public class MemberService {
     public void updatePhone(final String email, final String phone) {
         final Member member = findOrThrow(email);
         member.updatePhone(phone);
+    }
+
+    @Transactional
+    public void updatePassword(final UpdatePasswordRequest request) {
+        final Member member = memberRepository.findByEmailAndPhone(request.email(), request.phone())
+                .orElseThrow(() -> new IllegalArgumentException("올바르지 않은 계정 정보입니다."));
+
+        member.updatePassword(request.password());
     }
 }

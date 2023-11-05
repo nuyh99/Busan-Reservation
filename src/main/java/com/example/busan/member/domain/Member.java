@@ -83,6 +83,12 @@ public class Member {
         validateEmail(email);
         validateName(name);
         validateCompany(company);
+        validatePassword(password);
+        validatePhone(phone);
+        Assert.notNull(region, "지역이 필요합니다.");
+    }
+
+    private void validatePassword(final String password) {
         if (isBlank(password) || containsWhitespace(password) || !password.matches(PASSWORD_REGEX) ||
                 password.length() < PASSWORD_MINIMUM_LENGTH ||
                 password.length() > PASSWORD_MAXIMUM_LENGTH) {
@@ -91,8 +97,6 @@ public class Member {
                             PASSWORD_MINIMUM_LENGTH,
                             PASSWORD_MAXIMUM_LENGTH));
         }
-        validatePhone(phone);
-        Assert.notNull(region, "지역이 필요합니다.");
     }
 
     private void validatePhone(final String phone) {
@@ -127,6 +131,11 @@ public class Member {
     public void updatePhone(final String phone) {
         validatePhone(phone);
         this.phone = phone;
+    }
+
+    public void updatePassword(final String password) {
+        validatePassword(password);
+        this.password = password;
     }
 
     public String getEmail() {

@@ -8,6 +8,7 @@ import com.example.busan.member.domain.Member;
 import com.example.busan.member.domain.Region;
 import com.example.busan.member.domain.Role;
 import com.example.busan.member.dto.EmailDuplicateResponse;
+import com.example.busan.member.dto.UpdatePasswordRequest;
 import com.example.busan.member.dto.UpdatePhoneRequest;
 import com.example.busan.member.dto.UpdateProfileRequest;
 import org.junit.jupiter.api.BeforeEach;
@@ -159,6 +160,31 @@ class MemberControllerTest extends ApiTest {
                 .andDo(print())
                 .andDo(document("회원 휴대폰 번호 변경하기",
                         requestFields(fieldWithPath("phone").description("인증 완료된 휴대폰 번호"))))
+                .andReturn()
+                .getResponse();
+
+        //then
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.NO_CONTENT.value());
+    }
+
+    @Test
+    @DisplayName("회원 비밀번호 변경하기")
+    void changePassword() throws Exception {
+        //given
+        final String request = objectMapper.writeValueAsString(
+                new UpdatePasswordRequest("test@naver.com", "01012341234", "@@newPassword123"));
+
+        //when
+        final MockHttpServletResponse response = mockMvc.perform(
+                        put("/members/password")
+                                .content(request)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("비밀번호 분실 시 변경하기",
+                        requestFields(
+                                fieldWithPath("email").description("이메일"),
+                                fieldWithPath("phone").description("인증 완료된 휴대폰 번호"),
+                                fieldWithPath("password").description("새 비밀번호"))))
                 .andReturn()
                 .getResponse();
 
