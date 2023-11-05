@@ -3,6 +3,7 @@ package com.example.busan.auth;
 import com.example.busan.ApiTest;
 import com.example.busan.auth.dto.AuthenticatePhoneRequest;
 import com.example.busan.auth.dto.Authentication;
+import com.example.busan.auth.dto.FindEmailRequest;
 import com.example.busan.auth.dto.LoginRequest;
 import com.example.busan.auth.service.AuthService;
 import com.example.busan.auth.service.PhoneAuthenticator;
@@ -26,6 +27,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -129,5 +131,29 @@ class AuthControllerTest extends ApiTest {
 
         //then
         assertThat(response.getStatus()).isEqualTo(HttpStatus.NO_CONTENT.value());
+    }
+
+    @Test
+    @DisplayName("휴대폰 번호로 이메일 찾기")
+    void findEmailByPhone() throws Exception {
+        //given
+        given(authService.findEmailByPhone(any()))
+                .willReturn(new FindEmailResponse("test@gmail.com"));
+        final String request = objectMapper.writeValueAsString(new FindEmailRequest("01012345678"));
+
+        //when
+        final MockHttpServletResponse response = mockMvc.perform(
+                        get("/auth/email")
+                                .content(request)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("휴대폰 번호로 이메일 찾기",
+                        requestFields(fieldWithPath("phone").description("인증 완료된 휴대폰 번호")),
+                        responseFields(fieldWithPath("email").description("해당 번호의 이메일"))))
+                .andReturn()
+                .getResponse();
+
+        //then
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
     }
 }

@@ -1,5 +1,6 @@
 package com.example.busan.auth.service;
 
+import com.example.busan.auth.FindEmailResponse;
 import com.example.busan.auth.domain.PasswordEncoder;
 import com.example.busan.auth.dto.Authentication;
 import com.example.busan.auth.dto.LoginRequest;
@@ -27,5 +28,12 @@ public class AuthService {
         member.checkPassword(request.password(), passwordEncoder);
 
         return Authentication.from(member);
+    }
+
+    public FindEmailResponse findEmailByPhone(final String phone) {
+        final Member member = memberRepository.findByPhone(phone)
+                .orElseThrow(() -> new IllegalArgumentException("가입된 유저가 아닙니다."));
+
+        return new FindEmailResponse(member.getEmail());
     }
 }

@@ -158,7 +158,7 @@ class MemberControllerTest extends ApiTest {
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andDo(document("회원 휴대폰 번호 변경하기",
-                        requestFields(fieldWithPath("phone").description("변경할 휴대폰 번호"))))
+                        requestFields(fieldWithPath("phone").description("인증 완료된 휴대폰 번호"))))
                 .andReturn()
                 .getResponse();
 
