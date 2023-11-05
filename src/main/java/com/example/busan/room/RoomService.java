@@ -1,19 +1,25 @@
 package com.example.busan.room;
 
+import com.example.busan.reservation.ReservationRepository;
 import com.example.busan.room.domain.Room;
 import com.example.busan.room.dto.CreateRoomRequest;
+import com.example.busan.room.dto.RoomResponse;
 import com.example.busan.room.dto.UpdateRoomRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Transactional(readOnly = true)
 @Service
 public class RoomService {
 
     private final RoomRepository roomRepository;
+    private final ReservationRepository reservationRepository;
 
-    public RoomService(final RoomRepository roomRepository) {
+    public RoomService(final RoomRepository roomRepository, final ReservationRepository reservationRepository) {
         this.roomRepository = roomRepository;
+        this.reservationRepository = reservationRepository;
     }
 
     @Transactional
@@ -31,6 +37,11 @@ public class RoomService {
 
     @Transactional
     public void deleteById(final Long roomId) {
+        reservationRepository.deleteAllByRoomId(roomId);
         roomRepository.deleteById(roomId);
+    }
+
+    public List<RoomResponse> findAll() {
+        throw new UnsupportedOperationException();
     }
 }

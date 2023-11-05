@@ -18,7 +18,7 @@ class ReservationTest {
         final LocalDateTime endTime = LocalDateTime.of(2023, 11, 10, 16, 1);
 
         //when, then
-        assertThatThrownBy(() -> new Reservation(startTime, endTime))
+        assertThatThrownBy(() -> new Reservation(1L, startTime, endTime))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -30,7 +30,7 @@ class ReservationTest {
         final LocalDateTime endTime = LocalDateTime.of(2023, 11, 10, 14, 1);
 
         //when, then
-        assertThatThrownBy(() -> new Reservation(startTime, endTime))
+        assertThatThrownBy(() -> new Reservation(1L, startTime, endTime))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -42,6 +42,6 @@ class ReservationTest {
         final LocalDateTime endTime = LocalDateTime.of(2023, 11, 10, 15, 30);
 
         //when, then
-        assertDoesNotThrow(() -> new Reservation(startTime, endTime));
+        assertDoesNotThrow(() -> new Reservation(1L, startTime, endTime));
     }
 }

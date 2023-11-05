@@ -30,6 +30,8 @@ public class Reservation {
     private LocalDateTime startTime;
     @Column(nullable = false)
     private LocalDateTime endTime;
+    @Column(nullable = false)
+    private Long roomId;
     @CreatedDate
     @Column(nullable = false)
     private LocalDateTime createdTime;
@@ -43,8 +45,10 @@ public class Reservation {
     public Reservation(final Long id,
                        final Status status,
                        final LocalDateTime startTime,
-                       final LocalDateTime endTime) {
+                       final LocalDateTime endTime,
+                       final Long roomId) {
         Assert.notNull(status, "예약 상태가 필요합니다.");
+        Assert.notNull(roomId, "회의실 ID가 필요합니다.");
         if (endTime.isBefore(startTime)) {
             throw new IllegalArgumentException("시작 시각보다 종료 시각이 이전일 수 없습니다.");
         }
@@ -52,13 +56,14 @@ public class Reservation {
             throw new IllegalArgumentException("예약 시각은 최대 3시간까지만 가능합니다.");
         }
         this.id = id;
+        this.roomId = roomId;
         this.status = status;
         this.startTime = startTime;
         this.endTime = endTime;
     }
 
-    public Reservation(final LocalDateTime startTime, final LocalDateTime endTime) {
-        this(null, Status.RESERVED, startTime, endTime);
+    public Reservation(final Long roomId, final LocalDateTime startTime, final LocalDateTime endTime) {
+        this(null, Status.RESERVED, startTime, endTime, roomId);
     }
 
     public Long getId() {
@@ -83,5 +88,9 @@ public class Reservation {
 
     public String getReservationEmail() {
         return reservationEmail;
+    }
+
+    public Long getRoomId() {
+        return roomId;
     }
 }
