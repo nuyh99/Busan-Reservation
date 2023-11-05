@@ -6,7 +6,10 @@ import com.example.busan.auth.service.PhoneAuthenticator;
 import net.nurigo.sdk.message.model.Message;
 import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
 import net.nurigo.sdk.message.service.DefaultMessageService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -16,6 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class InMemoryPhoneAuthenticator implements PhoneAuthenticator {
 
+    private static final Logger log = LoggerFactory.getLogger(InMemoryPhoneAuthenticator.class);
     private static final Map<String, PhoneAuthentication> WAITING = new ConcurrentHashMap<>();
     private static final Map<String, LocalDateTime> AUTHENTICATED = new ConcurrentHashMap<>();
     private static final int DURATION_MINUTES = 5;
@@ -76,5 +80,31 @@ public class InMemoryPhoneAuthenticator implements PhoneAuthenticator {
         if (expired.isBefore(LocalDateTime.now())) {
             throw new IllegalArgumentException("시간이 만료되어 재인증이 필요합니다.");
         }
+    }
+
+    @Scheduled(cron = "0 0 0 * * *")
+    private void removeExpires() {
+        final int previousCount = WAITING.size() + AUTHENTICATED.size();
+
+        removeExpiredWaitings();
+        removeExpiredAuthenticates();
+
+        log.info("Clean phone authenticator! {} removed!",
+                WAITING.size() + AUTHENTICATED.size() - previousCount);
+    }
+
+    private void removeExpiredAuthenticates() {
+        final LocalDateTime now = LocalDateTime.now();
+        AUTHENTICATED.entrySet().stream()
+                .filter(authenticated -> authenticated.getValue().isBefore(now))
+                .map(Map.Entry::getKey)
+                .forEach(AUTHENTICATED::remove);
+    }
+
+    private void removeExpiredWaitings() {
+        WAITING.entrySet().stream()
+                .filter(waiting -> waiting.getValue().isExpired())
+                .map(Map.Entry::getKey)
+                .forEach(WAITING::remove);
     }
 }
