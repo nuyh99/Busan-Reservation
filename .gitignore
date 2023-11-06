@@ -60,5 +60,4 @@ out/
 hs_err_pid*
 replay_pid*
 
-src/main/resources/static/api/openapi3.yaml
 src/main/resources/application-prod.yaml

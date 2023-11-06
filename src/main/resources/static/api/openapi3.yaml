@@ -1,0 +1,541 @@
+openapi: 3.0.1
+info:
+  title: 회의실 대관 서비스 API
+  description: 회의실 대관 서비스입니다.
+  version: 1.0.0
+servers:
+- url: http://localhost:8080
+tags: []
+paths:
+  /admin/rooms:
+    post:
+      tags:
+      - admin
+      operationId: 회의실 생성 - 어드민
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/admin-rooms-1790608654'
+            examples:
+              회의실 생성 - 어드민:
+                value: "{\"name\":\"컨퍼런스룸 1\",\"image\":\"https://image.com\",\"maxPeopleCount\"\
+                  :14}"
+      responses:
+        "201":
+          description: "201"
+  /admin/rooms/{roomId}:
+    put:
+      tags:
+      - admin
+      operationId: 회의실 수정 - 어드민
+      parameters:
+      - name: roomId
+        in: path
+        description: ""
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/admin-rooms-1790608654'
+            examples:
+              회의실 수정 - 어드민:
+                value: "{\"name\":\"updated\",\"image\":\"updated\",\"maxPeopleCount\"\
+                  :10}"
+      responses:
+        "204":
+          description: "204"
+    delete:
+      tags:
+      - admin
+      operationId: 회의실 삭제 - 어드민
+      parameters:
+      - name: roomId
+        in: path
+        description: 회의실 ID
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: "204"
+  /auth/email:
+    get:
+      tags:
+      - auth
+      operationId: 휴대폰 번호로 이메일 찾기
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/auth-email932474475'
+            examples:
+              휴대폰 번호로 이메일 찾기:
+                value: "{\"phone\":\"01012345678\"}"
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/auth-email-1599798553'
+              examples:
+                휴대폰 번호로 이메일 찾기:
+                  value: "{\"email\":\"test@gmail.com\"}"
+  /auth/login:
+    post:
+      tags:
+      - auth
+      operationId: 로그인 하기
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/auth-login-74814376'
+            examples:
+              로그인 하기:
+                value: "{\"email\":\"email@naver.com\",\"password\":\"password\"}"
+      responses:
+        "204":
+          description: "204"
+  /auth/logout:
+    post:
+      tags:
+      - auth
+      operationId: 로그아웃 하기
+      responses:
+        "204":
+          description: "204"
+  /auth/phone:
+    get:
+      tags:
+      - auth
+      operationId: 받은 인증 코드로 인증 완료하기
+      parameters:
+      - name: code
+        in: query
+        description: 인증 코드
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: "204"
+    post:
+      tags:
+      - auth
+      operationId: 휴대폰 번호로 인증 코드 보내기
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/auth-phone2135928301'
+            examples:
+              휴대폰 번호로 인증 코드 보내기:
+                value: "{\"phone\":\"01012312413\"}"
+      responses:
+        "200":
+          description: "200"
+  /members:
+    post:
+      tags:
+      - members
+      operationId: 회원 가입 하기
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/members-1490608316'
+            examples:
+              회원 가입 하기:
+                value: "{\"email\":\"email@naver.com\",\"password\":\"password\",\"\
+                  name\":\"name\",\"phone\":\"0101234\",\"region\":\"GANGNEUNG\",\"\
+                  company\":\"company\"}"
+      responses:
+        "201":
+          description: "201"
+    delete:
+      tags:
+      - members
+      operationId: 회원 탈퇴 하기
+      responses:
+        "204":
+          description: "204"
+  /members/password:
+    put:
+      tags:
+      - members
+      operationId: 비밀번호 분실 시 변경하기
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/members-password-1537663412'
+            examples:
+              비밀번호 분실 시 변경하기:
+                value: "{\"email\":\"test@naver.com\",\"phone\":\"01012341234\",\"\
+                  password\":\"@@newPassword123\"}"
+      responses:
+        "204":
+          description: "204"
+  /members/phone:
+    put:
+      tags:
+      - members
+      operationId: 회원 휴대폰 번호 변경하기
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/auth-email932474475'
+            examples:
+              회원 휴대폰 번호 변경하기:
+                value: "{\"phone\":\"01012341234\"}"
+      responses:
+        "204":
+          description: "204"
+  /members/profile:
+    put:
+      tags:
+      - members
+      operationId: "회원 정보 수정하기 - 이름, 회사명, 이메일"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/members-profile273689223'
+            examples:
+              회원 정보 수정하기 - 이름, 회사명, 이메일:
+                value: "{\"name\":\"name\",\"company\":\"company\",\"email\":\"test@naver.com\"\
+                  }"
+      responses:
+        "204":
+          description: "204"
+  /members/{email}:
+    get:
+      tags:
+      - members
+      operationId: 이메일 중복 확인하기
+      parameters:
+      - name: email
+        in: path
+        description: 확인할 이메일
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/members-email-1386460070'
+              examples:
+                이메일 중복 확인하기:
+                  value: "{\"isDuplicated\":false}"
+  /reservations:
+    get:
+      tags:
+      - reservations
+      operationId: 자신의 회의실 예약 목록 최신 순으로 보기
+      parameters:
+      - name: page
+        in: query
+        description: 페이지는 1부터 시작 (디폴트값 1)
+        required: false
+        schema:
+          type: string
+      - name: size
+        in: query
+        description: 페이지별 사이즈 (디폴트값 10)
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/reservations-117751723'
+              examples:
+                자신의 회의실 예약 목록 최신 순으로 보기:
+                  value: "[{\"id\":1,\"status\":\"RESERVED\",\"cancelReason\":null,\"\
+                    startTime\":\"2023-11-06T17:28:45.404875\",\"endTime\":\"2023-11-06T19:28:45.40488\"\
+                    ,\"name\":\"황재현\",\"phone\":\"01012341234\",\"reservedAt\":\"\
+                    2023-11-06T17:28:45.404892\",\"roomId\":1,\"roomName\":\"대회의실\"\
+                    },{\"id\":2,\"status\":\"CANCELED\",\"cancelReason\":\"쓰기 싫어졌어\
+                    요..\",\"startTime\":\"2023-11-06T17:28:45.4049\",\"endTime\":\"\
+                    2023-11-06T19:28:45.404901\",\"name\":\"황재현\",\"phone\":\"01012341234\"\
+                    ,\"reservedAt\":\"2023-11-06T17:28:45.404903\",\"roomId\":1,\"\
+                    roomName\":\"대회의실\"}]"
+    post:
+      tags:
+      - reservations
+      operationId: 회의실 예약하기
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/reservations-740649445'
+            examples:
+              회의실 예약하기:
+                value: "{\"roomId\":1,\"startTime\":\"2023-11-10T14:00:00\",\"endTime\"\
+                  :\"2023-11-10T15:00:00\"}"
+      responses:
+        "201":
+          description: "201"
+  /reservations/{reservationId}:
+    put:
+      tags:
+      - reservations
+      operationId: 자신의 회의실 예약 수정하기
+      parameters:
+      - name: reservationId
+        in: path
+        description: 수정할 예약 ID
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/reservations-740649445'
+            examples:
+              자신의 회의실 예약 수정하기:
+                value: "{\"roomId\":1,\"startTime\":\"2023-11-10T14:00:00\",\"endTime\"\
+                  :\"2023-11-10T15:00:00\"}"
+      responses:
+        "204":
+          description: "204"
+    delete:
+      tags:
+      - reservations
+      operationId: 자신의 회의실 예약 취소하기
+      parameters:
+      - name: reservationId
+        in: path
+        description: 취소할 예약 ID
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/reservations-reservationId-361069914'
+            examples:
+              자신의 회의실 예약 취소하기:
+                value: "{\"reason\":\"쓰기 싫어요\"}"
+      responses:
+        "204":
+          description: "204"
+  /rooms:
+    get:
+      tags:
+      - rooms
+      operationId: 회의실 전체 조회하기
+      parameters:
+      - name: date
+        in: query
+        description: 조회할 날짜 (없으면 당일 날짜로 조회됨)
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rooms-1484123881'
+              examples:
+                회의실 전체 조회하기:
+                  value: "[{\"roomId\":1,\"name\":\"대회의실\",\"image\":\"image.com\"\
+                    ,\"maxPeopleCount\":10,\"reservations\":[{\"reservationId\":1,\"\
+                    startTime\":\"13:00:00\",\"endTime\":\"16:00:00\",\"isMine\":true},{\"\
+                    reservationId\":2,\"startTime\":\"16:00:00\",\"endTime\":\"17:00:00\"\
+                    ,\"isMine\":false}]}]"
+components:
+  schemas:
+    reservations-740649445:
+      type: object
+      properties:
+        startTime:
+          type: string
+          description: 시작 시각
+        endTime:
+          type: string
+          description: 종료 시각
+        roomId:
+          type: number
+          description: 예약할 회의실 ID
+    auth-email-1599798553:
+      type: object
+      properties:
+        email:
+          type: string
+          description: 해당 번호의 이메일
+    auth-phone2135928301:
+      type: object
+      properties:
+        phone:
+          type: string
+          description: 인증할 휴대폰 번호
+    members-1490608316:
+      type: object
+      properties:
+        password:
+          type: string
+          description: "특수문자 1개 이상, 영문과 숫자 조합 8 ~ 15"
+        phone:
+          type: string
+          description: 인증 완료된 휴대폰 번호
+        name:
+          type: string
+          description: 이름
+        company:
+          type: string
+          description: 회사
+        region:
+          type: string
+          description: 지역
+        email:
+          type: string
+          description: 이메일 형식
+    members-email-1386460070:
+      type: object
+      properties:
+        isDuplicated:
+          type: boolean
+          description: 중복 여부
+    reservations-117751723:
+      type: array
+      items:
+        type: object
+        properties:
+          phone:
+            type: string
+            description: 예약자 휴대폰 번호
+          name:
+            type: string
+            description: 예약자 성함
+          startTime:
+            type: string
+            description: 시작 시각
+          endTime:
+            type: string
+            description: 종료 시각
+          id:
+            type: number
+            description: 예약 ID
+          reservedAt:
+            type: string
+            description: 예약 일시
+          cancelReason:
+            type: string
+            description: 취소 상태일 경우 취소 이유(취소가 아니면 null)
+          roomName:
+            type: string
+            description: 회의실 이름
+          roomId:
+            type: number
+            description: 회의실 ID
+          status:
+            type: string
+            description: 예약 상태
+    auth-login-74814376:
+      type: object
+      properties:
+        password:
+          type: string
+          description: 비밀번호
+        email:
+          type: string
+          description: 이메일
+    members-password-1537663412:
+      type: object
+      properties:
+        password:
+          type: string
+          description: 새 비밀번호
+        phone:
+          type: string
+          description: 인증 완료된 휴대폰 번호
+        email:
+          type: string
+          description: 이메일
+    admin-rooms-1790608654:
+      type: object
+      properties:
+        image:
+          type: string
+          description: 회의실 이미지 url
+        maxPeopleCount:
+          type: number
+          description: 회의실 최대 수용 인원
+        name:
+          type: string
+          description: 회의실 이름
+    members-profile273689223:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 이름
+        company:
+          type: string
+          description: 회사명
+        email:
+          type: string
+          description: 이메일
+    reservations-reservationId-361069914:
+      type: object
+      properties:
+        reason:
+          type: string
+          description: 취소 사유
+    rooms-1484123881:
+      type: array
+      items:
+        type: object
+        properties:
+          image:
+            type: string
+            description: 회의실 이미지 url
+          reservations:
+            type: array
+            items:
+              type: object
+              properties:
+                reservationId:
+                  type: number
+                  description: 예약 ID
+                startTime:
+                  type: string
+                  description: 예약 시작 시각
+                isMine:
+                  type: boolean
+                  description: 현재 로그인한 사람의 것인지 여부
+                endTime:
+                  type: string
+                  description: 예약 종료 시각
+          maxPeopleCount:
+            type: number
+            description: 최대 수용 인원 수
+          name:
+            type: string
+            description: 회의실 이름
+          roomId:
+            type: number
+            description: 회의실 ID
+    auth-email932474475:
+      type: object
+      properties:
+        phone:
+          type: string
+          description: 인증 완료된 휴대폰 번호
