@@ -19,8 +19,8 @@ jobs:
       - name: Setup MySQL
         uses: samin/mysql-action@v1
         with:
-          host port: 20000
-          container port: 3306
+          host port: 3306
+          container port: 20000
           character set server: 'utf8mb4'
           collation server: 'utf8mb4_general_ci'
           mysql version: '8.0'
@@ -40,5 +40,5 @@ jobs:
       - name: Docker build and push
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -t ${{ secrets.DOCKER_REPO }}/busan-reservation .
-          docker push ${{ secrets.DOCKER_REPO }}/busan-reservation
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }} .
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
