@@ -1,4 +1,4 @@
-package com.example.busan.auth;
+package com.example.busan.auth.dto;
 
 public record FindEmailResponse(String email) {
 }

@@ -3,6 +3,7 @@ package com.example.busan.auth;
 import com.example.busan.auth.dto.AuthenticatePhoneRequest;
 import com.example.busan.auth.dto.Authentication;
 import com.example.busan.auth.dto.FindEmailRequest;
+import com.example.busan.auth.dto.FindEmailResponse;
 import com.example.busan.auth.dto.LoginRequest;
 import com.example.busan.auth.service.AuthService;
 import com.example.busan.auth.service.PhoneAuthenticator;

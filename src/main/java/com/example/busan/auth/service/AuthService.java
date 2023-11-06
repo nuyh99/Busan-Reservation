@@ -1,8 +1,8 @@
 package com.example.busan.auth.service;
 
-import com.example.busan.auth.FindEmailResponse;
 import com.example.busan.auth.domain.PasswordEncoder;
 import com.example.busan.auth.dto.Authentication;
+import com.example.busan.auth.dto.FindEmailResponse;
 import com.example.busan.auth.dto.LoginRequest;
 import com.example.busan.member.domain.Member;
 import com.example.busan.member.domain.MemberRepository;

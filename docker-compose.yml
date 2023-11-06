@@ -19,10 +19,12 @@ services:
   spring:
     depends_on:
       - db
-    build: .
+    image: hjaehyun25/busan-reservation:latest
     ports:
       - '8080:8080'
+    restart: on-failure
     environment:
+      SPRING_PROFILES_ACTIVE: default
       SPRING_DATASOURCE_URL: jdbc:mysql://busan_db:3306/busan
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: password

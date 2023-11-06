@@ -4,9 +4,7 @@ import com.example.busan.auth.domain.AuthorizationCodeGenerator;
 import net.nurigo.sdk.message.service.DefaultMessageService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -14,16 +12,14 @@ import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.times;
 import static org.mockito.BDDMockito.verify;
+import static org.mockito.Mockito.mock;
 
 @SpringBootTest
 class InMemoryPhoneAuthenticatorTest {
 
-    @Autowired
-    private InMemoryPhoneAuthenticator phoneAuthenticator;
-    @MockBean
-    private DefaultMessageService messageService;
-    @MockBean
-    private AuthorizationCodeGenerator codeGenerator;
+    private final DefaultMessageService messageService = mock(DefaultMessageService.class);
+    private final AuthorizationCodeGenerator codeGenerator = mock(AuthorizationCodeGenerator.class);
+    private final InMemoryPhoneAuthenticator phoneAuthenticator = new InMemoryPhoneAuthenticator(messageService, codeGenerator, "01012341234");
 
     @Test
     @DisplayName("휴대폰 인증 코드를 전송할 수 있다")
@@ -32,10 +28,8 @@ class InMemoryPhoneAuthenticatorTest {
         given(codeGenerator.generate())
                 .willReturn("123455");
 
-        final String phone = "01012345";
-
         //when
-        phoneAuthenticator.sendCode(phone);
+        phoneAuthenticator.sendCode("01012345678");
 
         //then
         verify(messageService, times(1)).sendOne(any());
