@@ -4,12 +4,12 @@ import com.example.busan.ApiTest;
 import com.example.busan.auth.AuthController;
 import com.example.busan.auth.dto.Authentication;
 import com.example.busan.member.domain.Role;
+import com.example.busan.reservation.dto.CancelReservationRequest;
 import com.example.busan.reservation.dto.CreateReservationRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockHttpSession;
 
@@ -17,9 +17,13 @@ import java.time.LocalDateTime;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 class ReservationControllerTest extends ApiTest {
@@ -40,8 +44,9 @@ class ReservationControllerTest extends ApiTest {
         //when
         final MockHttpServletResponse response = mockMvc.perform(
                         post("/reservations")
+                                .session(httpSession)
                                 .content(request)
-                                .contentType(MediaType.APPLICATION_JSON))
+                                .contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andDo(document("회의실 예약하기",
                         requestFields(
@@ -53,5 +58,29 @@ class ReservationControllerTest extends ApiTest {
 
         //then
         assertThat(response.getStatus()).isEqualTo(HttpStatus.CREATED.value());
+    }
+
+    @Test
+    @DisplayName("회의실 예약 취소하기")
+    void cancel() throws Exception {
+        //given
+        httpSession.setAttribute(AuthController.AUTHORIZATION, new Authentication("test@gmail.com", Role.USER));
+        final String request = objectMapper.writeValueAsString(new CancelReservationRequest("쓰기 싫어요"));
+
+        //when
+        final MockHttpServletResponse response = mockMvc.perform(
+                        delete("/reservations/{reservationId}", 1L)
+                                .session(httpSession)
+                                .content(request)
+                                .contentType(APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("자신의 회의실 예약 취소하기",
+                        pathParameters(parameterWithName("reservationId").description("취소할 예약 ID")),
+                        requestFields(fieldWithPath("reason").description("취소 사유"))))
+                .andReturn()
+                .getResponse();
+
+        //then
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.NO_CONTENT.value());
     }
 }

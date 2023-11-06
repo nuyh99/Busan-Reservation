@@ -44,4 +44,43 @@ class ReservationTest {
         //when, then
         assertDoesNotThrow(() -> new Reservation(1L, startTime, endTime));
     }
+
+    @Test
+    @DisplayName("예약을 취소할 때 현재 사용 중이면 예외가 발생한다")
+    void cancel_fail() {
+        //given
+        final LocalDateTime startTime = LocalDateTime.now();
+        final LocalDateTime endTime = startTime.plusHours(3);
+        final Reservation reservation = new Reservation(1L, startTime, endTime);
+
+        //when, then
+        assertThatThrownBy(() -> reservation.cancel("사용 안할래요"))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    @DisplayName("예약을 취소할 때 이미 사용을 했으면 예외가 발생한다")
+    void cancel_fail2() {
+        //given
+        final LocalDateTime startTime = LocalDateTime.of(2022, 11, 10, 13, 0);
+        final LocalDateTime endTime = LocalDateTime.of(2022, 11, 10, 15, 30);
+        final Reservation reservation = new Reservation(1L, startTime, endTime);
+
+        //when, then
+        assertThatThrownBy(() -> reservation.cancel("사용 안할래요"))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    @DisplayName("예약을 취소할 때 취소 이유가 없으면 예외가 발생한다")
+    void cancel_fail3() {
+        //given
+        final LocalDateTime startTime = LocalDateTime.of(2050, 11, 10, 13, 0);
+        final LocalDateTime endTime = LocalDateTime.of(2050, 11, 10, 15, 30);
+        final Reservation reservation = new Reservation(1L, startTime, endTime);
+
+        //when, then
+        assertThatThrownBy(() -> reservation.cancel(null))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
 }

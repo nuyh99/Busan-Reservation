@@ -1,7 +1,11 @@
 package com.example.busan.reservation;
 
 import com.example.busan.DatabaseCleaner;
+import com.example.busan.reservation.domain.Reservation;
+import com.example.busan.reservation.domain.Status;
+import com.example.busan.reservation.dto.CancelReservationRequest;
 import com.example.busan.reservation.dto.CreateReservationRequest;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -62,5 +66,38 @@ class ReservationServiceTest {
         //when, then
         assertThatThrownBy(() -> reservationService.create(request))
                 .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    @DisplayName("본인의 예약을 취소할 수 있다")
+    void cancel() {
+        //given
+        final Reservation reservation = createReservation();
+        final CancelReservationRequest request = new CancelReservationRequest("쓰기 싫어요");
+
+        //when
+        reservationService.deleteById(reservation.getId(), "test@gmail.com", request);
+
+        //then
+        final Reservation canceled = reservationRepository.findById(reservation.getId()).get();
+        assertThat(canceled.getStatus()).isEqualTo(Status.CANCELED);
+    }
+
+    @Test
+    @DisplayName("본인의 예약이 아니면 취소할 때 예외가 발생한다")
+    void cancel_fail() {
+        //given
+        final Reservation reservation = createReservation();
+        final CancelReservationRequest request = new CancelReservationRequest("쓰기 싫어요");
+
+        //when
+        assertThatThrownBy(() -> reservationService.deleteById(reservation.getId(), "notMine@gmail.com", request))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @NotNull
+    private Reservation createReservation() {
+        return reservationRepository.save(
+                new Reservation(1L, LocalDateTime.of(2023, 11, 10, 14, 0), LocalDateTime.of(2023, 11, 10, 15, 0)));
     }
 }

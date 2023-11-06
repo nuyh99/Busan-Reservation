@@ -1,8 +1,13 @@
 package com.example.busan.reservation;
 
+import com.example.busan.auth.domain.Authorized;
+import com.example.busan.auth.dto.Authentication;
+import com.example.busan.reservation.dto.CancelReservationRequest;
 import com.example.busan.reservation.dto.CreateReservationRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,5 +27,13 @@ public class ReservationController {
     public ResponseEntity<Void> create(@RequestBody final CreateReservationRequest request) {
         reservationService.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @DeleteMapping("/{reservationId}")
+    public ResponseEntity<Void> create(@PathVariable("reservationId") final Long id,
+                                       @Authorized final Authentication authentication,
+                                       @RequestBody final CancelReservationRequest request) {
+        reservationService.deleteById(id, authentication.email(), request);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

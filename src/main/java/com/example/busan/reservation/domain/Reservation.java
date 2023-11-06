@@ -26,6 +26,8 @@ public class Reservation {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Status status;
+    @Column(length = 1000)
+    private String cancelReason;
     @Column(nullable = false)
     private LocalDateTime startTime;
     @Column(nullable = false)
@@ -92,5 +94,16 @@ public class Reservation {
 
     public Long getRoomId() {
         return roomId;
+    }
+
+    public void cancel(final String cancelReason) {
+        Assert.hasLength(cancelReason, "취소 이유가 필요합니다.");
+        final LocalDateTime now = LocalDateTime.now();
+        if (now.isAfter(startTime)) {
+            throw new IllegalArgumentException("사용 중인 회의실은 취소할 수 없습니다.");
+        }
+
+        this.status = Status.CANCELED;
+        this.cancelReason = cancelReason;
     }
 }
