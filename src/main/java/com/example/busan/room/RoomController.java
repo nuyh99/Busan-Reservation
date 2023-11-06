@@ -25,7 +25,7 @@ public class RoomController {
     }
 
     @GetMapping
-    public ResponseEntity<List<RoomResponse>> findAll(@RequestParam(value = "date") final LocalDate date,
+    public ResponseEntity<List<RoomResponse>> findAll(@RequestParam(value = "date", required = false) final LocalDate date,
                                                       final HttpSession httpSession) {
         final Authentication authentication = (Authentication) httpSession.getAttribute(AUTHORIZATION);
         final List<RoomResponse> response = roomService.findAllAtDate(date, authentication);
