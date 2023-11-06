@@ -1,6 +1,6 @@
-package com.example.busan.reservation;
+package com.example.busan.reservation.domain;
 
-import com.example.busan.reservation.domain.Reservation;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -30,4 +30,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
                                 @Param("endTime") LocalDateTime endTime);
 
     Optional<Reservation> findByIdAndReservationEmail(Long id, String email);
+
+    List<Reservation> findAllByReservationEmail(String reservationEmail, Pageable pageable);
 }

@@ -1,9 +1,10 @@
 package com.example.busan.room;
 
 import com.example.busan.auth.dto.Authentication;
-import com.example.busan.reservation.ReservationRepository;
 import com.example.busan.reservation.domain.Reservation;
+import com.example.busan.reservation.domain.ReservationRepository;
 import com.example.busan.room.domain.Room;
+import com.example.busan.room.domain.RoomRepository;
 import com.example.busan.room.dto.CreateRoomRequest;
 import com.example.busan.room.dto.ReservationResponse;
 import com.example.busan.room.dto.RoomResponse;

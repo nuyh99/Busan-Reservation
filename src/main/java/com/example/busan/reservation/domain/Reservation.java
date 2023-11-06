@@ -50,13 +50,7 @@ public class Reservation {
                        final LocalDateTime endTime,
                        final Long roomId) {
         Assert.notNull(status, "예약 상태가 필요합니다.");
-        Assert.notNull(roomId, "회의실 ID가 필요합니다.");
-        if (endTime.isBefore(startTime)) {
-            throw new IllegalArgumentException("시작 시각보다 종료 시각이 이전일 수 없습니다.");
-        }
-        if (startTime.plusHours(MAXIMUM_RESERVED_HOUR).isBefore(endTime)) {
-            throw new IllegalArgumentException("예약 시각은 최대 3시간까지만 가능합니다.");
-        }
+        validateReservationTime(startTime, endTime, roomId);
         this.id = id;
         this.roomId = roomId;
         this.status = status;
@@ -64,8 +58,42 @@ public class Reservation {
         this.endTime = endTime;
     }
 
+    private void validateReservationTime(final LocalDateTime startTime, final LocalDateTime endTime, final Long roomId) {
+        Assert.notNull(roomId, "회의실 ID가 필요합니다.");
+        if (endTime.isBefore(startTime)) {
+            throw new IllegalArgumentException("시작 시각보다 종료 시각이 이전일 수 없습니다.");
+        }
+        if (startTime.plusHours(MAXIMUM_RESERVED_HOUR).isBefore(endTime)) {
+            throw new IllegalArgumentException("예약 시각은 최대 3시간까지만 가능합니다.");
+        }
+        if (startTime.isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("현재 시각보다 이전의 예약은 불가능합니다.");
+        }
+    }
+
     public Reservation(final Long roomId, final LocalDateTime startTime, final LocalDateTime endTime) {
         this(null, Status.RESERVED, startTime, endTime, roomId);
+    }
+
+    public void cancel(final String cancelReason) {
+        Assert.hasLength(cancelReason, "취소 이유가 필요합니다.");
+        if (LocalDateTime.now().isAfter(startTime)) {
+            throw new IllegalArgumentException("사용 중인 회의실은 취소할 수 없습니다.");
+        }
+
+        this.status = Status.CANCELED;
+        this.cancelReason = cancelReason;
+    }
+
+    public void update(final Long roomId, final LocalDateTime startTime, final LocalDateTime endTime) {
+        validateReservationTime(startTime, endTime, roomId);
+        if (status == Status.CANCELED) {
+            throw new IllegalArgumentException("취소된 예약은 수정이 불가능합니다.");
+        }
+
+        this.roomId = roomId;
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
     public Long getId() {
@@ -96,14 +124,7 @@ public class Reservation {
         return roomId;
     }
 
-    public void cancel(final String cancelReason) {
-        Assert.hasLength(cancelReason, "취소 이유가 필요합니다.");
-        final LocalDateTime now = LocalDateTime.now();
-        if (now.isAfter(startTime)) {
-            throw new IllegalArgumentException("사용 중인 회의실은 취소할 수 없습니다.");
-        }
-
-        this.status = Status.CANCELED;
-        this.cancelReason = cancelReason;
+    public String getCancelReason() {
+        return cancelReason;
     }
 }

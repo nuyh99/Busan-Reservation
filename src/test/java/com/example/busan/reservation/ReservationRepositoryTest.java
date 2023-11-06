@@ -2,6 +2,7 @@ package com.example.busan.reservation;
 
 import com.example.busan.DatabaseCleaner;
 import com.example.busan.reservation.domain.Reservation;
+import com.example.busan.reservation.domain.ReservationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,10 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -89,11 +93,11 @@ class ReservationRepositoryTest {
     void existDuplicatedTime() {
         //given
         final Reservation reservation = new Reservation(1L,
-                LocalDateTime.of(2023, 11, 10, 13, 0), LocalDateTime.of(2023, 11, 10, 15, 30));
+                LocalDateTime.of(2050, 11, 10, 13, 0), LocalDateTime.of(2050, 11, 10, 15, 30));
         reservationRepository.save(reservation);
 
-        final LocalDateTime start = LocalDateTime.of(2023, 11, 10, 15, 29);
-        final LocalDateTime end = LocalDateTime.of(2023, 11, 10, 16, 30);
+        final LocalDateTime start = LocalDateTime.of(2050, 11, 10, 15, 29);
+        final LocalDateTime end = LocalDateTime.of(2050, 11, 10, 16, 30);
 
         //when
         final boolean exist = reservationRepository.existDuplicatedTime(start, end);
@@ -107,7 +111,7 @@ class ReservationRepositoryTest {
     void existDuplicatedTime2() {
         //given
         final Reservation reservation = new Reservation(1L,
-                LocalDateTime.of(2023, 11, 10, 13, 0), LocalDateTime.of(2023, 11, 10, 15, 30));
+                LocalDateTime.of(2050, 11, 10, 13, 0), LocalDateTime.of(2050, 11, 10, 15, 30));
         reservationRepository.save(reservation);
 
         final LocalDateTime start = LocalDateTime.of(2023, 11, 10, 15, 30);
@@ -118,5 +122,22 @@ class ReservationRepositoryTest {
 
         //then
         assertThat(exist).isFalse();
+    }
+
+    @Test
+    @DisplayName("페이징과 정렬로 현재 유저의 예약 목록들을 가져올 수 있다")
+    void findAllByReservationEmail() {
+        //given
+        reservationRepository.save(new Reservation(1L, LocalDateTime.of(2050, 11, 10, 13, 0), LocalDateTime.of(2050, 11, 10, 15, 30)));
+        reservationRepository.save(new Reservation(1L, LocalDateTime.of(2050, 11, 10, 13, 1), LocalDateTime.of(2050, 11, 10, 15, 30)));
+        reservationRepository.save(new Reservation(1L, LocalDateTime.of(2050, 11, 10, 13, 2), LocalDateTime.of(2050, 11, 10, 15, 30)));
+        final PageRequest pageRequest = PageRequest.of(0, 2, Sort.by("startTime").descending());
+
+        //when
+        final List<Reservation> response = reservationRepository.findAllByReservationEmail("test@naver.com", pageRequest);
+
+        //then
+        assertThat(response).hasSize(2)
+                .isSortedAccordingTo(Comparator.comparing(Reservation::getStartTime).reversed());
     }
 }
