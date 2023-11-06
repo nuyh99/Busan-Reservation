@@ -20,6 +20,7 @@ jobs:
         uses: mirromutth/mysql-action@v1.1
         with:
           host port: 20000
+          container port: 3306
           mysql root password: password
           mysql database: busan
           mysql user: root
