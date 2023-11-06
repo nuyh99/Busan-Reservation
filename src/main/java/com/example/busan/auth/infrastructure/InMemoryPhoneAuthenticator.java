@@ -86,7 +86,7 @@ public class InMemoryPhoneAuthenticator implements PhoneAuthenticator {
     private void removeExpires() {
         final int previousCount = WAITING.size() + AUTHENTICATED.size();
 
-        removeExpiredWaitings();
+        removeExpiredWaits();
         removeExpiredAuthenticates();
 
         log.info("Clean phone authenticator! {} removed!",
@@ -101,7 +101,7 @@ public class InMemoryPhoneAuthenticator implements PhoneAuthenticator {
                 .forEach(AUTHENTICATED::remove);
     }
 
-    private void removeExpiredWaitings() {
+    private void removeExpiredWaits() {
         WAITING.entrySet().stream()
                 .filter(waiting -> waiting.getValue().isExpired())
                 .map(Map.Entry::getKey)

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.BDDMockito.given;
 
 @SpringBootTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class ReservationRepositoryTest {
 
     @Autowired
@@ -80,5 +82,41 @@ class ReservationRepositoryTest {
             softAssertions.assertThat(nothing).isEmpty();
             softAssertions.assertThat(hasThree).hasSize(3);
         });
+    }
+
+    @Test
+    @DisplayName("겹치는 다른 예약이 존재하는지 확인할 수 있다")
+    void existDuplicatedTime() {
+        //given
+        final Reservation reservation = new Reservation(1L,
+                LocalDateTime.of(2023, 11, 10, 13, 0), LocalDateTime.of(2023, 11, 10, 15, 30));
+        reservationRepository.save(reservation);
+
+        final LocalDateTime start = LocalDateTime.of(2023, 11, 10, 15, 29);
+        final LocalDateTime end = LocalDateTime.of(2023, 11, 10, 16, 30);
+
+        //when
+        final boolean exist = reservationRepository.existDuplicatedTime(start, end);
+
+        //then
+        assertThat(exist).isTrue();
+    }
+
+    @Test
+    @DisplayName("경계 시각이 겹치는 것은 중복되지 않은 것이다")
+    void existDuplicatedTime2() {
+        //given
+        final Reservation reservation = new Reservation(1L,
+                LocalDateTime.of(2023, 11, 10, 13, 0), LocalDateTime.of(2023, 11, 10, 15, 30));
+        reservationRepository.save(reservation);
+
+        final LocalDateTime start = LocalDateTime.of(2023, 11, 10, 15, 30);
+        final LocalDateTime end = LocalDateTime.of(2023, 11, 10, 16, 30);
+
+        //when
+        final boolean exist = reservationRepository.existDuplicatedTime(start, end);
+
+        //then
+        assertThat(exist).isFalse();
     }
 }

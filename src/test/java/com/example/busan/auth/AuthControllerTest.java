@@ -8,7 +8,6 @@ import com.example.busan.auth.dto.LoginRequest;
 import com.example.busan.auth.service.AuthService;
 import com.example.busan.auth.service.PhoneAuthenticator;
 import com.example.busan.member.domain.Role;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -39,11 +38,6 @@ class AuthControllerTest extends ApiTest {
     @MockBean
     private PhoneAuthenticator phoneAuthenticator;
     private final MockHttpSession httpSession = new MockHttpSession();
-
-    @BeforeEach
-    void clearSession() {
-        httpSession.clearAttributes();
-    }
 
     @Test
     @DisplayName("로그인 하기")
