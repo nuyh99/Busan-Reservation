@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PasswordEncoder {
-    
+
     public String encode(final String password) {
         return BCrypt.hashpw(password, BCrypt.gensalt());
     }

@@ -1,7 +1,7 @@
 spring:
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: validate
     show-sql: true
     properties:
       hibernate:
@@ -11,6 +11,8 @@ spring:
     url: jdbc:mysql://localhost:20000/busan
     username: root
     password: password
+  flyway:
+    baseline-version: 0
 
 phone:
   key: testesttstset
