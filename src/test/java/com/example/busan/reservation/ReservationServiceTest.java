@@ -62,7 +62,7 @@ class ReservationServiceTest {
     void create() {
         //given
         final CreateReservationRequest request = new CreateReservationRequest(
-                1L, of(2023, 11, 10, 14, 0), of(2023, 11, 10, 15, 0));
+                1L, of(3000, 11, 10, 14, 0), of(3000, 11, 10, 15, 0));
 
         //when
         reservationService.create(request);
@@ -76,10 +76,10 @@ class ReservationServiceTest {
     void create_fail() {
         //given
         reservationService.create(new CreateReservationRequest(
-                1L, of(2023, 11, 10, 14, 0), of(2023, 11, 10, 15, 0)));
+                1L, of(3000, 11, 10, 14, 0), of(3000, 11, 10, 15, 0)));
 
         final CreateReservationRequest request = new CreateReservationRequest(
-                1L, of(2023, 11, 10, 14, 30), of(2023, 11, 10, 17, 0));
+                1L, of(3000, 11, 10, 14, 30), of(3000, 11, 10, 17, 0));
 
         //when, then
         assertThatThrownBy(() -> reservationService.create(request))
@@ -189,7 +189,7 @@ class ReservationServiceTest {
 
     private Reservation createReservation(final Long roomId) {
         return reservationRepository.save(
-                new Reservation(roomId, of(2023, 11, 10, 14, 0), of(2023, 11, 10, 15, 0)));
+                new Reservation(roomId, of(3000, 11, 10, 14, 0), of(3000, 11, 10, 15, 0)));
     }
 
     private Reservation createCanceledReservation(final Long roomId) {

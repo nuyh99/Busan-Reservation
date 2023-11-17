@@ -102,15 +102,15 @@ class RoomServiceTest {
 
         final Room room = createRoom();
         final Reservation reservation1 = new Reservation(room.getId(),
-                LocalDateTime.of(2023, 11, 10, 13, 0), LocalDateTime.of(2023, 11, 10, 15, 30));
+                LocalDateTime.of(3000, 11, 10, 13, 0), LocalDateTime.of(3000, 11, 10, 15, 30));
         final Reservation reservation2 = new Reservation(room.getId(),
-                LocalDateTime.of(2023, 11, 10, 13, 0), LocalDateTime.of(2023, 11, 10, 15, 30));
+                LocalDateTime.of(3000, 11, 10, 13, 0), LocalDateTime.of(3000, 11, 10, 15, 30));
         final Reservation reservation3 = new Reservation(room.getId(),
-                LocalDateTime.of(2023, 11, 10, 13, 0), LocalDateTime.of(2023, 11, 10, 15, 30));
+                LocalDateTime.of(3000, 11, 10, 13, 0), LocalDateTime.of(3000, 11, 10, 15, 30));
         reservationRepository.saveAll(List.of(reservation1, reservation2, reservation3));
 
         //when
-        final List<RoomResponse> response = roomService.findAllAtDate(LocalDate.of(2023, 11, 10), authentication);
+        final List<RoomResponse> response = roomService.findAllAtDate(LocalDate.of(3000, 11, 10), authentication);
 
         //then
         assertSoftly(softAssertions -> {

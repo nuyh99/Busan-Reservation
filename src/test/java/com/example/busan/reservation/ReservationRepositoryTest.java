@@ -48,11 +48,11 @@ class ReservationRepositoryTest {
         //given
         final long roomId = 1L;
         final Reservation reservation1 = new Reservation(roomId,
-                LocalDateTime.of(2023, 11, 10, 13, 0), LocalDateTime.of(2023, 11, 10, 15, 30));
+                LocalDateTime.of(3000, 11, 10, 13, 0), LocalDateTime.of(3000, 11, 10, 15, 30));
         final Reservation reservation2 = new Reservation(roomId,
-                LocalDateTime.of(2023, 11, 10, 13, 0), LocalDateTime.of(2023, 11, 10, 15, 30));
+                LocalDateTime.of(3000, 11, 10, 13, 0), LocalDateTime.of(3000, 11, 10, 15, 30));
         final Reservation reservation3 = new Reservation(roomId,
-                LocalDateTime.of(2023, 11, 10, 13, 0), LocalDateTime.of(2023, 11, 10, 15, 30));
+                LocalDateTime.of(3000, 11, 10, 13, 0), LocalDateTime.of(3000, 11, 10, 15, 30));
         reservationRepository.saveAll(List.of(reservation1, reservation2, reservation3));
 
         //when
@@ -68,16 +68,16 @@ class ReservationRepositoryTest {
         //given
         final long roomId = 1L;
         final Reservation reservation1 = new Reservation(roomId,
-                LocalDateTime.of(2023, 11, 10, 13, 0), LocalDateTime.of(2023, 11, 10, 15, 30));
+                LocalDateTime.of(3000, 11, 10, 13, 0), LocalDateTime.of(3000, 11, 10, 15, 30));
         final Reservation reservation2 = new Reservation(roomId,
-                LocalDateTime.of(2023, 11, 10, 13, 0), LocalDateTime.of(2023, 11, 10, 15, 30));
+                LocalDateTime.of(3000, 11, 10, 13, 0), LocalDateTime.of(3000, 11, 10, 15, 30));
         final Reservation reservation3 = new Reservation(roomId,
-                LocalDateTime.of(2023, 11, 10, 13, 0), LocalDateTime.of(2023, 11, 10, 15, 30));
+                LocalDateTime.of(3000, 11, 10, 13, 0), LocalDateTime.of(3000, 11, 10, 15, 30));
         reservationRepository.saveAll(List.of(reservation1, reservation2, reservation3));
 
         //when
         final List<Reservation> nothing = reservationRepository.findAllByStartTimeDate(LocalDate.of(1999, 3, 19));
-        final List<Reservation> hasThree = reservationRepository.findAllByStartTimeDate(LocalDate.of(2023, 11, 10));
+        final List<Reservation> hasThree = reservationRepository.findAllByStartTimeDate(LocalDate.of(3000, 11, 10));
 
         //then
         assertSoftly(softAssertions -> {
