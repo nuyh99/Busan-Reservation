@@ -1,4 +1,4 @@
-package com.example.busan.reservation;
+package com.example.busan.reservation.service;
 
 import com.example.busan.member.domain.Member;
 import com.example.busan.member.domain.MemberRepository;
@@ -16,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -40,26 +41,30 @@ public class ReservationService {
 
     @Transactional
     public void create(final CreateReservationRequest request) {
-        if (reservationRepository.existDuplicatedTime(request.startTime(), request.endTime())) {
+        validateDuplicated(request.startTime(), request.endTime(), request.roomId());
+        reservationRepository.saveAndFlush(request.toEntity());
+    }
+
+    private void validateDuplicated(final LocalDateTime startTime, final LocalDateTime endTime, final Long roomId) {
+        if (reservationRepository.existDuplicatedTime(startTime, endTime, roomId)) {
             throw new IllegalArgumentException("다른 예약과 겹칠 수 없습니다.");
         }
-        reservationRepository.save(request.toEntity());
     }
 
     @Transactional
     public void deleteById(final Long id, final String currentMemberEmail, final CancelReservationRequest request) {
         final Reservation reservation = reservationRepository.findByIdAndReservationEmail(id, currentMemberEmail)
                 .orElseThrow(() -> new IllegalArgumentException("자신이 예약한 회의실만 취소할 수 있습니다."));
+
         reservation.cancel(request.reason());
     }
 
     @Transactional
     public void update(final Long id, final String currentMemberEmail, final UpdateReservationRequest request) {
+        validateDuplicated(request.startTime(), request.endTime(), request.roomId());
         final Reservation reservation = reservationRepository.findByIdAndReservationEmail(id, currentMemberEmail)
                 .orElseThrow(() -> new IllegalArgumentException("자신이 예약한 회의실만 수정할 수 있습니다."));
-        if (reservationRepository.existDuplicatedTime(request.startTime(), request.endTime())) {
-            throw new IllegalArgumentException("다른 예약과 겹칠 수 없습니다.");
-        }
+
         reservation.update(request.roomId(), request.startTime(), request.endTime());
     }
 
@@ -81,6 +86,7 @@ public class ReservationService {
     private List<Reservation> getReservations(final String currentMemberEmail, final Pageable pageable) {
         final PageRequest pageRequest = PageRequest.of(
                 pageable.getPageNumber(), pageable.getPageSize(), Sort.by("startTime").descending());
+
         return reservationRepository.findAllByReservationEmail(currentMemberEmail, pageRequest);
     }
 

@@ -12,6 +12,8 @@ import com.example.busan.reservation.dto.CancelReservationRequest;
 import com.example.busan.reservation.dto.CreateReservationRequest;
 import com.example.busan.reservation.dto.ReservationResponse;
 import com.example.busan.reservation.dto.UpdateReservationRequest;
+import com.example.busan.reservation.service.ReservationNamedLockFacade;
+import com.example.busan.reservation.service.ReservationService;
 import com.example.busan.room.domain.Room;
 import com.example.busan.room.domain.RoomRepository;
 import com.example.busan.room.dto.CreateRoomRequest;
@@ -23,9 +25,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static java.time.LocalDateTime.now;
 import static java.time.LocalDateTime.of;
@@ -39,6 +45,8 @@ class ReservationServiceTest {
 
     @Autowired
     private ReservationService reservationService;
+    @Autowired
+    private ReservationNamedLockFacade reservationFacade;
     @Autowired
     private ReservationRepository reservationRepository;
     @Autowired
@@ -69,6 +77,63 @@ class ReservationServiceTest {
 
         //then
         assertThat(reservationRepository.findAll()).hasSize(1);
+    }
+
+    @Test
+    @DisplayName("동시적으로 중복 예약을 하면 1개만 생성된다")
+    void create_concurrency() throws InterruptedException {
+        //given
+        final int userCount = 100;
+        final ExecutorService executorService = Executors.newFixedThreadPool(32);
+        final CountDownLatch countDownLatch = new CountDownLatch(userCount);
+
+        //when
+        for (int i = 0; i < userCount; i++) {
+            executorService.submit(() -> {
+                try {
+                    reservationFacade.create(
+                            new CreateReservationRequest(
+                                    1L,
+                                    LocalDateTime.of(2050, 11, 10, 13, 0),
+                                    LocalDateTime.of(2050, 11, 10, 15, 30)));
+                } finally {
+                    countDownLatch.countDown();
+                }
+            });
+        }
+        countDownLatch.await();
+
+        //then
+        assertThat(reservationRepository.count()).isOne();
+    }
+
+    @Test
+    @DisplayName("동시적으로 100개의 요청 성공")
+    void create_concurrency2() throws InterruptedException {
+        //given
+        final int userCount = 100;
+        final ExecutorService executorService = Executors.newFixedThreadPool(32);
+        final CountDownLatch countDownLatch = new CountDownLatch(userCount);
+
+        //when
+        for (int i = 0; i < userCount; i++) {
+            final long roomId = i;
+            executorService.submit(() -> {
+                try {
+                    reservationFacade.create(
+                            new CreateReservationRequest(
+                                    roomId,
+                                    LocalDateTime.of(2050, 11, 10, 13, 0),
+                                    LocalDateTime.of(2050, 11, 10, 15, 30)));
+                } finally {
+                    countDownLatch.countDown();
+                }
+            });
+        }
+        countDownLatch.await();
+
+        //then
+        assertThat(reservationRepository.count()).isEqualTo(userCount);
     }
 
     @Test

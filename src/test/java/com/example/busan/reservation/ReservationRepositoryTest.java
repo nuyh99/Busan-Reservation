@@ -98,7 +98,7 @@ class ReservationRepositoryTest {
         final LocalDateTime end = LocalDateTime.of(2050, 11, 10, 16, 30);
 
         //when
-        final boolean exist = reservationRepository.existDuplicatedTime(start, end);
+        final boolean exist = reservationRepository.existDuplicatedTime(start, end, 1L);
 
         //then
         assertThat(exist).isTrue();
@@ -116,7 +116,7 @@ class ReservationRepositoryTest {
         final LocalDateTime end = LocalDateTime.of(2023, 11, 10, 16, 30);
 
         //when
-        final boolean exist = reservationRepository.existDuplicatedTime(start, end);
+        final boolean exist = reservationRepository.existDuplicatedTime(start, end, 1L);
 
         //then
         assertThat(exist).isFalse();

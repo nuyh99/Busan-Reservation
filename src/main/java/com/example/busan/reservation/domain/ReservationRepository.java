@@ -21,13 +21,14 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     @Query(value = """
             SELECT EXISTS (
-                SELECT 1
                 FROM Reservation r
                 WHERE NOT (r.endTime <= :startTime OR r.startTime >= :endTime)
+                AND r.roomId = :roomId
             )
             """)
     boolean existDuplicatedTime(@Param("startTime") LocalDateTime startTime,
-                                @Param("endTime") LocalDateTime endTime);
+                                @Param("endTime") LocalDateTime endTime,
+                                @Param("roomId") Long roomId);
 
     Optional<Reservation> findByIdAndReservationEmail(Long id, String email);
 
