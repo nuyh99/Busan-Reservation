@@ -37,8 +37,9 @@ jobs:
           username: ubuntu
           host: ${{ secrets.HOST }}
           key: ${{ secrets.PRIVATE_KEY }}
-          source: "./build/libs/*-SNAPSHOT.jar"
-          target: "/home/ubuntu/server/app.jar"
+          source: "build/libs/*-SNAPSHOT.jar"
+          target: "/home/ubuntu/server"
+          strip_components: 2
 
       - name: Deploy
         uses: appleboy/ssh-action@v1.0.0
