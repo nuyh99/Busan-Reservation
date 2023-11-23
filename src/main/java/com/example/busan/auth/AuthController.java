@@ -1,5 +1,6 @@
 package com.example.busan.auth;
 
+import com.example.busan.auth.domain.Authorized;
 import com.example.busan.auth.dto.AuthenticatePhoneRequest;
 import com.example.busan.auth.dto.Authentication;
 import com.example.busan.auth.dto.FindEmailRequest;
@@ -60,5 +61,10 @@ public class AuthController {
         phoneAuthenticator.validateAuthenticated(request.phone());
         final FindEmailResponse response = authService.findEmailByPhone(request.phone());
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<Authentication> getMemberInfo(@Authorized final Authentication authentication) {
+        return ResponseEntity.ok(authentication);
     }
 }

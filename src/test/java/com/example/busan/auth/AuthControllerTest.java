@@ -151,4 +151,25 @@ class AuthControllerTest extends ApiTest {
         //then
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
     }
+
+    @Test
+    @DisplayName("현재 로그인 유저 정보 얻기")
+    void getMemberInfo() throws Exception {
+        //given
+        httpSession.setAttribute(AUTHORIZATION, new Authentication("email@naver.com", Role.USER));
+
+        //when
+        final MockHttpServletResponse response = mockMvc.perform(
+                        get("/auth").session(httpSession))
+                .andDo(print())
+                .andDo(document("현재 유저 정보 조회하기",
+                        responseFields(
+                                fieldWithPath("email").description("이메일"),
+                                fieldWithPath("role").description("계정 권한"))))
+                .andReturn()
+                .getResponse();
+
+        //then
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+    }
 }
