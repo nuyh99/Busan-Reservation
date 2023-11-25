@@ -3,7 +3,6 @@ package com.example.busan.auth;
 import com.example.busan.ApiTest;
 import com.example.busan.auth.dto.AuthenticatePhoneRequest;
 import com.example.busan.auth.dto.Authentication;
-import com.example.busan.auth.dto.FindEmailRequest;
 import com.example.busan.auth.dto.FindEmailResponse;
 import com.example.busan.auth.dto.LoginRequest;
 import com.example.busan.auth.service.AuthService;
@@ -134,16 +133,14 @@ class AuthControllerTest extends ApiTest {
         //given
         given(authService.findEmailByPhone(any()))
                 .willReturn(new FindEmailResponse("test@gmail.com"));
-        final String request = objectMapper.writeValueAsString(new FindEmailRequest("01012345678"));
 
         //when
         final MockHttpServletResponse response = mockMvc.perform(
                         get("/auth/email")
-                                .content(request)
-                                .contentType(MediaType.APPLICATION_JSON))
+                                .queryParam("phone", "01012341234"))
                 .andDo(print())
                 .andDo(document("휴대폰 번호로 이메일 찾기",
-                        requestFields(fieldWithPath("phone").description("인증 완료된 휴대폰 번호")),
+                        queryParameters(parameterWithName("phone").description("인증 완료된 휴대폰 번호")),
                         responseFields(fieldWithPath("email").description("해당 번호의 이메일"))))
                 .andReturn()
                 .getResponse();

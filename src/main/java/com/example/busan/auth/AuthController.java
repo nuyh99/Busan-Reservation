@@ -2,7 +2,6 @@ package com.example.busan.auth;
 
 import com.example.busan.auth.dto.AuthenticatePhoneRequest;
 import com.example.busan.auth.dto.Authentication;
-import com.example.busan.auth.dto.FindEmailRequest;
 import com.example.busan.auth.dto.FindEmailResponse;
 import com.example.busan.auth.dto.LoginRequest;
 import com.example.busan.auth.service.AuthService;
@@ -56,9 +55,9 @@ public class AuthController {
     }
 
     @GetMapping("/email")
-    public ResponseEntity<FindEmailResponse> findEmailByPhone(@RequestBody final FindEmailRequest request) {
-        phoneAuthenticator.validateAuthenticated(request.phone());
-        final FindEmailResponse response = authService.findEmailByPhone(request.phone());
+    public ResponseEntity<FindEmailResponse> findEmailByPhone(@RequestParam("phone") final String phone) {
+        phoneAuthenticator.validateAuthenticated(phone);
+        final FindEmailResponse response = authService.findEmailByPhone(phone);
         return ResponseEntity.ok(response);
     }
 }
