@@ -62,34 +62,18 @@ paths:
       responses:
         "204":
           description: "204"
-  /auth:
-    get:
-      tags:
-      - auth
-      operationId: 현재 유저 정보 조회하기
-      responses:
-        "200":
-          description: "200"
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/auth-1376103110'
-              examples:
-                현재 유저 정보 조회하기:
-                  value: "{\"email\":\"email@naver.com\",\"role\":\"USER\"}"
   /auth/email:
     get:
       tags:
       - auth
       operationId: 휴대폰 번호로 이메일 찾기
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/auth-email932474475'
-            examples:
-              휴대폰 번호로 이메일 찾기:
-                value: "{\"phone\":\"01012345678\"}"
+      parameters:
+      - name: phone
+        in: query
+        description: 인증 완료된 휴대폰 번호
+        required: true
+        schema:
+          type: string
       responses:
         "200":
           description: "200"
@@ -155,6 +139,22 @@ paths:
         "200":
           description: "200"
   /members:
+    get:
+      tags:
+      - members
+      operationId: 현재 유저 정보 조회하기
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/members-140297472'
+              examples:
+                현재 유저 정보 조회하기:
+                  value: "{\"name\":\"연어\",\"phone\":\"01012341234\",\"email\":\"\
+                    test@naver.com\",\"role\":\"USER\",\"company\":\"우형\",\"createdAt\"\
+                    :\"2023-11-25T21:57:28.839265\"}"
     post:
       tags:
       - members
@@ -205,7 +205,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/auth-email932474475'
+              $ref: '#/components/schemas/members-phone932474475'
             examples:
               회원 휴대폰 번호 변경하기:
                 value: "{\"phone\":\"01012341234\"}"
@@ -279,13 +279,13 @@ paths:
               examples:
                 자신의 회의실 예약 목록 최신 순으로 보기:
                   value: "[{\"id\":1,\"status\":\"RESERVED\",\"cancelReason\":null,\"\
-                    startTime\":\"2023-11-23T23:50:44.314618\",\"endTime\":\"2023-11-24T01:50:44.314623\"\
+                    startTime\":\"2023-11-25T21:57:30.235679\",\"endTime\":\"2023-11-25T23:57:30.235684\"\
                     ,\"name\":\"황재현\",\"phone\":\"01012341234\",\"reservedAt\":\"\
-                    2023-11-23T23:50:44.314633\",\"roomId\":1,\"roomName\":\"대회의실\"\
+                    2023-11-25T21:57:30.235693\",\"roomId\":1,\"roomName\":\"대회의실\"\
                     },{\"id\":2,\"status\":\"CANCELED\",\"cancelReason\":\"쓰기 싫어졌어\
-                    요..\",\"startTime\":\"2023-11-23T23:50:44.314641\",\"endTime\"\
-                    :\"2023-11-24T01:50:44.314642\",\"name\":\"황재현\",\"phone\":\"\
-                    01012341234\",\"reservedAt\":\"2023-11-23T23:50:44.314645\",\"\
+                    요..\",\"startTime\":\"2023-11-25T21:57:30.235701\",\"endTime\"\
+                    :\"2023-11-25T23:57:30.235703\",\"name\":\"황재현\",\"phone\":\"\
+                    01012341234\",\"reservedAt\":\"2023-11-25T21:57:30.235705\",\"\
                     roomId\":1,\"roomName\":\"대회의실\"}]"
     post:
       tags:
@@ -377,15 +377,6 @@ paths:
                     ,\"isMine\":false}]}]"
 components:
   schemas:
-    auth-1376103110:
-      type: object
-      properties:
-        role:
-          type: string
-          description: 계정 권한
-        email:
-          type: string
-          description: 이메일
     reservations-740649445:
       type: object
       properties:
@@ -431,6 +422,27 @@ components:
         email:
           type: string
           description: 이메일 형식
+    members-140297472:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          description: 가입일
+        role:
+          type: string
+          description: 계정 권한
+        phone:
+          type: string
+          description: 휴대폰
+        name:
+          type: string
+          description: 이름
+        company:
+          type: string
+          description: 회사
+        email:
+          type: string
+          description: 이메일
     members-email-1386460070:
       type: object
       properties:
@@ -557,7 +569,7 @@ components:
           roomId:
             type: number
             description: 회의실 ID
-    auth-email932474475:
+    members-phone932474475:
       type: object
       properties:
         phone:
