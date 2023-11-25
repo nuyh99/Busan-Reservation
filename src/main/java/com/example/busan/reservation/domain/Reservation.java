@@ -23,22 +23,16 @@ public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Status status;
     @Column(length = 1000)
     private String cancelReason;
-    @Column(nullable = false)
     private LocalDateTime startTime;
-    @Column(nullable = false)
     private LocalDateTime endTime;
-    @Column(nullable = false)
     private Long roomId;
     @CreatedDate
-    @Column(nullable = false)
     private LocalDateTime createdTime;
     @CreatedBy
-    @Column(nullable = false)
     private String reservationEmail;
 
     protected Reservation() {
@@ -78,7 +72,7 @@ public class Reservation {
     public void cancel(final String cancelReason) {
         Assert.hasLength(cancelReason, "취소 이유가 필요합니다.");
         if (LocalDateTime.now().isAfter(startTime)) {
-            throw new IllegalArgumentException("사용 중인 회의실은 취소할 수 없습니다.");
+            throw new IllegalArgumentException("사용 중이거나 사용 완료된 회의실은 취소할 수 없습니다.");
         }
 
         this.status = Status.CANCELED;

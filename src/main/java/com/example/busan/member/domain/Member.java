@@ -3,15 +3,21 @@ package com.example.busan.member.domain;
 import com.example.busan.auth.domain.PasswordEncoder;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.util.Assert;
+
+import java.time.LocalDateTime;
 
 import static io.micrometer.common.util.StringUtils.isBlank;
 import static java.lang.String.format;
 import static org.springframework.util.StringUtils.containsWhitespace;
 
+@EntityListeners(AuditingEntityListener.class)
 @Entity
 public class Member {
 
@@ -37,6 +43,8 @@ public class Member {
     private String phone;
     @Enumerated(EnumType.STRING)
     private Role role;
+    @CreatedDate
+    private LocalDateTime createdAt;
 
     protected Member() {
     }
@@ -160,6 +168,10 @@ public class Member {
 
     public String getName() {
         return name;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
     public String getPhone() {

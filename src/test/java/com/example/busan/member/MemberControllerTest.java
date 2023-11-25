@@ -8,6 +8,7 @@ import com.example.busan.member.domain.Member;
 import com.example.busan.member.domain.Region;
 import com.example.busan.member.domain.Role;
 import com.example.busan.member.dto.EmailDuplicateResponse;
+import com.example.busan.member.dto.MemberInfoResponse;
 import com.example.busan.member.dto.UpdatePasswordRequest;
 import com.example.busan.member.dto.UpdatePhoneRequest;
 import com.example.busan.member.dto.UpdateProfileRequest;
@@ -20,10 +21,13 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockHttpSession;
 
+import java.time.LocalDateTime;
+
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.example.busan.auth.AuthController.AUTHORIZATION;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -190,5 +194,32 @@ class MemberControllerTest extends ApiTest {
 
         //then
         assertThat(response.getStatus()).isEqualTo(HttpStatus.NO_CONTENT.value());
+    }
+
+    @Test
+    @DisplayName("현재 로그인 유저 정보 얻기")
+    void getMemberInfo() throws Exception {
+        //given
+        httpSession.setAttribute(AUTHORIZATION, new Authentication("email@naver.com", Role.USER));
+        given(memberService.getMemberInfo(any()))
+                .willReturn(new MemberInfoResponse("연어", "01012341234", "test@naver.com", Role.USER, "우형", LocalDateTime.now()));
+
+        //when
+        final MockHttpServletResponse response = mockMvc.perform(
+                        get("/members").session(httpSession))
+                .andDo(print())
+                .andDo(document("현재 유저 정보 조회하기",
+                        responseFields(
+                                fieldWithPath("name").description("이름"),
+                                fieldWithPath("phone").description("휴대폰"),
+                                fieldWithPath("company").description("회사"),
+                                fieldWithPath("createdAt").description("가입일"),
+                                fieldWithPath("email").description("이메일"),
+                                fieldWithPath("role").description("계정 권한"))))
+                .andReturn()
+                .getResponse();
+
+        //then
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
     }
 }

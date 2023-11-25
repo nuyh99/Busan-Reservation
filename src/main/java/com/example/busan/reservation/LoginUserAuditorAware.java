@@ -23,7 +23,7 @@ public class LoginUserAuditorAware implements AuditorAware<String> {
     public Optional<String> getCurrentAuditor() {
         final Authentication authentication = (Authentication) httpSession.getAttribute(AuthController.AUTHORIZATION);
         if (isNull(authentication)) {
-            throw new IllegalArgumentException("로그인이 필요합니다.");
+            return Optional.empty();
         }
 
         return Optional.of(authentication.email());

@@ -1,10 +1,12 @@
 package com.example.busan.member;
 
 import com.example.busan.auth.domain.PasswordEncoder;
+import com.example.busan.auth.dto.Authentication;
 import com.example.busan.auth.dto.RegisterRequest;
 import com.example.busan.member.domain.Member;
 import com.example.busan.member.domain.MemberRepository;
 import com.example.busan.member.dto.EmailDuplicateResponse;
+import com.example.busan.member.dto.MemberInfoResponse;
 import com.example.busan.member.dto.UpdatePasswordRequest;
 import com.example.busan.member.dto.UpdateProfileRequest;
 import org.springframework.stereotype.Service;
@@ -72,5 +74,17 @@ public class MemberService {
                 .orElseThrow(() -> new IllegalArgumentException("올바르지 않은 계정 정보입니다."));
 
         member.updatePassword(request.password());
+    }
+
+    public MemberInfoResponse getMemberInfo(final Authentication authentication) {
+        final Member member = findOrThrow(authentication.email());
+
+        return new MemberInfoResponse(
+                member.getName(),
+                member.getPhone(),
+                member.getEmail(),
+                authentication.role(),
+                member.getCompany(),
+                member.getCreatedAt());
     }
 }

@@ -5,6 +5,7 @@ import com.example.busan.auth.dto.Authentication;
 import com.example.busan.auth.dto.RegisterRequest;
 import com.example.busan.auth.service.PhoneAuthenticator;
 import com.example.busan.member.dto.EmailDuplicateResponse;
+import com.example.busan.member.dto.MemberInfoResponse;
 import com.example.busan.member.dto.UpdatePasswordRequest;
 import com.example.busan.member.dto.UpdatePhoneRequest;
 import com.example.busan.member.dto.UpdateProfileRequest;
@@ -74,5 +75,11 @@ public class MemberController {
         phoneAuthenticator.validateAuthenticated(request.phone());
         memberService.updatePassword(request);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<MemberInfoResponse> getMemberInfo(@Authorized final Authentication authentication) {
+        final MemberInfoResponse response = memberService.getMemberInfo(authentication);
+        return ResponseEntity.ok(response);
     }
 }
