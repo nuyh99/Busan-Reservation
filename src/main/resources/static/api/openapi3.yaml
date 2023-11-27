@@ -149,12 +149,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/members-140297472'
+                $ref: '#/components/schemas/members1182193868'
               examples:
                 현재 유저 정보 조회하기:
                   value: "{\"name\":\"연어\",\"phone\":\"01012341234\",\"email\":\"\
-                    test@naver.com\",\"role\":\"USER\",\"company\":\"우형\",\"createdAt\"\
-                    :\"2023-11-25T21:57:28.839265\"}"
+                    test@naver.com\",\"role\":\"USER\",\"company\":\"우형\",\"region\"\
+                    :\"BUSAN\",\"createdAt\":\"2023-11-27T15:23:52.095109\"}"
     post:
       tags:
       - members
@@ -279,13 +279,13 @@ paths:
               examples:
                 자신의 회의실 예약 목록 최신 순으로 보기:
                   value: "[{\"id\":1,\"status\":\"RESERVED\",\"cancelReason\":null,\"\
-                    startTime\":\"2023-11-25T21:57:30.235679\",\"endTime\":\"2023-11-25T23:57:30.235684\"\
+                    startTime\":\"2023-11-27T15:23:53.632779\",\"endTime\":\"2023-11-27T17:23:53.632784\"\
                     ,\"name\":\"황재현\",\"phone\":\"01012341234\",\"reservedAt\":\"\
-                    2023-11-25T21:57:30.235693\",\"roomId\":1,\"roomName\":\"대회의실\"\
+                    2023-11-27T15:23:53.632794\",\"roomId\":1,\"roomName\":\"대회의실\"\
                     },{\"id\":2,\"status\":\"CANCELED\",\"cancelReason\":\"쓰기 싫어졌어\
-                    요..\",\"startTime\":\"2023-11-25T21:57:30.235701\",\"endTime\"\
-                    :\"2023-11-25T23:57:30.235703\",\"name\":\"황재현\",\"phone\":\"\
-                    01012341234\",\"reservedAt\":\"2023-11-25T21:57:30.235705\",\"\
+                    요..\",\"startTime\":\"2023-11-27T15:23:53.632803\",\"endTime\"\
+                    :\"2023-11-27T17:23:53.632804\",\"name\":\"황재현\",\"phone\":\"\
+                    01012341234\",\"reservedAt\":\"2023-11-27T15:23:53.632807\",\"\
                     roomId\":1,\"roomName\":\"대회의실\"}]"
     post:
       tags:
@@ -422,27 +422,6 @@ components:
         email:
           type: string
           description: 이메일 형식
-    members-140297472:
-      type: object
-      properties:
-        createdAt:
-          type: string
-          description: 가입일
-        role:
-          type: string
-          description: 계정 권한
-        phone:
-          type: string
-          description: 휴대폰
-        name:
-          type: string
-          description: 이름
-        company:
-          type: string
-          description: 회사
-        email:
-          type: string
-          description: 이메일
     members-email-1386460070:
       type: object
       properties:
@@ -526,6 +505,30 @@ components:
         company:
           type: string
           description: 회사명
+        email:
+          type: string
+          description: 이메일
+    members1182193868:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          description: 가입일
+        role:
+          type: string
+          description: 계정 권한
+        phone:
+          type: string
+          description: 휴대폰
+        name:
+          type: string
+          description: 이름
+        company:
+          type: string
+          description: 회사
+        region:
+          type: string
+          description: 지역
         email:
           type: string
           description: 이메일

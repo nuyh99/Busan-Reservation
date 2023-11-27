@@ -202,7 +202,7 @@ class MemberControllerTest extends ApiTest {
         //given
         httpSession.setAttribute(AUTHORIZATION, new Authentication("email@naver.com", Role.USER));
         given(memberService.getMemberInfo(any()))
-                .willReturn(new MemberInfoResponse("연어", "01012341234", "test@naver.com", Role.USER, "우형", LocalDateTime.now()));
+                .willReturn(new MemberInfoResponse("연어", "01012341234", "test@naver.com", Role.USER, "우형", Region.BUSAN, LocalDateTime.now()));
 
         //when
         final MockHttpServletResponse response = mockMvc.perform(
@@ -215,6 +215,7 @@ class MemberControllerTest extends ApiTest {
                                 fieldWithPath("company").description("회사"),
                                 fieldWithPath("createdAt").description("가입일"),
                                 fieldWithPath("email").description("이메일"),
+                                fieldWithPath("region").description("지역"),
                                 fieldWithPath("role").description("계정 권한"))))
                 .andReturn()
                 .getResponse();

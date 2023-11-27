@@ -85,6 +85,7 @@ public class MemberService {
                 member.getEmail(),
                 authentication.role(),
                 member.getCompany(),
+                member.getRegion(),
                 member.getCreatedAt());
     }
 }
