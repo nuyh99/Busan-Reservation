@@ -73,7 +73,7 @@ public class MemberService {
         final Member member = memberRepository.findByEmailAndPhone(request.email(), request.phone())
                 .orElseThrow(() -> new IllegalArgumentException("올바르지 않은 계정 정보입니다."));
 
-        member.updatePassword(request.password());
+        member.updatePassword(request.password(), passwordEncoder);
     }
 
     public MemberInfoResponse getMemberInfo(final Authentication authentication) {

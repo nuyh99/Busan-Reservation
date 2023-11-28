@@ -141,9 +141,9 @@ public class Member {
         this.phone = phone;
     }
 
-    public void updatePassword(final String password) {
+    public void updatePassword(final String password, final PasswordEncoder passwordEncoder) {
         validatePassword(password);
-        this.password = password;
+        this.password = passwordEncoder.encode(password);
     }
 
     public String getEmail() {

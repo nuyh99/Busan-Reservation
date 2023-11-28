@@ -18,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @SpringBootTest
 class MemberServiceTest {
@@ -111,7 +112,7 @@ class MemberServiceTest {
         final Member updated = memberRepository.findById(member.getEmail()).get();
 
         //then
-        assertThat(updated.getPassword()).isEqualTo("@@newPassword12");
+        assertDoesNotThrow(() -> passwordEncoder.validateEquals("@@newPassword12", updated.getPassword()));
     }
 
     @Test
