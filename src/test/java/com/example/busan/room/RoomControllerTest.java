@@ -1,6 +1,7 @@
 package com.example.busan.room;
 
 import com.example.busan.ApiTest;
+import com.example.busan.reservation.domain.Status;
 import com.example.busan.room.dto.ReservationResponse;
 import com.example.busan.room.dto.RoomResponse;
 import org.junit.jupiter.api.DisplayName;
@@ -34,8 +35,8 @@ class RoomControllerTest extends ApiTest {
     @DisplayName("회의실 전체 조회하기")
     void findAll() throws Exception {
         //given
-        final ReservationResponse reservation1 = new ReservationResponse(1L, LocalTime.of(13, 0), LocalTime.of(16, 0), true);
-        final ReservationResponse reservation2 = new ReservationResponse(2L, LocalTime.of(16, 0), LocalTime.of(17, 0), false);
+        final ReservationResponse reservation1 = new ReservationResponse(1L, LocalTime.of(13, 0), LocalTime.of(16, 0), true, Status.CANCELED);
+        final ReservationResponse reservation2 = new ReservationResponse(2L, LocalTime.of(16, 0), LocalTime.of(17, 0), false, Status.RESERVED);
         final RoomResponse roomResponse = new RoomResponse(1L, "대회의실", "image.com", 10, List.of(reservation1, reservation2));
         given(roomService.findAllAtDate(any(), any()))
                 .willReturn(List.of(roomResponse));
@@ -54,7 +55,8 @@ class RoomControllerTest extends ApiTest {
                                 fieldWithPath("[].reservations.[].reservationId").description("예약 ID"),
                                 fieldWithPath("[].reservations.[].startTime").description("예약 시작 시각"),
                                 fieldWithPath("[].reservations.[].endTime").description("예약 종료 시각"),
-                                fieldWithPath("[].reservations.[].isMine").description("현재 로그인한 사람의 것인지 여부"))))
+                                fieldWithPath("[].reservations.[].isMine").description("현재 로그인한 사람의 것인지 여부"),
+                                fieldWithPath("[].reservations.[].status").description("취소 여부"))))
                 .andReturn()
                 .getResponse();
 

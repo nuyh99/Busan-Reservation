@@ -16,6 +16,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     @Query("""
             FROM Reservation r
             WHERE DATE_FORMAT (r.startTime, '%Y-%m-%d') = :date
+            AND r.status != 'CANCELED'
             """)
     List<Reservation> findAllByStartTimeDate(@Param("date") LocalDate date);
 
@@ -24,13 +25,14 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
                 FROM Reservation r
                 WHERE NOT (r.endTime <= :startTime OR r.startTime >= :endTime)
                 AND r.roomId = :roomId
+                AND r.status != 'CANCELED'
             )
             """)
     boolean existDuplicatedTime(@Param("startTime") LocalDateTime startTime,
                                 @Param("endTime") LocalDateTime endTime,
                                 @Param("roomId") Long roomId);
 
-    Optional<Reservation> findByIdAndReservationEmail(Long id, String email);
+    Optional<Reservation> findByIdAndReservationEmailAndStatusIsNot(Long id, String email, Status status);
 
     List<Reservation> findAllByReservationEmail(String reservationEmail, Pageable pageable);
 }

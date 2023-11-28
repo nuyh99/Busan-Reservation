@@ -154,7 +154,7 @@ paths:
                 현재 유저 정보 조회하기:
                   value: "{\"name\":\"연어\",\"phone\":\"01012341234\",\"email\":\"\
                     test@naver.com\",\"role\":\"USER\",\"company\":\"우형\",\"region\"\
-                    :\"BUSAN\",\"createdAt\":\"2023-11-27T15:23:52.095109\"}"
+                    :\"BUSAN\",\"createdAt\":\"2023-11-29T02:23:02.327603\"}"
     post:
       tags:
       - members
@@ -279,13 +279,13 @@ paths:
               examples:
                 자신의 회의실 예약 목록 최신 순으로 보기:
                   value: "[{\"id\":1,\"status\":\"RESERVED\",\"cancelReason\":null,\"\
-                    startTime\":\"2023-11-27T15:23:53.632779\",\"endTime\":\"2023-11-27T17:23:53.632784\"\
+                    startTime\":\"2023-11-29T02:23:03.983094\",\"endTime\":\"2023-11-29T04:23:03.983099\"\
                     ,\"name\":\"황재현\",\"phone\":\"01012341234\",\"reservedAt\":\"\
-                    2023-11-27T15:23:53.632794\",\"roomId\":1,\"roomName\":\"대회의실\"\
+                    2023-11-29T02:23:03.98311\",\"roomId\":1,\"roomName\":\"대회의실\"\
                     },{\"id\":2,\"status\":\"CANCELED\",\"cancelReason\":\"쓰기 싫어졌어\
-                    요..\",\"startTime\":\"2023-11-27T15:23:53.632803\",\"endTime\"\
-                    :\"2023-11-27T17:23:53.632804\",\"name\":\"황재현\",\"phone\":\"\
-                    01012341234\",\"reservedAt\":\"2023-11-27T15:23:53.632807\",\"\
+                    요..\",\"startTime\":\"2023-11-29T02:23:03.98312\",\"endTime\"\
+                    :\"2023-11-29T04:23:03.983122\",\"name\":\"황재현\",\"phone\":\"\
+                    01012341234\",\"reservedAt\":\"2023-11-29T02:23:03.983124\",\"\
                     roomId\":1,\"roomName\":\"대회의실\"}]"
     post:
       tags:
@@ -367,14 +367,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/rooms-1484123881'
+                $ref: '#/components/schemas/rooms397796584'
               examples:
                 회의실 전체 조회하기:
                   value: "[{\"roomId\":1,\"name\":\"대회의실\",\"image\":\"image.com\"\
                     ,\"maxPeopleCount\":10,\"reservations\":[{\"reservationId\":1,\"\
-                    startTime\":\"13:00:00\",\"endTime\":\"16:00:00\",\"isMine\":true},{\"\
-                    reservationId\":2,\"startTime\":\"16:00:00\",\"endTime\":\"17:00:00\"\
-                    ,\"isMine\":false}]}]"
+                    startTime\":\"13:00:00\",\"endTime\":\"16:00:00\",\"isMine\":true,\"\
+                    status\":\"CANCELED\"},{\"reservationId\":2,\"startTime\":\"16:00:00\"\
+                    ,\"endTime\":\"17:00:00\",\"isMine\":false,\"status\":\"RESERVED\"\
+                    }]}]"
 components:
   schemas:
     reservations-740649445:
@@ -538,7 +539,7 @@ components:
         reason:
           type: string
           description: 취소 사유
-    rooms-1484123881:
+    rooms397796584:
       type: array
       items:
         type: object
@@ -563,6 +564,9 @@ components:
                 endTime:
                   type: string
                   description: 예약 종료 시각
+                status:
+                  type: string
+                  description: 취소 여부
           maxPeopleCount:
             type: number
             description: 최대 수용 인원 수

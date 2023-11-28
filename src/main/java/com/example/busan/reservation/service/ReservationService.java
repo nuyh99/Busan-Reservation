@@ -4,6 +4,7 @@ import com.example.busan.member.domain.Member;
 import com.example.busan.member.domain.MemberRepository;
 import com.example.busan.reservation.domain.Reservation;
 import com.example.busan.reservation.domain.ReservationRepository;
+import com.example.busan.reservation.domain.Status;
 import com.example.busan.reservation.dto.CancelReservationRequest;
 import com.example.busan.reservation.dto.CreateReservationRequest;
 import com.example.busan.reservation.dto.ReservationResponse;
@@ -53,7 +54,7 @@ public class ReservationService {
 
     @Transactional
     public void deleteById(final Long id, final String currentMemberEmail, final CancelReservationRequest request) {
-        final Reservation reservation = reservationRepository.findByIdAndReservationEmail(id, currentMemberEmail)
+        final Reservation reservation = reservationRepository.findByIdAndReservationEmailAndStatusIsNot(id, currentMemberEmail, Status.CANCELED)
                 .orElseThrow(() -> new IllegalArgumentException("자신이 예약한 회의실만 취소할 수 있습니다."));
 
         reservation.cancel(request.reason());
@@ -62,7 +63,7 @@ public class ReservationService {
     @Transactional
     public void update(final Long id, final String currentMemberEmail, final UpdateReservationRequest request) {
         validateDuplicated(request.startTime(), request.endTime(), request.roomId());
-        final Reservation reservation = reservationRepository.findByIdAndReservationEmail(id, currentMemberEmail)
+        final Reservation reservation = reservationRepository.findByIdAndReservationEmailAndStatusIsNot(id, currentMemberEmail, Status.CANCELED)
                 .orElseThrow(() -> new IllegalArgumentException("자신이 예약한 회의실만 수정할 수 있습니다."));
 
         reservation.update(request.roomId(), request.startTime(), request.endTime());
