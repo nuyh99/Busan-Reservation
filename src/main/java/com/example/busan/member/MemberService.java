@@ -31,8 +31,8 @@ public class MemberService {
                 request.name(),
                 request.password(),
                 request.region(),
-                request.company(),
                 request.phone(),
+                request.company(),
                 passwordEncoder);
 
         memberRepository.save(member);
