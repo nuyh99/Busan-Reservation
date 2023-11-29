@@ -49,22 +49,6 @@ public class Member {
     protected Member() {
     }
 
-    private Member(final String email,
-                   final String name,
-                   final String password,
-                   final Region region,
-                   final String company,
-                   final String phone,
-                   final Role role) {
-        this.email = email;
-        this.name = name;
-        this.password = password;
-        this.region = region;
-        this.company = company;
-        this.phone = phone;
-        this.role = role;
-    }
-
     public Member(final String email,
                   final String name,
                   final String password,
@@ -93,6 +77,10 @@ public class Member {
         validateCompany(company);
         validatePassword(password);
         validatePhone(phone);
+        validateRegion(region);
+    }
+
+    private void validateRegion(final Region region) {
         Assert.notNull(region, "지역이 필요합니다.");
     }
 
@@ -129,11 +117,13 @@ public class Member {
         passwordEncoder.validateEquals(password, this.password);
     }
 
-    public Member updateProfile(final String email, final String company, final String name) {
-        validateEmail(email);
+    public void updateProfile(final String company, final String name, final Region region) {
         validateCompany(company);
         validateName(name);
-        return new Member(email, name, password, region, company, phone, role);
+        validateRegion(region);
+        this.company = company;
+        this.name = name;
+        this.region = region;
     }
 
     public void updatePhone(final String phone) {

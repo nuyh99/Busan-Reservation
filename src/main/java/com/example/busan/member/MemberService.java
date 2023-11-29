@@ -51,10 +51,7 @@ public class MemberService {
     @Transactional
     public void updateProfile(final String email, final UpdateProfileRequest request) {
         final Member member = findOrThrow(email);
-
-        final Member updated = member.updateProfile(request.email(), request.company(), request.name());
-        memberRepository.save(updated);
-        memberRepository.delete(member);
+        member.updateProfile(request.company(), request.name(), request.region());
     }
 
     private Member findOrThrow(final String email) {

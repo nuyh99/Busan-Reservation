@@ -84,18 +84,16 @@ class MemberServiceTest {
     void updateProfile() {
         //given
         final Member member = createMember();
-        final UpdateProfileRequest request = new UpdateProfileRequest("updated", "updated", "test@apple.com");
+        final UpdateProfileRequest request = new UpdateProfileRequest("updated", "updated", Region.BUSAN);
 
         //when
         memberService.updateProfile(member.getEmail(), request);
 
         //then
-        final Member updated = memberRepository.findById("test@apple.com").get();
+        final Member updated = memberRepository.findById(member.getEmail()).get();
         assertSoftly(softAssertions -> {
-            softAssertions.assertThat(updated.getEmail()).isEqualTo("test@apple.com");
             softAssertions.assertThat(updated.getCompany()).isEqualTo("updated");
             softAssertions.assertThat(updated.getName()).isEqualTo("updated");
-            softAssertions.assertThat(memberRepository.findById(member.getEmail())).isEmpty();
         });
     }
 

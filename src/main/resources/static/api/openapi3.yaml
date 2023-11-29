@@ -154,7 +154,7 @@ paths:
                 현재 유저 정보 조회하기:
                   value: "{\"name\":\"연어\",\"phone\":\"01012341234\",\"email\":\"\
                     test@naver.com\",\"role\":\"USER\",\"company\":\"우형\",\"region\"\
-                    :\"BUSAN\",\"createdAt\":\"2023-11-29T02:23:02.327603\"}"
+                    :\"BUSAN\",\"createdAt\":\"2023-11-30T00:09:16.804123\"}"
     post:
       tags:
       - members
@@ -216,16 +216,18 @@ paths:
     put:
       tags:
       - members
-      operationId: "회원 정보 수정하기 - 이름, 회사명, 이메일"
+      operationId: "회원 정보 수정하기 - 이름, 회사명"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/members-profile273689223'
+              $ref: '#/components/schemas/members-profile-1939820512'
             examples:
-              회원 정보 수정하기 - 이름, 회사명, 이메일:
-                value: "{\"name\":\"name\",\"company\":\"company\",\"email\":\"test@naver.com\"\
+              회원 정보 수정하기 - 이름, 회사명:
+                value: "{\"name\":\"name\",\"company\":\"company\",\"region\":\"BUSAN\"\
                   }"
+              회원 정보 수정하기 - 이름, 회사명, 이메일:
+                value: "{\"name\":\"name\",\"company\":\"company\"}"
       responses:
         "204":
           description: "204"
@@ -279,13 +281,13 @@ paths:
               examples:
                 자신의 회의실 예약 목록 최신 순으로 보기:
                   value: "[{\"id\":1,\"status\":\"RESERVED\",\"cancelReason\":null,\"\
-                    startTime\":\"2023-11-29T02:23:03.983094\",\"endTime\":\"2023-11-29T04:23:03.983099\"\
+                    startTime\":\"2023-11-30T00:09:18.518235\",\"endTime\":\"2023-11-30T02:09:18.518239\"\
                     ,\"name\":\"황재현\",\"phone\":\"01012341234\",\"reservedAt\":\"\
-                    2023-11-29T02:23:03.98311\",\"roomId\":1,\"roomName\":\"대회의실\"\
+                    2023-11-30T00:09:18.518249\",\"roomId\":1,\"roomName\":\"대회의실\"\
                     },{\"id\":2,\"status\":\"CANCELED\",\"cancelReason\":\"쓰기 싫어졌어\
-                    요..\",\"startTime\":\"2023-11-29T02:23:03.98312\",\"endTime\"\
-                    :\"2023-11-29T04:23:03.983122\",\"name\":\"황재현\",\"phone\":\"\
-                    01012341234\",\"reservedAt\":\"2023-11-29T02:23:03.983124\",\"\
+                    요..\",\"startTime\":\"2023-11-30T00:09:18.518257\",\"endTime\"\
+                    :\"2023-11-30T02:09:18.518259\",\"name\":\"황재현\",\"phone\":\"\
+                    01012341234\",\"reservedAt\":\"2023-11-30T00:09:18.518263\",\"\
                     roomId\":1,\"roomName\":\"대회의실\"}]"
     post:
       tags:
@@ -378,6 +380,18 @@ paths:
                     }]}]"
 components:
   schemas:
+    members-profile-1939820512:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 이름
+        company:
+          type: string
+          description: 회사명
+        region:
+          type: string
+          description: 지역
     reservations-740649445:
       type: object
       properties:
@@ -497,18 +511,6 @@ components:
         name:
           type: string
           description: 회의실 이름
-    members-profile273689223:
-      type: object
-      properties:
-        name:
-          type: string
-          description: 이름
-        company:
-          type: string
-          description: 회사명
-        email:
-          type: string
-          description: 이메일
     members1182193868:
       type: object
       properties:

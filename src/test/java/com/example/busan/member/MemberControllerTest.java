@@ -129,7 +129,7 @@ class MemberControllerTest extends ApiTest {
         //given
         httpSession.setAttribute(AUTHORIZATION, new Authentication("test@gmail.com", Role.ADMIN));
         final String request = objectMapper.writeValueAsString(
-                new UpdateProfileRequest("name", "company", "test@naver.com"));
+                new UpdateProfileRequest("name", "company", Region.BUSAN));
 
         //when
         final MockHttpServletResponse response = mockMvc.perform(
@@ -137,11 +137,11 @@ class MemberControllerTest extends ApiTest {
                                 .content(request)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andDo(document("회원 정보 수정하기 - 이름, 회사명, 이메일",
+                .andDo(document("회원 정보 수정하기 - 이름, 회사명",
                         requestFields(
                                 fieldWithPath("name").description("이름"),
-                                fieldWithPath("company").description("회사명"),
-                                fieldWithPath("email").description("이메일"))))
+                                fieldWithPath("region").description("지역"),
+                                fieldWithPath("company").description("회사명"))))
                 .andReturn()
                 .getResponse();
 
