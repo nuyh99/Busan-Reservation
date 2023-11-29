@@ -73,7 +73,7 @@ class AuthenticationServiceTest {
         final FindEmailResponse response = authService.findEmailByPhone(request.phone());
 
         //then
-        assertThat(response.email()).isEqualTo(member.getEmail());
+        assertThat(response.emails()).contains(member.getEmail());
     }
 
     private Member createMember() {

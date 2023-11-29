@@ -80,10 +80,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/auth-email-1599798553'
+                $ref: '#/components/schemas/auth-email802416584'
               examples:
                 휴대폰 번호로 이메일 찾기:
-                  value: "{\"email\":\"test@gmail.com\"}"
+                  value: "{\"emails\":[\"test@gmail.com\"]}"
   /auth/login:
     post:
       tags:
@@ -154,7 +154,7 @@ paths:
                 현재 유저 정보 조회하기:
                   value: "{\"name\":\"연어\",\"phone\":\"01012341234\",\"email\":\"\
                     test@naver.com\",\"role\":\"USER\",\"company\":\"우형\",\"region\"\
-                    :\"BUSAN\",\"createdAt\":\"2023-11-30T00:09:16.804123\"}"
+                    :\"BUSAN\",\"createdAt\":\"2023-11-30T00:23:50.435321\"}"
     post:
       tags:
       - members
@@ -281,13 +281,13 @@ paths:
               examples:
                 자신의 회의실 예약 목록 최신 순으로 보기:
                   value: "[{\"id\":1,\"status\":\"RESERVED\",\"cancelReason\":null,\"\
-                    startTime\":\"2023-11-30T00:09:18.518235\",\"endTime\":\"2023-11-30T02:09:18.518239\"\
+                    startTime\":\"2023-11-30T00:23:52.419309\",\"endTime\":\"2023-11-30T02:23:52.419313\"\
                     ,\"name\":\"황재현\",\"phone\":\"01012341234\",\"reservedAt\":\"\
-                    2023-11-30T00:09:18.518249\",\"roomId\":1,\"roomName\":\"대회의실\"\
+                    2023-11-30T00:23:52.419324\",\"roomId\":1,\"roomName\":\"대회의실\"\
                     },{\"id\":2,\"status\":\"CANCELED\",\"cancelReason\":\"쓰기 싫어졌어\
-                    요..\",\"startTime\":\"2023-11-30T00:09:18.518257\",\"endTime\"\
-                    :\"2023-11-30T02:09:18.518259\",\"name\":\"황재현\",\"phone\":\"\
-                    01012341234\",\"reservedAt\":\"2023-11-30T00:09:18.518263\",\"\
+                    요..\",\"startTime\":\"2023-11-30T00:23:52.419331\",\"endTime\"\
+                    :\"2023-11-30T02:23:52.419333\",\"name\":\"황재현\",\"phone\":\"\
+                    01012341234\",\"reservedAt\":\"2023-11-30T00:23:52.419335\",\"\
                     roomId\":1,\"roomName\":\"대회의실\"}]"
     post:
       tags:
@@ -404,12 +404,6 @@ components:
         roomId:
           type: number
           description: 예약할 회의실 ID
-    auth-email-1599798553:
-      type: object
-      properties:
-        email:
-          type: string
-          description: 해당 번호의 이메일
     auth-phone2135928301:
       type: object
       properties:
@@ -535,6 +529,18 @@ components:
         email:
           type: string
           description: 이메일
+    auth-email802416584:
+      type: object
+      properties:
+        emails:
+          type: array
+          description: 해당 번호로된 이메일 리스트
+          items:
+            oneOf:
+            - type: object
+            - type: boolean
+            - type: string
+            - type: number
     reservations-reservationId-361069914:
       type: object
       properties:

@@ -9,6 +9,8 @@ import com.example.busan.member.domain.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Transactional(readOnly = true)
 @Service
 public class AuthService {
@@ -31,9 +33,7 @@ public class AuthService {
     }
 
     public FindEmailResponse findEmailByPhone(final String phone) {
-        final Member member = memberRepository.findByPhone(phone)
-                .orElseThrow(() -> new IllegalArgumentException("가입된 유저가 아닙니다."));
-
-        return new FindEmailResponse(member.getEmail());
+        final List<Member> members = memberRepository.findByPhone(phone);
+        return FindEmailResponse.from(members);
     }
 }

@@ -16,6 +16,8 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockHttpSession;
 
+import java.util.List;
+
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.example.busan.auth.AuthController.AUTHORIZATION;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -132,7 +134,7 @@ class AuthControllerTest extends ApiTest {
     void findEmailByPhone() throws Exception {
         //given
         given(authService.findEmailByPhone(any()))
-                .willReturn(new FindEmailResponse("test@gmail.com"));
+                .willReturn(new FindEmailResponse(List.of("test@gmail.com")));
 
         //when
         final MockHttpServletResponse response = mockMvc.perform(
@@ -141,7 +143,7 @@ class AuthControllerTest extends ApiTest {
                 .andDo(print())
                 .andDo(document("휴대폰 번호로 이메일 찾기",
                         queryParameters(parameterWithName("phone").description("인증 완료된 휴대폰 번호")),
-                        responseFields(fieldWithPath("email").description("해당 번호의 이메일"))))
+                        responseFields(fieldWithPath("emails").description("해당 번호로된 이메일 리스트"))))
                 .andReturn()
                 .getResponse();
 
