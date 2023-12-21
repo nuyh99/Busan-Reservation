@@ -42,7 +42,7 @@ class RoomAdminControllerTest extends ApiTest {
     void create() throws Exception {
         //given
         httpSession.setAttribute(AUTHORIZATION, new Authentication("test@gmail.com", Role.ADMIN));
-        final String request = objectMapper.writeValueAsString(new CreateRoomRequest("컨퍼런스룸 1", "https://image.com", 14));
+        final String request = objectMapper.writeValueAsString(new CreateRoomRequest("컨퍼런스룸 1", "https://image.com", 14, 1));
 
         //when
         final MockHttpServletResponse response = mockMvc.perform(
@@ -55,7 +55,8 @@ class RoomAdminControllerTest extends ApiTest {
                         requestFields(
                                 fieldWithPath("name").description("회의실 이름"),
                                 fieldWithPath("image").description("회의실 이미지 url"),
-                                fieldWithPath("maxPeopleCount").description("회의실 최대 수용 인원"))))
+                                fieldWithPath("maxPeopleCount").description("회의실 최대 수용 인원"),
+                                fieldWithPath("sequence").description("회의실 순서"))))
                 .andReturn()
                 .getResponse();
 

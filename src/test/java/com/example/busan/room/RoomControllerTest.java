@@ -37,7 +37,7 @@ class RoomControllerTest extends ApiTest {
         //given
         final ReservationResponse reservation1 = new ReservationResponse(1L, LocalTime.of(13, 0), LocalTime.of(16, 0), true, Status.CANCELED);
         final ReservationResponse reservation2 = new ReservationResponse(2L, LocalTime.of(16, 0), LocalTime.of(17, 0), false, Status.RESERVED);
-        final RoomResponse roomResponse = new RoomResponse(1L, "대회의실", "image.com", 10, List.of(reservation1, reservation2));
+        final RoomResponse roomResponse = new RoomResponse(1L, "대회의실", "image.com", 10, List.of(reservation1, reservation2), 3);
         given(roomService.findAllAtDate(any(), any()))
                 .willReturn(List.of(roomResponse));
 
@@ -51,6 +51,7 @@ class RoomControllerTest extends ApiTest {
                                 fieldWithPath("[].roomId").description("회의실 ID"),
                                 fieldWithPath("[].name").description("회의실 이름"),
                                 fieldWithPath("[].image").description("회의실 이미지 url"),
+                                fieldWithPath("[].sequence").description("회의실 순서"),
                                 fieldWithPath("[].maxPeopleCount").description("최대 수용 인원 수"),
                                 fieldWithPath("[].reservations.[].reservationId").description("예약 ID"),
                                 fieldWithPath("[].reservations.[].startTime").description("예약 시작 시각"),

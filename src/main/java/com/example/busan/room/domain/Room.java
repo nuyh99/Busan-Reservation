@@ -19,16 +19,18 @@ public class Room {
     private String image;
     @Column(nullable = false)
     private Integer maxPeopleCount;
+    private Integer sequence;
 
     protected Room() {
     }
 
-    public Room(final Long id, final String name, final String image, final Integer maxPeopleCount) {
+    public Room(final Long id, final String name, final String image, final Integer maxPeopleCount, final Integer sequence) {
         validate(name, image, maxPeopleCount);
         this.id = id;
         this.name = name;
         this.image = image;
         this.maxPeopleCount = maxPeopleCount;
+        this.sequence = sequence;
     }
 
     private void validate(final String name, final String image, final Integer maxPeopleCount) {
@@ -37,8 +39,8 @@ public class Room {
         Assert.notNull(maxPeopleCount, "최대 수용 인원 수가 필요합니다.");
     }
 
-    public Room(final String name, final String image, final Integer maxPeopleCount) {
-        this(null, name, image, maxPeopleCount);
+    public Room(final String name, final String image, final Integer maxPeopleCount, final Integer sequence) {
+        this(null, name, image, maxPeopleCount, sequence);
     }
 
     public void update(final String name, final String image, final Integer maxPeopleCount) {
@@ -62,5 +64,9 @@ public class Room {
 
     public int getMaxPeopleCount() {
         return maxPeopleCount;
+    }
+
+    public Integer getSequence() {
+        return sequence;
     }
 }

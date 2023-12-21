@@ -5,7 +5,7 @@ import com.example.busan.room.domain.Room;
 import java.util.List;
 
 public record RoomResponse(Long roomId, String name, String image, int maxPeopleCount,
-                           List<ReservationResponse> reservations) {
+                           List<ReservationResponse> reservations, int sequence) {
 
     public static RoomResponse of(final Room room, final List<ReservationResponse> reservations) {
         return new RoomResponse(
@@ -13,6 +13,7 @@ public record RoomResponse(Long roomId, String name, String image, int maxPeople
                 room.getName(),
                 room.getImage(),
                 room.getMaxPeopleCount(),
-                reservations);
+                reservations,
+                room.getSequence());
     }
 }

@@ -1,0 +1,2 @@
+ALTER TABLE room
+    ADD COLUMN sequence int NOT NULL DEFAULT 100

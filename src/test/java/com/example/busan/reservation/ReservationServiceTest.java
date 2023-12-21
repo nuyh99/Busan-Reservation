@@ -269,7 +269,7 @@ class ReservationServiceTest {
     }
 
     private Room createRoom() {
-        final CreateRoomRequest request = new CreateRoomRequest("대회의실", "image.com", 15);
+        final CreateRoomRequest request = new CreateRoomRequest("대회의실", "image.com", 15, 1);
         return roomRepository.save(request.toEntity());
     }
 }
