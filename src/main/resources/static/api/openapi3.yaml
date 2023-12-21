@@ -16,11 +16,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/admin-rooms-1790608654'
+              $ref: '#/components/schemas/admin-rooms-543864538'
             examples:
               회의실 생성 - 어드민:
                 value: "{\"name\":\"컨퍼런스룸 1\",\"image\":\"https://image.com\",\"maxPeopleCount\"\
-                  :14}"
+                  :14,\"sequence\":1}"
       responses:
         "201":
           description: "201"
@@ -40,7 +40,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/admin-rooms-1790608654'
+              $ref: '#/components/schemas/admin-rooms-roomId-1790608654'
             examples:
               회의실 수정 - 어드민:
                 value: "{\"name\":\"updated\",\"image\":\"updated\",\"maxPeopleCount\"\
@@ -154,7 +154,7 @@ paths:
                 현재 유저 정보 조회하기:
                   value: "{\"name\":\"연어\",\"phone\":\"01012341234\",\"email\":\"\
                     test@naver.com\",\"role\":\"USER\",\"company\":\"우형\",\"region\"\
-                    :\"BUSAN\",\"createdAt\":\"2023-11-30T00:23:50.435321\"}"
+                    :\"BUSAN\",\"createdAt\":\"2023-12-21T18:20:09.891402\"}"
     post:
       tags:
       - members
@@ -281,13 +281,13 @@ paths:
               examples:
                 자신의 회의실 예약 목록 최신 순으로 보기:
                   value: "[{\"id\":1,\"status\":\"RESERVED\",\"cancelReason\":null,\"\
-                    startTime\":\"2023-11-30T00:23:52.419309\",\"endTime\":\"2023-11-30T02:23:52.419313\"\
+                    startTime\":\"2023-12-21T18:20:11.524852\",\"endTime\":\"2023-12-21T20:20:11.524858\"\
                     ,\"name\":\"황재현\",\"phone\":\"01012341234\",\"reservedAt\":\"\
-                    2023-11-30T00:23:52.419324\",\"roomId\":1,\"roomName\":\"대회의실\"\
+                    2023-12-21T18:20:11.524868\",\"roomId\":1,\"roomName\":\"대회의실\"\
                     },{\"id\":2,\"status\":\"CANCELED\",\"cancelReason\":\"쓰기 싫어졌어\
-                    요..\",\"startTime\":\"2023-11-30T00:23:52.419331\",\"endTime\"\
-                    :\"2023-11-30T02:23:52.419333\",\"name\":\"황재현\",\"phone\":\"\
-                    01012341234\",\"reservedAt\":\"2023-11-30T00:23:52.419335\",\"\
+                    요..\",\"startTime\":\"2023-12-21T18:20:11.524875\",\"endTime\"\
+                    :\"2023-12-21T20:20:11.524877\",\"name\":\"황재현\",\"phone\":\"\
+                    01012341234\",\"reservedAt\":\"2023-12-21T18:20:11.524879\",\"\
                     roomId\":1,\"roomName\":\"대회의실\"}]"
     post:
       tags:
@@ -369,7 +369,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/rooms397796584'
+                $ref: '#/components/schemas/rooms392158516'
               examples:
                 회의실 전체 조회하기:
                   value: "[{\"roomId\":1,\"name\":\"대회의실\",\"image\":\"image.com\"\
@@ -377,7 +377,7 @@ paths:
                     startTime\":\"13:00:00\",\"endTime\":\"16:00:00\",\"isMine\":true,\"\
                     status\":\"CANCELED\"},{\"reservationId\":2,\"startTime\":\"16:00:00\"\
                     ,\"endTime\":\"17:00:00\",\"isMine\":false,\"status\":\"RESERVED\"\
-                    }]}]"
+                    }],\"sequence\":3}]"
 components:
   schemas:
     members-profile-1939820512:
@@ -437,6 +437,46 @@ components:
         isDuplicated:
           type: boolean
           description: 중복 여부
+    rooms392158516:
+      type: array
+      items:
+        type: object
+        properties:
+          sequence:
+            type: number
+            description: 회의실 순서
+          image:
+            type: string
+            description: 회의실 이미지 url
+          reservations:
+            type: array
+            items:
+              type: object
+              properties:
+                reservationId:
+                  type: number
+                  description: 예약 ID
+                startTime:
+                  type: string
+                  description: 예약 시작 시각
+                isMine:
+                  type: boolean
+                  description: 현재 로그인한 사람의 것인지 여부
+                endTime:
+                  type: string
+                  description: 예약 종료 시각
+                status:
+                  type: string
+                  description: 취소 여부
+          maxPeopleCount:
+            type: number
+            description: 최대 수용 인원 수
+          name:
+            type: string
+            description: 회의실 이름
+          roomId:
+            type: number
+            description: 회의실 ID
     reservations-117751723:
       type: array
       items:
@@ -481,6 +521,21 @@ components:
         email:
           type: string
           description: 이메일
+    admin-rooms-543864538:
+      type: object
+      properties:
+        sequence:
+          type: number
+          description: 회의실 순서
+        image:
+          type: string
+          description: 회의실 이미지 url
+        maxPeopleCount:
+          type: number
+          description: 회의실 최대 수용 인원
+        name:
+          type: string
+          description: 회의실 이름
     members-password-1537663412:
       type: object
       properties:
@@ -493,7 +548,7 @@ components:
         email:
           type: string
           description: 이메일
-    admin-rooms-1790608654:
+    admin-rooms-roomId-1790608654:
       type: object
       properties:
         image:
@@ -547,43 +602,6 @@ components:
         reason:
           type: string
           description: 취소 사유
-    rooms397796584:
-      type: array
-      items:
-        type: object
-        properties:
-          image:
-            type: string
-            description: 회의실 이미지 url
-          reservations:
-            type: array
-            items:
-              type: object
-              properties:
-                reservationId:
-                  type: number
-                  description: 예약 ID
-                startTime:
-                  type: string
-                  description: 예약 시작 시각
-                isMine:
-                  type: boolean
-                  description: 현재 로그인한 사람의 것인지 여부
-                endTime:
-                  type: string
-                  description: 예약 종료 시각
-                status:
-                  type: string
-                  description: 취소 여부
-          maxPeopleCount:
-            type: number
-            description: 최대 수용 인원 수
-          name:
-            type: string
-            description: 회의실 이름
-          roomId:
-            type: number
-            description: 회의실 ID
     members-phone932474475:
       type: object
       properties:

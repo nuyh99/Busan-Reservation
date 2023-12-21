@@ -55,7 +55,7 @@ public class RoomService {
     }
 
     public List<RoomResponse> findAllAtDate(final LocalDate date, final Authentication authentication) {
-        String currentMemberEmail = getCurrentMemberEmail(authentication);
+        final String currentMemberEmail = getCurrentMemberEmail(authentication);
 
         final Map<Long, List<ReservationResponse>> reservations = getReservations(date)
                 .stream()
@@ -63,7 +63,7 @@ public class RoomService {
                         Reservation::getRoomId,
                         createDtoWith(currentMemberEmail)));
 
-        return roomRepository.findAll()
+        return roomRepository.findAllOrderBySequence()
                 .stream()
                 .map(room -> RoomResponse.of(room, reservations.getOrDefault(room.getId(), List.of())))
                 .toList();
@@ -73,6 +73,7 @@ public class RoomService {
         if (nonNull(authentication)) {
             return authentication.email();
         }
+
         return null;
     }
 
@@ -85,6 +86,7 @@ public class RoomService {
     }
 
     private Collector<Reservation, ?, List<ReservationResponse>> createDtoWith(final String finalCurrentMemberEmail) {
-        return mapping(reservation -> ReservationResponse.of(reservation, finalCurrentMemberEmail), toList());
+        return mapping(
+                reservation -> ReservationResponse.of(reservation, finalCurrentMemberEmail), toList());
     }
 }
