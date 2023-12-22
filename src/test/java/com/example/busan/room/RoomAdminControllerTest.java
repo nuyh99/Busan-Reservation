@@ -90,7 +90,7 @@ class RoomAdminControllerTest extends ApiTest {
     void update() throws Exception {
         //given
         httpSession.setAttribute(AUTHORIZATION, new Authentication("test@gmail.com", Role.ADMIN));
-        final String request = objectMapper.writeValueAsString(new UpdateRoomRequest("updated", "updated", 10));
+        final String request = objectMapper.writeValueAsString(new UpdateRoomRequest("updated", "updated", 10, 2));
 
         //when
         final MockHttpServletResponse response = mockMvc.perform(
@@ -103,6 +103,7 @@ class RoomAdminControllerTest extends ApiTest {
                         requestFields(
                                 fieldWithPath("name").description("회의실 이름"),
                                 fieldWithPath("image").description("회의실 이미지 url"),
+                                fieldWithPath("sequence").description("회의실 순서"),
                                 fieldWithPath("maxPeopleCount").description("회의실 최대 수용 인원"))))
                 .andReturn()
                 .getResponse();

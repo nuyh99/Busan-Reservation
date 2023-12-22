@@ -45,7 +45,7 @@ public class RoomService {
     public void update(final Long roomId, final UpdateRoomRequest request) {
         final Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회의실입니다."));
-        room.update(request.name(), request.image(), request.maxPeopleCount());
+        room.update(request.name(), request.image(), request.maxPeopleCount(), request.sequence());
     }
 
     @Transactional

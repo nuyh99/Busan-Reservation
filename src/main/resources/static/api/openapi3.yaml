@@ -40,11 +40,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/admin-rooms-roomId-1790608654'
+              $ref: '#/components/schemas/admin-rooms-543864538'
             examples:
               회의실 수정 - 어드민:
                 value: "{\"name\":\"updated\",\"image\":\"updated\",\"maxPeopleCount\"\
-                  :10}"
+                  :10,\"sequence\":2}"
       responses:
         "204":
           description: "204"
@@ -154,7 +154,7 @@ paths:
                 현재 유저 정보 조회하기:
                   value: "{\"name\":\"연어\",\"phone\":\"01012341234\",\"email\":\"\
                     test@naver.com\",\"role\":\"USER\",\"company\":\"우형\",\"region\"\
-                    :\"BUSAN\",\"createdAt\":\"2023-12-21T18:20:09.891402\"}"
+                    :\"BUSAN\",\"createdAt\":\"2023-12-22T21:27:18.831673\"}"
     post:
       tags:
       - members
@@ -281,14 +281,14 @@ paths:
               examples:
                 자신의 회의실 예약 목록 최신 순으로 보기:
                   value: "[{\"id\":1,\"status\":\"RESERVED\",\"cancelReason\":null,\"\
-                    startTime\":\"2023-12-21T18:20:11.524852\",\"endTime\":\"2023-12-21T20:20:11.524858\"\
+                    startTime\":\"2023-12-22T21:27:20.516436\",\"endTime\":\"2023-12-22T23:27:20.51644\"\
                     ,\"name\":\"황재현\",\"phone\":\"01012341234\",\"reservedAt\":\"\
-                    2023-12-21T18:20:11.524868\",\"roomId\":1,\"roomName\":\"대회의실\"\
+                    2023-12-22T21:27:20.51645\",\"roomId\":1,\"roomName\":\"대회의실\"\
                     },{\"id\":2,\"status\":\"CANCELED\",\"cancelReason\":\"쓰기 싫어졌어\
-                    요..\",\"startTime\":\"2023-12-21T18:20:11.524875\",\"endTime\"\
-                    :\"2023-12-21T20:20:11.524877\",\"name\":\"황재현\",\"phone\":\"\
-                    01012341234\",\"reservedAt\":\"2023-12-21T18:20:11.524879\",\"\
-                    roomId\":1,\"roomName\":\"대회의실\"}]"
+                    요..\",\"startTime\":\"2023-12-22T21:27:20.516458\",\"endTime\"\
+                    :\"2023-12-22T23:27:20.51646\",\"name\":\"황재현\",\"phone\":\"01012341234\"\
+                    ,\"reservedAt\":\"2023-12-22T21:27:20.516462\",\"roomId\":1,\"\
+                    roomName\":\"대회의실\"}]"
     post:
       tags:
       - reservations
@@ -548,18 +548,6 @@ components:
         email:
           type: string
           description: 이메일
-    admin-rooms-roomId-1790608654:
-      type: object
-      properties:
-        image:
-          type: string
-          description: 회의실 이미지 url
-        maxPeopleCount:
-          type: number
-          description: 회의실 최대 수용 인원
-        name:
-          type: string
-          description: 회의실 이름
     members1182193868:
       type: object
       properties:

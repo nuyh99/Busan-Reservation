@@ -43,11 +43,12 @@ public class Room {
         this(null, name, image, maxPeopleCount, sequence);
     }
 
-    public void update(final String name, final String image, final Integer maxPeopleCount) {
+    public void update(final String name, final String image, final Integer maxPeopleCount, final Integer sequence) {
         validate(name, image, maxPeopleCount);
         this.name = name;
         this.image = image;
         this.maxPeopleCount = maxPeopleCount;
+        this.sequence = sequence;
     }
 
     public Long getId() {

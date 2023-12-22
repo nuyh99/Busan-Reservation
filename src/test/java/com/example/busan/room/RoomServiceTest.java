@@ -80,7 +80,7 @@ class RoomServiceTest {
     void update() {
         //given
         final Room room = createRoom();
-        final UpdateRoomRequest request = new UpdateRoomRequest("updated", "newImage", 100);
+        final UpdateRoomRequest request = new UpdateRoomRequest("updated", "newImage", 100, 1);
 
         //when
         roomService.update(room.getId(), request);
@@ -91,6 +91,7 @@ class RoomServiceTest {
             softAssertions.assertThat(updated.getName()).isEqualTo("updated");
             softAssertions.assertThat(updated.getImage()).isEqualTo("newImage");
             softAssertions.assertThat(updated.getMaxPeopleCount()).isEqualTo(100);
+            softAssertions.assertThat(updated.getSequence()).isOne();
         });
     }
 
