@@ -48,7 +48,7 @@ class AuthControllerTest extends ApiTest {
         final Authentication authentication = new Authentication("email@naver.com", Role.USER);
         given(authService.login(any()))
                 .willReturn(authentication);
-        final String request = objectMapper.writeValueAsString(new LoginRequest("email@naver.com", "password"));
+        final String request = objectMapper.writeValueAsString(new LoginRequest("email@naver.com", "password", true));
 
         //when
         final MockHttpServletResponse response = mockMvc.perform(
@@ -60,7 +60,8 @@ class AuthControllerTest extends ApiTest {
                 .andDo(document("로그인 하기",
                         requestFields(
                                 fieldWithPath("email").description("이메일"),
-                                fieldWithPath("password").description("비밀번호"))))
+                                fieldWithPath("password").description("비밀번호"),
+                                fieldWithPath("isAuto").description("자동 로그인 여부"))))
                 .andReturn()
                 .getResponse();
 

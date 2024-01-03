@@ -1,8 +1,9 @@
 package com.example.busan.auth;
 
 import com.example.busan.auth.domain.Authorized;
+import com.example.busan.auth.domain.AutoLoginManager;
 import com.example.busan.auth.dto.Authentication;
-import com.example.busan.auth.exception.UnauthorizedException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -11,11 +12,16 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import static com.example.busan.auth.AuthController.AUTHORIZATION;
-import static java.util.Objects.isNull;
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_SESSION;
 
 @Component
 public class AuthorizationArgumentResolver implements HandlerMethodArgumentResolver {
+
+    private final AutoLoginManager autoLoginManager;
+
+    public AuthorizationArgumentResolver(AutoLoginManager autoLoginManager) {
+        this.autoLoginManager = autoLoginManager;
+    }
 
     @Override
     public boolean supportsParameter(final MethodParameter parameter) {
@@ -29,12 +35,13 @@ public class AuthorizationArgumentResolver implements HandlerMethodArgumentResol
     public Object resolveArgument(final MethodParameter parameter,
                                   final ModelAndViewContainer mavContainer,
                                   final NativeWebRequest webRequest,
-                                  final WebDataBinderFactory binderFactory) throws Exception {
-        final Object authentication = webRequest.getAttribute(AUTHORIZATION, SCOPE_SESSION);
-        if (isNull(authentication)) {
-            throw new UnauthorizedException();
+                                  final WebDataBinderFactory binderFactory) {
+        Object authentication = webRequest.getAttribute(AUTHORIZATION, SCOPE_SESSION);
+        if (authentication != null) {
+            return authentication;
         }
 
-        return authentication;
+        final HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
+        return autoLoginManager.getAuthentication(request);
     }
 }

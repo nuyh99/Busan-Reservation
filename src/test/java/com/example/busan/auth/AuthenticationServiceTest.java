@@ -42,7 +42,7 @@ class AuthenticationServiceTest {
     void login() {
         //given
         final Member member = createMember();
-        final LoginRequest request = new LoginRequest(member.getEmail(), "@password1234");
+        final LoginRequest request = new LoginRequest(member.getEmail(), "@password1234", false);
 
         //when
         final Authentication login = authService.login(request);
@@ -55,7 +55,7 @@ class AuthenticationServiceTest {
     @DisplayName("로그인 실패")
     void login_fail() {
         //given
-        final LoginRequest request = new LoginRequest("ididididid", "@password1234");
+        final LoginRequest request = new LoginRequest("ididididid", "@password1234", false);
 
         //when, then
         assertThatThrownBy(() -> authService.login(request))

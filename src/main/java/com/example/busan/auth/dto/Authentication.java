@@ -2,8 +2,12 @@ package com.example.busan.auth.dto;
 
 import com.example.busan.member.domain.Member;
 import com.example.busan.member.domain.Role;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
-public record Authentication(String email, Role role) {
+@Embeddable
+public record Authentication(String email, @Enumerated(value = EnumType.STRING) Role role) {
 
     public static Authentication from(final Member member) {
         return new Authentication(member.getEmail(), member.getRole());

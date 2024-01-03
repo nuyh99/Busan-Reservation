@@ -1,11 +1,13 @@
 package com.example.busan.auth;
 
+import com.example.busan.auth.domain.AutoLoginManager;
 import com.example.busan.auth.dto.AuthenticatePhoneRequest;
 import com.example.busan.auth.dto.Authentication;
 import com.example.busan.auth.dto.FindEmailResponse;
 import com.example.busan.auth.dto.LoginRequest;
 import com.example.busan.auth.service.AuthService;
 import com.example.busan.auth.service.PhoneAuthenticator;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,15 +25,26 @@ public class AuthController {
 
     private final AuthService authService;
     private final PhoneAuthenticator phoneAuthenticator;
+    private final AutoLoginManager autoLoginManager;
 
-    public AuthController(final AuthService authService, final PhoneAuthenticator phoneAuthenticator) {
+    public AuthController(final AuthService authService,
+                          final PhoneAuthenticator phoneAuthenticator,
+                          AutoLoginManager autoLoginManager) {
         this.authService = authService;
         this.phoneAuthenticator = phoneAuthenticator;
+        this.autoLoginManager = autoLoginManager;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody final LoginRequest request, final HttpSession session) {
+    public ResponseEntity<Void> login(@RequestBody final LoginRequest request,
+                                      final HttpServletResponse httpServletResponse,
+                                      final HttpSession session) {
         final Authentication authentication = authService.login(request);
+
+        if (request.isAuto()) {
+            autoLoginManager.setAutoCookie(session, httpServletResponse, authentication);
+        }
+
         session.setAttribute(AUTHORIZATION, authentication);
         return ResponseEntity.noContent().build();
     }

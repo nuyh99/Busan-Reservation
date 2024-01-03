@@ -3,16 +3,17 @@ package com.example.busan;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
-import jakarta.persistence.metamodel.EntityType;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
 
 @Component
 public class DatabaseCleaner implements InitializingBean {
+
+    private static final String TRUNCATE = "TRUNCATE ";
+    private static final String FLYWAY = "flyway";
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -20,10 +21,11 @@ public class DatabaseCleaner implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() {
-        final Set<EntityType<?>> entities = entityManager.getMetamodel().getEntities();
+        final List<String> tableNames = entityManager.createNativeQuery("SHOW TABLES ").getResultList();
 
-        truncateDMLs = entities.stream()
-                .map(entity -> "TRUNCATE " + entity.getName().toLowerCase())
+        truncateDMLs = tableNames.stream()
+                .filter(tableName -> !tableName.contains(FLYWAY))
+                .map(TRUNCATE::concat)
                 .toList();
     }
 
