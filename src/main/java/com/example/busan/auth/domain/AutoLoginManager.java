@@ -45,6 +45,9 @@ public class AutoLoginManager {
 
     public Authentication getAuthentication(final HttpServletRequest request) {
         final Cookie autoLoggedInCookie = getAutoLoggedInCookie(request);
+        if (autoLoggedInCookie == null) {
+            throw new UnauthorizedException();
+        }
 
         final String id = autoLoggedInCookie.getValue();
         return autoLoginRepository.findById(id)
@@ -56,15 +59,19 @@ public class AutoLoginManager {
         return Arrays.stream(request.getCookies())
                 .filter(cookie -> cookie.getName().equals(AUTO_LOGIN_COOKIE_NAME))
                 .findAny()
-                .orElseThrow(UnauthorizedException::new);
+                .orElse(null);
     }
 
     public void removeAutoLogin(final HttpServletRequest request,
                                 final HttpServletResponse response) {
         final Cookie autoLoggedInCookie = getAutoLoggedInCookie(request);
-        autoLoggedInCookie.setMaxAge(0);
-        response.addCookie(autoLoggedInCookie);
 
-        autoLoginRepository.deleteById(autoLoggedInCookie.getValue());
+        final Cookie cookie = new Cookie(AUTO_LOGIN_COOKIE_NAME, "");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+
+        if (autoLoggedInCookie != null) {
+            autoLoginRepository.deleteById(autoLoggedInCookie.getValue());
+        }
     }
 }

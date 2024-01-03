@@ -93,10 +93,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/auth-login-74814376'
+              $ref: '#/components/schemas/auth-login1098228858'
             examples:
               로그인 하기:
-                value: "{\"email\":\"email@naver.com\",\"password\":\"password\"}"
+                value: "{\"email\":\"email@naver.com\",\"password\":\"password\",\"\
+                  isAuto\":true}"
       responses:
         "204":
           description: "204"
@@ -142,7 +143,7 @@ paths:
     get:
       tags:
       - members
-      operationId: 현재 유저 정보 조회하기
+      operationId: 자동 로그인 하기현재 유저 정보 조회하기
       responses:
         "200":
           description: "200"
@@ -154,7 +155,11 @@ paths:
                 현재 유저 정보 조회하기:
                   value: "{\"name\":\"연어\",\"phone\":\"01012341234\",\"email\":\"\
                     test@naver.com\",\"role\":\"USER\",\"company\":\"우형\",\"region\"\
-                    :\"BUSAN\",\"createdAt\":\"2023-12-22T21:27:18.831673\"}"
+                    :\"BUSAN\",\"createdAt\":\"2024-01-03T17:58:33.227632\"}"
+                자동 로그인 하기:
+                  value: "{\"name\":\"연어\",\"phone\":\"01012341234\",\"email\":\"\
+                    test@naver.com\",\"role\":\"USER\",\"company\":\"우형\",\"region\"\
+                    :\"BUSAN\",\"createdAt\":\"2024-01-03T17:33:27.690919\"}"
     post:
       tags:
       - members
@@ -281,14 +286,14 @@ paths:
               examples:
                 자신의 회의실 예약 목록 최신 순으로 보기:
                   value: "[{\"id\":1,\"status\":\"RESERVED\",\"cancelReason\":null,\"\
-                    startTime\":\"2023-12-22T21:27:20.516436\",\"endTime\":\"2023-12-22T23:27:20.51644\"\
+                    startTime\":\"2024-01-03T17:58:34.971705\",\"endTime\":\"2024-01-03T19:58:34.97171\"\
                     ,\"name\":\"황재현\",\"phone\":\"01012341234\",\"reservedAt\":\"\
-                    2023-12-22T21:27:20.51645\",\"roomId\":1,\"roomName\":\"대회의실\"\
+                    2024-01-03T17:58:34.971719\",\"roomId\":1,\"roomName\":\"대회의실\"\
                     },{\"id\":2,\"status\":\"CANCELED\",\"cancelReason\":\"쓰기 싫어졌어\
-                    요..\",\"startTime\":\"2023-12-22T21:27:20.516458\",\"endTime\"\
-                    :\"2023-12-22T23:27:20.51646\",\"name\":\"황재현\",\"phone\":\"01012341234\"\
-                    ,\"reservedAt\":\"2023-12-22T21:27:20.516462\",\"roomId\":1,\"\
-                    roomName\":\"대회의실\"}]"
+                    요..\",\"startTime\":\"2024-01-03T17:58:34.971727\",\"endTime\"\
+                    :\"2024-01-03T19:58:34.971728\",\"name\":\"황재현\",\"phone\":\"\
+                    01012341234\",\"reservedAt\":\"2024-01-03T17:58:34.97173\",\"\
+                    roomId\":1,\"roomName\":\"대회의실\"}]"
     post:
       tags:
       - reservations
@@ -512,12 +517,15 @@ components:
           status:
             type: string
             description: 예약 상태
-    auth-login-74814376:
+    auth-login1098228858:
       type: object
       properties:
         password:
           type: string
           description: 비밀번호
+        isAuto:
+          type: boolean
+          description: 자동 로그인 여부
         email:
           type: string
           description: 이메일

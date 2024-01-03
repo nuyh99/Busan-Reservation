@@ -1,6 +1,7 @@
 package com.example.busan.auth;
 
 import com.example.busan.ApiTest;
+import com.example.busan.auth.domain.AutoLoginManager;
 import com.example.busan.auth.dto.AuthenticatePhoneRequest;
 import com.example.busan.auth.dto.Authentication;
 import com.example.busan.auth.dto.FindEmailResponse;
@@ -8,6 +9,7 @@ import com.example.busan.auth.dto.LoginRequest;
 import com.example.busan.auth.service.AuthService;
 import com.example.busan.auth.service.PhoneAuthenticator;
 import com.example.busan.member.domain.Role;
+import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -80,7 +82,9 @@ class AuthControllerTest extends ApiTest {
 
         //when
         final MockHttpServletResponse response = mockMvc.perform(
-                        post("/auth/logout").session(httpSession))
+                        post("/auth/logout")
+                                .session(httpSession)
+                                .cookie(new Cookie(AutoLoginManager.AUTO_LOGIN_COOKIE_NAME, "")))
                 .andDo(print())
                 .andDo(document("로그아웃 하기"))
                 .andReturn()

@@ -7,6 +7,7 @@ import com.example.busan.auth.dto.FindEmailResponse;
 import com.example.busan.auth.dto.LoginRequest;
 import com.example.busan.auth.service.AuthService;
 import com.example.busan.auth.service.PhoneAuthenticator;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
@@ -50,8 +51,11 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(final HttpSession session) {
+    public ResponseEntity<Void> logout(final HttpSession session,
+                                       final HttpServletRequest request,
+                                       final HttpServletResponse response) {
         session.removeAttribute(AUTHORIZATION);
+        autoLoginManager.removeAutoLogin(request, response);
         return ResponseEntity.noContent().build();
     }
 
