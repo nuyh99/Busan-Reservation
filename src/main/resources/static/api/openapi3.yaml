@@ -143,7 +143,7 @@ paths:
     get:
       tags:
       - members
-      operationId: 자동 로그인 하기현재 유저 정보 조회하기
+      operationId: 현재 유저 정보 조회하기
       responses:
         "200":
           description: "200"
@@ -155,11 +155,7 @@ paths:
                 현재 유저 정보 조회하기:
                   value: "{\"name\":\"연어\",\"phone\":\"01012341234\",\"email\":\"\
                     test@naver.com\",\"role\":\"USER\",\"company\":\"우형\",\"region\"\
-                    :\"BUSAN\",\"createdAt\":\"2024-01-03T17:58:33.227632\"}"
-                자동 로그인 하기:
-                  value: "{\"name\":\"연어\",\"phone\":\"01012341234\",\"email\":\"\
-                    test@naver.com\",\"role\":\"USER\",\"company\":\"우형\",\"region\"\
-                    :\"BUSAN\",\"createdAt\":\"2024-01-03T17:33:27.690919\"}"
+                    :\"BUSAN\",\"createdAt\":\"2024-01-03T18:20:13.450063\"}"
     post:
       tags:
       - members
@@ -231,8 +227,6 @@ paths:
               회원 정보 수정하기 - 이름, 회사명:
                 value: "{\"name\":\"name\",\"company\":\"company\",\"region\":\"BUSAN\"\
                   }"
-              회원 정보 수정하기 - 이름, 회사명, 이메일:
-                value: "{\"name\":\"name\",\"company\":\"company\"}"
       responses:
         "204":
           description: "204"
@@ -286,13 +280,13 @@ paths:
               examples:
                 자신의 회의실 예약 목록 최신 순으로 보기:
                   value: "[{\"id\":1,\"status\":\"RESERVED\",\"cancelReason\":null,\"\
-                    startTime\":\"2024-01-03T17:58:34.971705\",\"endTime\":\"2024-01-03T19:58:34.97171\"\
+                    startTime\":\"2024-01-03T18:20:15.252433\",\"endTime\":\"2024-01-03T20:20:15.252438\"\
                     ,\"name\":\"황재현\",\"phone\":\"01012341234\",\"reservedAt\":\"\
-                    2024-01-03T17:58:34.971719\",\"roomId\":1,\"roomName\":\"대회의실\"\
+                    2024-01-03T18:20:15.252449\",\"roomId\":1,\"roomName\":\"대회의실\"\
                     },{\"id\":2,\"status\":\"CANCELED\",\"cancelReason\":\"쓰기 싫어졌어\
-                    요..\",\"startTime\":\"2024-01-03T17:58:34.971727\",\"endTime\"\
-                    :\"2024-01-03T19:58:34.971728\",\"name\":\"황재현\",\"phone\":\"\
-                    01012341234\",\"reservedAt\":\"2024-01-03T17:58:34.97173\",\"\
+                    요..\",\"startTime\":\"2024-01-03T18:20:15.252458\",\"endTime\"\
+                    :\"2024-01-03T20:20:15.252459\",\"name\":\"황재현\",\"phone\":\"\
+                    01012341234\",\"reservedAt\":\"2024-01-03T18:20:15.252462\",\"\
                     roomId\":1,\"roomName\":\"대회의실\"}]"
     post:
       tags:
