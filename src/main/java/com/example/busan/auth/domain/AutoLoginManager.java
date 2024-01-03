@@ -56,7 +56,12 @@ public class AutoLoginManager {
     }
 
     private Cookie getAutoLoggedInCookie(final HttpServletRequest request) {
-        return Arrays.stream(request.getCookies())
+        final Cookie[] cookies = request.getCookies();
+        if (cookies == null) {
+            return null;
+        }
+
+        return Arrays.stream(cookies)
                 .filter(cookie -> cookie.getName().equals(AUTO_LOGIN_COOKIE_NAME))
                 .findAny()
                 .orElse(null);
