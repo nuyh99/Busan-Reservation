@@ -131,10 +131,10 @@ class ReservationControllerTest extends ApiTest {
 
         final ReservationResponse reservation1 = new ReservationResponse(
                 1L, Status.RESERVED, null, LocalDateTime.now(), LocalDateTime.now().plusHours(2),
-                "황재현", "01012341234", LocalDateTime.now(), 1L, "대회의실");
+                "황재현", "01012341234", LocalDateTime.now(), 1L, "대회의실", "요기요");
         final ReservationResponse reservation2 = new ReservationResponse(
                 2L, Status.CANCELED, "쓰기 싫어졌어요..", LocalDateTime.now(), LocalDateTime.now().plusHours(2),
-                "황재현", "01012341234", LocalDateTime.now(), 1L, "대회의실");
+                "황재현", "01012341234", LocalDateTime.now(), 1L, "대회의실", "토스뱅크");
 
         given(reservationService.findAll(any(), any()))
                 .willReturn(List.of(reservation1, reservation2));
@@ -160,6 +160,7 @@ class ReservationControllerTest extends ApiTest {
                                 fieldWithPath("[].phone").description("예약자 휴대폰 번호"),
                                 fieldWithPath("[].reservedAt").description("예약 일시"),
                                 fieldWithPath("[].roomId").description("회의실 ID"),
+                                fieldWithPath("[].company").description("예약자 회사"),
                                 fieldWithPath("[].roomName").description("회의실 이름"))))
                 .andReturn()
                 .getResponse();

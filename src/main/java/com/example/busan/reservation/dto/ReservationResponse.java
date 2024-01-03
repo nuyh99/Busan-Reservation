@@ -9,12 +9,12 @@ import java.time.LocalDateTime;
 
 public record ReservationResponse(Long id, Status status, String cancelReason, LocalDateTime startTime,
                                   LocalDateTime endTime, String name, String phone, LocalDateTime reservedAt,
-                                  Long roomId, String roomName) {
+                                  Long roomId, String roomName, String company) {
 
     public static ReservationResponse of(final Reservation reservation, final Member member, final Room room) {
         return new ReservationResponse(
                 reservation.getId(), reservation.getStatus(), reservation.getCancelReason(),
                 reservation.getStartTime(), reservation.getEndTime(), member.getName(), member.getPhone(),
-                reservation.getCreatedTime(), room.getId(), room.getName());
+                reservation.getCreatedTime(), room.getId(), room.getName(), member.getCompany());
     }
 }
