@@ -88,7 +88,7 @@ public class InMemoryPhoneAuthenticator implements PhoneAuthenticator {
         removeExpiredAuthenticates();
 
         log.info("Clean phone authenticator! {} removed!",
-                WAITING.size() + AUTHENTICATED.size() - previousCount);
+                previousCount - (WAITING.size() + AUTHENTICATED.size()));
     }
 
     private void removeExpiredAuthenticates() {
