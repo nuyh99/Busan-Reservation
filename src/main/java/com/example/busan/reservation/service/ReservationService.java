@@ -11,6 +11,7 @@ import com.example.busan.reservation.dto.ReservationResponse;
 import com.example.busan.reservation.dto.UpdateReservationRequest;
 import com.example.busan.room.domain.Room;
 import com.example.busan.room.domain.RoomRepository;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -69,14 +70,13 @@ public class ReservationService {
         reservation.update(request.roomId(), request.startTime(), request.endTime());
     }
 
-    public List<ReservationResponse> findAll(final String currentMemberEmail, final Pageable pageable) {
+    public Page<ReservationResponse> findAll(final String currentMemberEmail, final Pageable pageable) {
         final Member member = getMember(currentMemberEmail);
-        final List<Reservation> reservations = getReservations(currentMemberEmail, pageable);
-        final Map<Long, Room> rooms = getRooms(reservations);
+        final Page<Reservation> reservations = getReservations(currentMemberEmail, pageable);
+        final Map<Long, Room> rooms = getRooms(reservations.getContent());
 
-        return reservations.stream()
-                .map(reservation -> ReservationResponse.of(reservation, member, rooms.get(reservation.getRoomId())))
-                .toList();
+        return reservations
+                .map(reservation -> ReservationResponse.of(reservation, member, rooms.get(reservation.getRoomId())));
     }
 
     private Member getMember(final String currentMemberEmail) {
@@ -84,7 +84,7 @@ public class ReservationService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 로그인 유저입니다."));
     }
 
-    private List<Reservation> getReservations(final String currentMemberEmail, final Pageable pageable) {
+    private Page<Reservation> getReservations(final String currentMemberEmail, final Pageable pageable) {
         final PageRequest pageRequest = PageRequest.of(
                 pageable.getPageNumber(), pageable.getPageSize(), Sort.by("startTime").descending());
 

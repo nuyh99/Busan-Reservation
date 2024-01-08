@@ -13,6 +13,7 @@ import com.example.busan.reservation.service.ReservationService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockHttpSession;
@@ -137,7 +138,7 @@ class ReservationControllerTest extends ApiTest {
                 "황재현", "01012341234", LocalDateTime.now(), 1L, "대회의실", "토스뱅크");
 
         given(reservationService.findAll(any(), any()))
-                .willReturn(List.of(reservation1, reservation2));
+                .willReturn(new PageImpl<>(List.of(reservation1, reservation2)));
 
         //when
         final MockHttpServletResponse response = mockMvc.perform(
@@ -151,17 +152,27 @@ class ReservationControllerTest extends ApiTest {
                                 parameterWithName("page").description("페이지는 1부터 시작 (디폴트값 1)").optional(),
                                 parameterWithName("size").description("페이지별 사이즈 (디폴트값 10)").optional()),
                         responseFields(
-                                fieldWithPath("[].id").description("예약 ID"),
-                                fieldWithPath("[].status").description("예약 상태"),
-                                fieldWithPath("[].cancelReason").description("취소 상태일 경우 취소 이유(취소가 아니면 null)").optional(),
-                                fieldWithPath("[].startTime").description("시작 시각"),
-                                fieldWithPath("[].endTime").description("종료 시각"),
-                                fieldWithPath("[].name").description("예약자 성함"),
-                                fieldWithPath("[].phone").description("예약자 휴대폰 번호"),
-                                fieldWithPath("[].reservedAt").description("예약 일시"),
-                                fieldWithPath("[].roomId").description("회의실 ID"),
-                                fieldWithPath("[].company").description("예약자 회사"),
-                                fieldWithPath("[].roomName").description("회의실 이름"))))
+                                fieldWithPath("content.[].id").description("예약 ID"),
+                                fieldWithPath("content.[].status").description("예약 상태"),
+                                fieldWithPath("content.[].cancelReason").description("취소 상태일 경우 취소 이유(취소가 아니면 null)").optional(),
+                                fieldWithPath("content.[].startTime").description("시작 시각"),
+                                fieldWithPath("content.[].endTime").description("종료 시각"),
+                                fieldWithPath("content.[].name").description("예약자 성함"),
+                                fieldWithPath("content.[].phone").description("예약자 휴대폰 번호"),
+                                fieldWithPath("content.[].reservedAt").description("예약 일시"),
+                                fieldWithPath("content.[].roomId").description("회의실 ID"),
+                                fieldWithPath("content.[].company").description("예약자 회사"),
+                                fieldWithPath("content.[].roomName").description("회의실 이름"),
+                                fieldWithPath("last").description("마지막 페이지인지"),
+                                fieldWithPath("first").description("첫 페이지인지"),
+                                fieldWithPath("empty").description("빈 데이터인지"),
+                                fieldWithPath("totalPages").description("전체 페이지 개수"),
+                                fieldWithPath("totalElements").description("전체 DB 데이터 요소 개수"),
+                                fieldWithPath("numberOfElements").description("현재 응답 데이터 요소 개수"),
+                                fieldWithPath("size").description("한 페이지당 사이즈"),
+                                fieldWithPath("number").description("현재 페이지"),
+                                fieldWithPath("pageable").description("요청한 페이지네이션 정보").ignored(),
+                                fieldWithPath("sort.*").description("정렬 정보").ignored())))
                 .andReturn()
                 .getResponse();
 

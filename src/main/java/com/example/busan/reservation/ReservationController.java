@@ -7,6 +7,7 @@ import com.example.busan.reservation.dto.CreateReservationRequest;
 import com.example.busan.reservation.dto.ReservationResponse;
 import com.example.busan.reservation.dto.UpdateReservationRequest;
 import com.example.busan.reservation.service.ReservationService;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -19,8 +20,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/reservations")
@@ -55,9 +54,9 @@ public class ReservationController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ReservationResponse>> findAll(@Authorized final Authentication authentication,
+    public ResponseEntity<Page<ReservationResponse>> findAll(@Authorized final Authentication authentication,
                                                              @PageableDefault final Pageable pageable) {
-        final List<ReservationResponse> response = reservationService.findAll(authentication.email(), pageable);
+        final Page<ReservationResponse> response = reservationService.findAll(authentication.email(), pageable);
         return ResponseEntity.ok(response);
     }
 }

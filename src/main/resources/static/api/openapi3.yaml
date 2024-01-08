@@ -155,7 +155,7 @@ paths:
                 현재 유저 정보 조회하기:
                   value: "{\"name\":\"연어\",\"phone\":\"01012341234\",\"email\":\"\
                     test@naver.com\",\"role\":\"USER\",\"company\":\"우형\",\"region\"\
-                    :\"BUSAN\",\"createdAt\":\"2024-01-08T12:46:55.613352\"}"
+                    :\"BUSAN\",\"createdAt\":\"2024-01-08T13:39:40.626045\"}"
     post:
       tags:
       - members
@@ -276,18 +276,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/reservations1059448458'
+                $ref: '#/components/schemas/reservations-2055281597'
               examples:
                 자신의 회의실 예약 목록 최신 순으로 보기:
-                  value: "[{\"id\":1,\"status\":\"RESERVED\",\"cancelReason\":null,\"\
-                    startTime\":\"2024-01-08T12:46:57.400076\",\"endTime\":\"2024-01-08T14:46:57.400081\"\
+                  value: "{\"content\":[{\"id\":1,\"status\":\"RESERVED\",\"cancelReason\"\
+                    :null,\"startTime\":\"2024-01-08T13:39:42.354426\",\"endTime\"\
+                    :\"2024-01-08T15:39:42.354432\",\"name\":\"황재현\",\"phone\":\"\
+                    01012341234\",\"reservedAt\":\"2024-01-08T13:39:42.354442\",\"\
+                    roomId\":1,\"roomName\":\"대회의실\",\"company\":\"요기요\"},{\"id\"\
+                    :2,\"status\":\"CANCELED\",\"cancelReason\":\"쓰기 싫어졌어요..\",\"\
+                    startTime\":\"2024-01-08T13:39:42.354451\",\"endTime\":\"2024-01-08T15:39:42.354453\"\
                     ,\"name\":\"황재현\",\"phone\":\"01012341234\",\"reservedAt\":\"\
-                    2024-01-08T12:46:57.400091\",\"roomId\":1,\"roomName\":\"대회의실\"\
-                    ,\"company\":\"요기요\"},{\"id\":2,\"status\":\"CANCELED\",\"cancelReason\"\
-                    :\"쓰기 싫어졌어요..\",\"startTime\":\"2024-01-08T12:46:57.400099\",\"\
-                    endTime\":\"2024-01-08T14:46:57.400101\",\"name\":\"황재현\",\"phone\"\
-                    :\"01012341234\",\"reservedAt\":\"2024-01-08T12:46:57.400103\"\
-                    ,\"roomId\":1,\"roomName\":\"대회의실\",\"company\":\"토스뱅크\"}]"
+                    2024-01-08T13:39:42.354455\",\"roomId\":1,\"roomName\":\"대회의실\"\
+                    ,\"company\":\"토스뱅크\"}],\"pageable\":\"INSTANCE\",\"last\":true,\"\
+                    totalPages\":1,\"totalElements\":2,\"first\":true,\"size\":2,\"\
+                    number\":0,\"sort\":{\"empty\":true,\"sorted\":false,\"unsorted\"\
+                    :true},\"numberOfElements\":2,\"empty\":false}"
     post:
       tags:
       - reservations
@@ -479,44 +483,6 @@ components:
           roomId:
             type: number
             description: 회의실 ID
-    reservations1059448458:
-      type: array
-      items:
-        type: object
-        properties:
-          phone:
-            type: string
-            description: 예약자 휴대폰 번호
-          name:
-            type: string
-            description: 예약자 성함
-          company:
-            type: string
-            description: 예약자 회사
-          startTime:
-            type: string
-            description: 시작 시각
-          endTime:
-            type: string
-            description: 종료 시각
-          id:
-            type: number
-            description: 예약 ID
-          reservedAt:
-            type: string
-            description: 예약 일시
-          cancelReason:
-            type: string
-            description: 취소 상태일 경우 취소 이유(취소가 아니면 null)
-          roomName:
-            type: string
-            description: 회의실 이름
-          roomId:
-            type: number
-            description: 회의실 ID
-          status:
-            type: string
-            description: 예약 상태
     auth-login1098228858:
       type: object
       properties:
@@ -598,6 +564,71 @@ components:
         reason:
           type: string
           description: 취소 사유
+    reservations-2055281597:
+      type: object
+      properties:
+        number:
+          type: number
+          description: 현재 페이지
+        size:
+          type: number
+          description: 한 페이지당 사이즈
+        numberOfElements:
+          type: number
+          description: 현재 응답 데이터 요소 개수
+        last:
+          type: boolean
+          description: 마지막 페이지인지
+        totalPages:
+          type: number
+          description: 전체 페이지 개수
+        first:
+          type: boolean
+          description: 첫 페이지인지
+        content:
+          type: array
+          items:
+            type: object
+            properties:
+              phone:
+                type: string
+                description: 예약자 휴대폰 번호
+              name:
+                type: string
+                description: 예약자 성함
+              company:
+                type: string
+                description: 예약자 회사
+              startTime:
+                type: string
+                description: 시작 시각
+              endTime:
+                type: string
+                description: 종료 시각
+              id:
+                type: number
+                description: 예약 ID
+              reservedAt:
+                type: string
+                description: 예약 일시
+              cancelReason:
+                type: string
+                description: 취소 상태일 경우 취소 이유(취소가 아니면 null)
+              roomName:
+                type: string
+                description: 회의실 이름
+              roomId:
+                type: number
+                description: 회의실 ID
+              status:
+                type: string
+                description: 예약 상태
+        totalElements:
+          type: number
+          description: 전체 DB 데이터 요소 개수
+        empty:
+          type: boolean
+          description: 빈 데이터인지
     members-phone932474475:
       type: object
       properties:

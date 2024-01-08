@@ -214,7 +214,8 @@ class ReservationServiceTest {
         createReservation(room.getId());
 
         //when
-        final List<ReservationResponse> response = reservationService.findAll("test@gmail.com", Pageable.ofSize(10));
+        final List<ReservationResponse> response = reservationService.findAll("test@gmail.com", Pageable.ofSize(10))
+                .getContent();
 
         //then
         assertSoftly(soft -> {
@@ -238,7 +239,8 @@ class ReservationServiceTest {
         createCanceledReservation(room.getId());
 
         //when
-        final List<ReservationResponse> response = reservationService.findAll("test@gmail.com", Pageable.ofSize(10));
+        final List<ReservationResponse> response = reservationService.findAll("test@gmail.com", Pageable.ofSize(10))
+                .getContent();
 
         //then
         assertSoftly(soft -> {

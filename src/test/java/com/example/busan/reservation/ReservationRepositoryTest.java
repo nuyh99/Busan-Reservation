@@ -132,7 +132,8 @@ class ReservationRepositoryTest {
         final PageRequest pageRequest = PageRequest.of(0, 2, Sort.by("startTime").descending());
 
         //when
-        final List<Reservation> response = reservationRepository.findAllByReservationEmail("test@naver.com", pageRequest);
+        final List<Reservation> response = reservationRepository.findAllByReservationEmail("test@naver.com", pageRequest)
+                .getContent();
 
         //then
         assertThat(response).hasSize(2)
