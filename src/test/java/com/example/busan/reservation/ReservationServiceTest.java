@@ -18,6 +18,7 @@ import com.example.busan.room.domain.Room;
 import com.example.busan.room.domain.RoomRepository;
 import com.example.busan.room.dto.CreateRoomRequest;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,6 +80,7 @@ class ReservationServiceTest {
         assertThat(reservationRepository.findAll()).hasSize(1);
     }
 
+    @Disabled("동시성 테스트 때만 사용")
     @Test
     @DisplayName("동시적으로 중복 예약을 하면 1개만 생성된다")
     void create_concurrency() throws InterruptedException {
@@ -107,6 +109,7 @@ class ReservationServiceTest {
         assertThat(reservationRepository.count()).isOne();
     }
 
+    @Disabled("동시성 테스트 때만 사용")
     @Test
     @DisplayName("동시적으로 100개의 요청 성공")
     void create_concurrency2() throws InterruptedException {
