@@ -81,7 +81,7 @@ public class RoomService {
             return authentication.email();
         }
 
-        return null;
+        return "unLoggedIn";
     }
 
     private List<Reservation> getReservations(final LocalDate date) {
