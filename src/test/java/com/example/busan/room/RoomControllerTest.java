@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.mock.web.MockHttpSession;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -27,7 +26,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 
 class RoomControllerTest extends ApiTest {
 
-    private final MockHttpSession httpSession = new MockHttpSession();
     @MockBean
     private RoomService roomService;
 
@@ -35,8 +33,8 @@ class RoomControllerTest extends ApiTest {
     @DisplayName("회의실 전체 조회하기")
     void findAll() throws Exception {
         //given
-        final ReservationResponse reservation1 = new ReservationResponse(1L, LocalTime.of(13, 0), LocalTime.of(16, 0), true, Status.CANCELED);
-        final ReservationResponse reservation2 = new ReservationResponse(2L, LocalTime.of(16, 0), LocalTime.of(17, 0), false, Status.RESERVED);
+        final ReservationResponse reservation1 = new ReservationResponse(1L, LocalTime.of(13, 0), LocalTime.of(16, 0), true, Status.CANCELED, "우형");
+        final ReservationResponse reservation2 = new ReservationResponse(2L, LocalTime.of(16, 0), LocalTime.of(17, 0), false, Status.RESERVED, "카카오");
         final RoomResponse roomResponse = new RoomResponse(1L, "대회의실", "image.com", 10, List.of(reservation1, reservation2), 3);
         given(roomService.findAllAtDate(any(), any()))
                 .willReturn(List.of(roomResponse));
@@ -57,7 +55,8 @@ class RoomControllerTest extends ApiTest {
                                 fieldWithPath("[].reservations.[].startTime").description("예약 시작 시각"),
                                 fieldWithPath("[].reservations.[].endTime").description("예약 종료 시각"),
                                 fieldWithPath("[].reservations.[].isMine").description("현재 로그인한 사람의 것인지 여부"),
-                                fieldWithPath("[].reservations.[].status").description("취소 여부"))))
+                                fieldWithPath("[].reservations.[].status").description("취소 여부"),
+                                fieldWithPath("[].reservations.[].company").description("예약 회사명"))))
                 .andReturn()
                 .getResponse();
 

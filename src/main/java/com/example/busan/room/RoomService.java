@@ -1,6 +1,8 @@
 package com.example.busan.room;
 
 import com.example.busan.auth.dto.Authentication;
+import com.example.busan.member.domain.Member;
+import com.example.busan.member.domain.MemberRepository;
 import com.example.busan.reservation.domain.Reservation;
 import com.example.busan.reservation.domain.ReservationRepository;
 import com.example.busan.room.domain.Room;
@@ -27,12 +29,17 @@ import static java.util.stream.Collectors.toList;
 @Service
 public class RoomService {
 
+    private static final String DELETED_MEMBER_COMPANY = "";
     private final RoomRepository roomRepository;
     private final ReservationRepository reservationRepository;
+    private final MemberRepository memberRepository;
 
-    public RoomService(final RoomRepository roomRepository, final ReservationRepository reservationRepository) {
+    public RoomService(final RoomRepository roomRepository,
+                       final ReservationRepository reservationRepository,
+                       MemberRepository memberRepository) {
         this.roomRepository = roomRepository;
         this.reservationRepository = reservationRepository;
+        this.memberRepository = memberRepository;
     }
 
     @Transactional
@@ -85,8 +92,13 @@ public class RoomService {
         return reservationRepository.findAllByStartTimeDate(date);
     }
 
-    private Collector<Reservation, ?, List<ReservationResponse>> createDtoWith(final String finalCurrentMemberEmail) {
-        return mapping(
-                reservation -> ReservationResponse.of(reservation, finalCurrentMemberEmail), toList());
+    private Collector<Reservation, ?, List<ReservationResponse>> createDtoWith(final String currentMemberEmail) {
+        return mapping(reservation -> {
+            final String reservedCompany = memberRepository.findById(currentMemberEmail)
+                    .map(Member::getCompany)
+                    .orElse(DELETED_MEMBER_COMPANY);
+
+            return ReservationResponse.of(reservation, currentMemberEmail, reservedCompany);
+        }, toList());
     }
 }
