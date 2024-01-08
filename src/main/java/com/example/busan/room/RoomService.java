@@ -94,7 +94,7 @@ public class RoomService {
 
     private Collector<Reservation, ?, List<ReservationResponse>> createDtoWith(final String currentMemberEmail) {
         return mapping(reservation -> {
-            final String reservedCompany = memberRepository.findById(currentMemberEmail)
+            final String reservedCompany = memberRepository.findById(reservation.getReservationEmail())
                     .map(Member::getCompany)
                     .orElse(DELETED_MEMBER_COMPANY);
 
