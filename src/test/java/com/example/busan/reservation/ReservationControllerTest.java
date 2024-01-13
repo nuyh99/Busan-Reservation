@@ -211,8 +211,8 @@ class ReservationControllerTest extends ApiTest {
                                 parameterWithName("page").description("페이지는 1부터 시작 (디폴트값 1)").optional(),
                                 parameterWithName("size").description("페이지별 사이즈 (디폴트값 10)").optional()),
                         requestFields(
-                                fieldWithPath("start").description("시작일(포함)"),
-                                fieldWithPath("end").description("마지막일(포함)")),
+                                fieldWithPath("start").description("시작 시각(포함)"),
+                                fieldWithPath("end").description("종료 시각(포함)")),
                         responseFields(
                                 fieldWithPath("content.[].id").description("예약 ID"),
                                 fieldWithPath("content.[].status").description("예약 상태"),

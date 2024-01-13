@@ -155,7 +155,7 @@ paths:
                 현재 유저 정보 조회하기:
                   value: "{\"name\":\"연어\",\"phone\":\"01012341234\",\"email\":\"\
                     test@naver.com\",\"role\":\"USER\",\"company\":\"우형\",\"region\"\
-                    :\"BUSAN\",\"createdAt\":\"2024-01-13T18:38:16.899219\"}"
+                    :\"BUSAN\",\"createdAt\":\"2024-01-13T18:43:39.511032\"}"
     post:
       tags:
       - members
@@ -276,18 +276,18 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/reservations-all-2055281597'
+                $ref: '#/components/schemas/reservations-2055281597'
               examples:
                 자신의 회의실 예약 목록 최신 순으로 보기:
                   value: "{\"content\":[{\"id\":1,\"status\":\"RESERVED\",\"cancelReason\"\
-                    :null,\"startTime\":\"2024-01-13T18:38:18.68911\",\"endTime\"\
-                    :\"2024-01-13T20:38:18.689115\",\"name\":\"황재현\",\"phone\":\"\
-                    01012341234\",\"reservedAt\":\"2024-01-13T18:38:18.689124\",\"\
+                    :null,\"startTime\":\"2024-01-13T18:43:41.311627\",\"endTime\"\
+                    :\"2024-01-13T20:43:41.311634\",\"name\":\"황재현\",\"phone\":\"\
+                    01012341234\",\"reservedAt\":\"2024-01-13T18:43:41.311645\",\"\
                     roomId\":1,\"roomName\":\"대회의실\",\"company\":\"요기요\"},{\"id\"\
                     :2,\"status\":\"CANCELED\",\"cancelReason\":\"쓰기 싫어졌어요..\",\"\
-                    startTime\":\"2024-01-13T18:38:18.689133\",\"endTime\":\"2024-01-13T20:38:18.689134\"\
+                    startTime\":\"2024-01-13T18:43:41.311655\",\"endTime\":\"2024-01-13T20:43:41.311656\"\
                     ,\"name\":\"황재현\",\"phone\":\"01012341234\",\"reservedAt\":\"\
-                    2024-01-13T18:38:18.689137\",\"roomId\":1,\"roomName\":\"대회의실\"\
+                    2024-01-13T18:43:41.311659\",\"roomId\":1,\"roomName\":\"대회의실\"\
                     ,\"company\":\"토스뱅크\"}],\"pageable\":\"INSTANCE\",\"last\":true,\"\
                     totalPages\":1,\"totalElements\":2,\"first\":true,\"size\":2,\"\
                     number\":0,\"sort\":{\"empty\":true,\"sorted\":false,\"unsorted\"\
@@ -330,10 +330,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/reservations-all1582432150'
+              $ref: '#/components/schemas/reservations-all1081739892'
             examples:
               전체 회의실 예약 목록 최신 순으로 보기:
-                value: "{\"start\":\"2024-01-13T18:38:18.800506\",\"end\":\"2024-01-13T18:38:18.800508\"\
+                value: "{\"start\":\"2024-01-13T18:43:41.412019\",\"end\":\"2024-01-13T18:43:41.412025\"\
                   }"
       responses:
         "200":
@@ -341,18 +341,18 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/reservations-all-2055281597'
+                $ref: '#/components/schemas/reservations-2055281597'
               examples:
                 전체 회의실 예약 목록 최신 순으로 보기:
                   value: "{\"content\":[{\"id\":1,\"status\":\"RESERVED\",\"cancelReason\"\
-                    :null,\"startTime\":\"2024-01-13T18:38:18.800459\",\"endTime\"\
-                    :\"2024-01-13T20:38:18.800463\",\"name\":\"황재현\",\"phone\":\"\
-                    01012341234\",\"reservedAt\":\"2024-01-13T18:38:18.80047\",\"\
+                    :null,\"startTime\":\"2024-01-13T18:43:41.411862\",\"endTime\"\
+                    :\"2024-01-13T20:43:41.411866\",\"name\":\"황재현\",\"phone\":\"\
+                    01012341234\",\"reservedAt\":\"2024-01-13T18:43:41.411871\",\"\
                     roomId\":1,\"roomName\":\"대회의실\",\"company\":\"요기요\"},{\"id\"\
                     :2,\"status\":\"CANCELED\",\"cancelReason\":\"쓰기 싫어졌어요..\",\"\
-                    startTime\":\"2024-01-13T18:38:18.800473\",\"endTime\":\"2024-01-13T20:38:18.800474\"\
+                    startTime\":\"2024-01-13T18:43:41.411874\",\"endTime\":\"2024-01-13T20:43:41.411875\"\
                     ,\"name\":\"황재현\",\"phone\":\"01012341234\",\"reservedAt\":\"\
-                    2024-01-13T18:38:18.800477\",\"roomId\":1,\"roomName\":\"대회의실\"\
+                    2024-01-13T18:43:41.411877\",\"roomId\":1,\"roomName\":\"대회의실\"\
                     ,\"company\":\"토스뱅크\"}],\"pageable\":\"INSTANCE\",\"last\":true,\"\
                     totalPages\":1,\"totalElements\":2,\"first\":true,\"size\":2,\"\
                     number\":0,\"sort\":{\"empty\":true,\"sorted\":false,\"unsorted\"\
@@ -490,15 +490,6 @@ components:
         isDuplicated:
           type: boolean
           description: 중복 여부
-    reservations-all1582432150:
-      type: object
-      properties:
-        start:
-          type: string
-          description: 시작일(포함)
-        end:
-          type: string
-          description: 마지막일(포함)
     rooms1328389190:
       type: array
       items:
@@ -545,6 +536,15 @@ components:
           roomId:
             type: number
             description: 회의실 ID
+    reservations-all1081739892:
+      type: object
+      properties:
+        start:
+          type: string
+          description: 시작 시각(포함)
+        end:
+          type: string
+          description: 종료 시각(포함)
     auth-login1098228858:
       type: object
       properties:
@@ -626,7 +626,7 @@ components:
         reason:
           type: string
           description: 취소 사유
-    reservations-all-2055281597:
+    reservations-2055281597:
       type: object
       properties:
         number:

@@ -31,7 +31,7 @@ jobs:
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v2.9.0
         with:
-          arguments: clean openapi3 build
+          arguments: clean build
 
       - name: SCP to prod server
         uses: appleboy/scp-action@master
