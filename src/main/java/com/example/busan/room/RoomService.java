@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collector;
 
 import static java.util.Objects.isNull;
@@ -30,6 +31,8 @@ import static java.util.stream.Collectors.toList;
 public class RoomService {
 
     private static final String DELETED_MEMBER_COMPANY = "";
+    private static final String DELETED_MEMBER_NAME = "";
+
     private final RoomRepository roomRepository;
     private final ReservationRepository reservationRepository;
     private final MemberRepository memberRepository;
@@ -94,11 +97,10 @@ public class RoomService {
 
     private Collector<Reservation, ?, List<ReservationResponse>> createDtoWith(final String currentMemberEmail) {
         return mapping(reservation -> {
-            final String reservedCompany = memberRepository.findById(reservation.getReservationEmail())
-                    .map(Member::getCompany)
-                    .orElse(DELETED_MEMBER_COMPANY);
-
-            return ReservationResponse.of(reservation, currentMemberEmail, reservedCompany);
+            final Optional<Member> reservedMember = memberRepository.findById(reservation.getReservationEmail());
+            return reservedMember
+                    .map(member -> ReservationResponse.of(reservation, currentMemberEmail, member.getCompany(), member.getName()))
+                    .orElse(ReservationResponse.of(reservation, currentMemberEmail, DELETED_MEMBER_COMPANY, DELETED_MEMBER_NAME));
         }, toList());
     }
 }
