@@ -7,6 +7,7 @@ import com.example.busan.member.domain.Role;
 import com.example.busan.reservation.domain.Status;
 import com.example.busan.reservation.dto.CancelReservationRequest;
 import com.example.busan.reservation.dto.CreateReservationRequest;
+import com.example.busan.reservation.dto.FindReservationRequest;
 import com.example.busan.reservation.dto.ReservationResponse;
 import com.example.busan.reservation.dto.UpdateReservationRequest;
 import com.example.busan.reservation.service.ReservationService;
@@ -125,8 +126,8 @@ class ReservationControllerTest extends ApiTest {
     }
 
     @Test
-    @DisplayName("회의실 예약 목록 조회하기")
-    void findAll() throws Exception {
+    @DisplayName("자신의 회의실 예약 목록 조회하기")
+    void findAllByCurrentLoggedInMember() throws Exception {
         //given
         httpSession.setAttribute(AuthController.AUTHORIZATION, new Authentication("test@gmail.com", Role.USER));
 
@@ -137,7 +138,7 @@ class ReservationControllerTest extends ApiTest {
                 2L, Status.CANCELED, "쓰기 싫어졌어요..", LocalDateTime.now(), LocalDateTime.now().plusHours(2),
                 "황재현", "01012341234", LocalDateTime.now(), 1L, "대회의실", "토스뱅크");
 
-        given(reservationService.findAll(any(), any()))
+        given(reservationService.findAllByCurrentLoggedInMember(any(), any()))
                 .willReturn(new PageImpl<>(List.of(reservation1, reservation2)));
 
         //when
@@ -151,6 +152,67 @@ class ReservationControllerTest extends ApiTest {
                         queryParameters(
                                 parameterWithName("page").description("페이지는 1부터 시작 (디폴트값 1)").optional(),
                                 parameterWithName("size").description("페이지별 사이즈 (디폴트값 10)").optional()),
+                        responseFields(
+                                fieldWithPath("content.[].id").description("예약 ID"),
+                                fieldWithPath("content.[].status").description("예약 상태"),
+                                fieldWithPath("content.[].cancelReason").description("취소 상태일 경우 취소 이유(취소가 아니면 null)").optional(),
+                                fieldWithPath("content.[].startTime").description("시작 시각"),
+                                fieldWithPath("content.[].endTime").description("종료 시각"),
+                                fieldWithPath("content.[].name").description("예약자 성함"),
+                                fieldWithPath("content.[].phone").description("예약자 휴대폰 번호"),
+                                fieldWithPath("content.[].reservedAt").description("예약 일시"),
+                                fieldWithPath("content.[].roomId").description("회의실 ID"),
+                                fieldWithPath("content.[].company").description("예약자 회사"),
+                                fieldWithPath("content.[].roomName").description("회의실 이름"),
+                                fieldWithPath("last").description("마지막 페이지인지"),
+                                fieldWithPath("first").description("첫 페이지인지"),
+                                fieldWithPath("empty").description("빈 데이터인지"),
+                                fieldWithPath("totalPages").description("전체 페이지 개수"),
+                                fieldWithPath("totalElements").description("전체 DB 데이터 요소 개수"),
+                                fieldWithPath("numberOfElements").description("현재 응답 데이터 요소 개수"),
+                                fieldWithPath("size").description("한 페이지당 사이즈"),
+                                fieldWithPath("number").description("현재 페이지"),
+                                fieldWithPath("pageable").description("요청한 페이지네이션 정보").ignored(),
+                                fieldWithPath("sort.*").description("정렬 정보").ignored())))
+                .andReturn()
+                .getResponse();
+
+        //then
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+    }
+
+    @Test
+    @DisplayName("전체 회의실 예약 목록 조회하기")
+    void findAll() throws Exception {
+        //given
+        final ReservationResponse reservation1 = new ReservationResponse(
+                1L, Status.RESERVED, null, LocalDateTime.now(), LocalDateTime.now().plusHours(2),
+                "황재현", "01012341234", LocalDateTime.now(), 1L, "대회의실", "요기요");
+        final ReservationResponse reservation2 = new ReservationResponse(
+                2L, Status.CANCELED, "쓰기 싫어졌어요..", LocalDateTime.now(), LocalDateTime.now().plusHours(2),
+                "황재현", "01012341234", LocalDateTime.now(), 1L, "대회의실", "토스뱅크");
+        final String request = objectMapper.writeValueAsString(
+                new FindReservationRequest(LocalDateTime.now(), LocalDateTime.now()));
+
+        given(reservationService.findAll(any(), any()))
+                .willReturn(new PageImpl<>(List.of(reservation1, reservation2)));
+
+        //when
+        final MockHttpServletResponse response = mockMvc.perform(
+                        get("/reservations/all")
+                                .queryParam("page", "1")
+                                .queryParam("size", "10")
+                                .session(httpSession)
+                                .content(request)
+                                .contentType(APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("전체 회의실 예약 목록 최신 순으로 보기",
+                        queryParameters(
+                                parameterWithName("page").description("페이지는 1부터 시작 (디폴트값 1)").optional(),
+                                parameterWithName("size").description("페이지별 사이즈 (디폴트값 10)").optional()),
+                        requestFields(
+                                fieldWithPath("start").description("시작일(포함)"),
+                                fieldWithPath("end").description("마지막일(포함)")),
                         responseFields(
                                 fieldWithPath("content.[].id").description("예약 ID"),
                                 fieldWithPath("content.[].status").description("예약 상태"),

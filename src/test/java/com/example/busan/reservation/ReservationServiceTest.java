@@ -10,6 +10,7 @@ import com.example.busan.reservation.domain.ReservationRepository;
 import com.example.busan.reservation.domain.Status;
 import com.example.busan.reservation.dto.CancelReservationRequest;
 import com.example.busan.reservation.dto.CreateReservationRequest;
+import com.example.busan.reservation.dto.FindReservationRequest;
 import com.example.busan.reservation.dto.ReservationResponse;
 import com.example.busan.reservation.dto.UpdateReservationRequest;
 import com.example.busan.reservation.service.ReservationNamedLockFacade;
@@ -209,7 +210,7 @@ class ReservationServiceTest {
 
     @Test
     @DisplayName("자신이 예약한 목록들을 조회할 수 있다")
-    void findAll() {
+    void findAllByCurrentLoggedInMember() {
         //given
         final Room room = createRoom();
         final Member member = createMember();
@@ -217,7 +218,34 @@ class ReservationServiceTest {
         createReservation(room.getId());
 
         //when
-        final List<ReservationResponse> response = reservationService.findAll("test@gmail.com", Pageable.ofSize(10))
+        final List<ReservationResponse> response = reservationService.findAllByCurrentLoggedInMember("test@gmail.com", Pageable.ofSize(10))
+                .getContent();
+
+        //then
+        assertSoftly(soft -> {
+            soft.assertThat(response).hasSize(2);
+            soft.assertThat(response).map(ReservationResponse::cancelReason).allMatch(Objects::isNull);
+            soft.assertThat(response).map(ReservationResponse::reservedAt).allMatch(reservedAt -> reservedAt.isBefore(now()));
+            soft.assertThat(response).map(ReservationResponse::name).allMatch(name -> name.equals(member.getName()));
+            soft.assertThat(response).map(ReservationResponse::roomId).allMatch(roomId -> roomId.equals(room.getId()));
+            soft.assertThat(response).map(ReservationResponse::phone).allMatch(phone -> phone.equals(member.getPhone()));
+            soft.assertThat(response).map(ReservationResponse::status).allMatch(status -> status == Status.RESERVED);
+        });
+    }
+
+    @Test
+    @DisplayName("예약된 전체 목록들을 조회할 수 있다")
+    void findAll() {
+        //given
+        final Room room = createRoom();
+        final Member member = createMember();
+        final Reservation reservation = createReservation(room.getId());
+        createReservation(room.getId());
+        final FindReservationRequest request = new FindReservationRequest(
+                reservation.getStartTime(), reservation.getEndTime());
+
+        //when
+        final List<ReservationResponse> response = reservationService.findAll(request, Pageable.ofSize(10))
                 .getContent();
 
         //then
@@ -242,7 +270,7 @@ class ReservationServiceTest {
         createCanceledReservation(room.getId());
 
         //when
-        final List<ReservationResponse> response = reservationService.findAll("test@gmail.com", Pageable.ofSize(10))
+        final List<ReservationResponse> response = reservationService.findAllByCurrentLoggedInMember("test@gmail.com", Pageable.ofSize(10))
                 .getContent();
 
         //then
@@ -262,10 +290,10 @@ class ReservationServiceTest {
                 new Reservation(roomId, of(3000, 11, 10, 14, 0), of(3000, 11, 10, 15, 0)));
     }
 
-    private Reservation createCanceledReservation(final Long roomId) {
+    private void createCanceledReservation(final Long roomId) {
         final Reservation reservation = new Reservation(roomId, of(2050, 11, 10, 14, 0), of(2050, 11, 10, 15, 0));
         reservation.cancel("쓰기 싫네요..");
-        return reservationRepository.save(reservation);
+        reservationRepository.save(reservation);
     }
 
     private Member createMember() {

@@ -7,6 +7,7 @@ import com.example.busan.reservation.domain.ReservationRepository;
 import com.example.busan.reservation.domain.Status;
 import com.example.busan.reservation.dto.CancelReservationRequest;
 import com.example.busan.reservation.dto.CreateReservationRequest;
+import com.example.busan.reservation.dto.FindReservationRequest;
 import com.example.busan.reservation.dto.ReservationResponse;
 import com.example.busan.reservation.dto.UpdateReservationRequest;
 import com.example.busan.room.domain.Room;
@@ -70,7 +71,7 @@ public class ReservationService {
         reservation.update(request.roomId(), request.startTime(), request.endTime());
     }
 
-    public Page<ReservationResponse> findAll(final String currentMemberEmail, final Pageable pageable) {
+    public Page<ReservationResponse> findAllByCurrentLoggedInMember(final String currentMemberEmail, final Pageable pageable) {
         final Member member = getMember(currentMemberEmail);
         final Page<Reservation> reservations = getReservations(currentMemberEmail, pageable);
         final Map<Long, Room> rooms = getRooms(reservations.getContent());
@@ -99,5 +100,29 @@ public class ReservationService {
 
         return roomRepository.findAllById(roomIds).stream()
                 .collect(toMap(Room::getId, Function.identity()));
+    }
+
+    public Page<ReservationResponse> findAll(final FindReservationRequest request, final Pageable pageable) {
+        final PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("startTime"));
+        final Page<Reservation> reservations = reservationRepository.findAllByStartTimeBetween(
+                request.start(), request.end(), pageRequest);
+
+        final Map<Long, Room> rooms = getRooms(reservations.getContent());
+        final Map<String, Member> members = getReservedMembers(reservations);
+
+        return reservations.map(reservation -> ReservationResponse.of(
+                reservation,
+                members.get(reservation.getReservationEmail()),
+                rooms.get(reservation.getRoomId())));
+    }
+
+    private Map<String, Member> getReservedMembers(final Page<Reservation> reservations) {
+        final List<String> emails = reservations.getContent().stream()
+                .map(Reservation::getReservationEmail)
+                .distinct()
+                .toList();
+
+        return memberRepository.findAllById(emails).stream()
+                .collect(toMap(Member::getEmail, Function.identity()));
     }
 }

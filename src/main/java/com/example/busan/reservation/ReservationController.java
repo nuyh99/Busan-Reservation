@@ -4,6 +4,7 @@ import com.example.busan.auth.domain.Authorized;
 import com.example.busan.auth.dto.Authentication;
 import com.example.busan.reservation.dto.CancelReservationRequest;
 import com.example.busan.reservation.dto.CreateReservationRequest;
+import com.example.busan.reservation.dto.FindReservationRequest;
 import com.example.busan.reservation.dto.ReservationResponse;
 import com.example.busan.reservation.dto.UpdateReservationRequest;
 import com.example.busan.reservation.service.ReservationService;
@@ -34,6 +35,7 @@ public class ReservationController {
     @PostMapping
     public ResponseEntity<Void> create(@RequestBody final CreateReservationRequest request) {
         reservationService.create(request);
+
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -42,6 +44,7 @@ public class ReservationController {
                                        @Authorized final Authentication authentication,
                                        @RequestBody final CancelReservationRequest request) {
         reservationService.deleteById(id, authentication.email(), request);
+
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
@@ -50,13 +53,25 @@ public class ReservationController {
                                        @Authorized final Authentication authentication,
                                        @RequestBody final UpdateReservationRequest request) {
         reservationService.update(id, authentication.email(), request);
+
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @GetMapping
-    public ResponseEntity<Page<ReservationResponse>> findAll(@Authorized final Authentication authentication,
-                                                             @PageableDefault final Pageable pageable) {
-        final Page<ReservationResponse> response = reservationService.findAll(authentication.email(), pageable);
+    public ResponseEntity<Page<ReservationResponse>> findAllByCurrentLoggedInMember(
+            @Authorized final Authentication authentication,
+            @PageableDefault final Pageable pageable) {
+        final Page<ReservationResponse> response = reservationService.findAllByCurrentLoggedInMember(
+                authentication.email(), pageable);
+
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<Page<ReservationResponse>> findAll(@PageableDefault final Pageable pageable,
+                                                             final FindReservationRequest request) {
+        final Page<ReservationResponse> reservations = reservationService.findAll(request, pageable);
+
+        return ResponseEntity.ok(reservations);
     }
 }

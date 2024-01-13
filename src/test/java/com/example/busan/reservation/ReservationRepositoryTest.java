@@ -139,4 +139,22 @@ class ReservationRepositoryTest {
         assertThat(response).hasSize(2)
                 .isSortedAccordingTo(Comparator.comparing(Reservation::getStartTime).reversed());
     }
+
+    @Test
+    @DisplayName("시작일이 두 날짜 사이의 전체 예약을 조회한다")
+    void findAllByStartTimeBetween() {
+        reservationRepository.save(new Reservation(1L, LocalDateTime.of(2050, 11, 10, 13, 0), LocalDateTime.of(2050, 11, 10, 15, 30)));
+        reservationRepository.save(new Reservation(1L, LocalDateTime.of(2070, 11, 10, 13, 1), LocalDateTime.of(2070, 11, 10, 15, 30)));
+        reservationRepository.save(new Reservation(1L, LocalDateTime.of(2070, 11, 10, 13, 2), LocalDateTime.of(2070, 11, 10, 15, 30)));
+        final PageRequest pageRequest = PageRequest.of(0, 2, Sort.by("startTime").descending());
+
+        //when
+        final List<Reservation> response = reservationRepository.findAllByStartTimeBetween(
+                        LocalDateTime.of(2050, 11, 10, 13, 0), LocalDateTime.of(2070, 11, 10, 13, 1), pageRequest)
+                .getContent();
+
+        //then
+        assertThat(response).hasSize(2)
+                .isSortedAccordingTo(Comparator.comparing(Reservation::getStartTime).reversed());
+    }
 }

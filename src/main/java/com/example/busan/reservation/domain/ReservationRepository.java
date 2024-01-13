@@ -36,4 +36,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     Optional<Reservation> findByIdAndReservationEmailAndStatusIsNot(Long id, String email, Status status);
 
     Page<Reservation> findAllByReservationEmail(String reservationEmail, Pageable pageable);
+
+    Page<Reservation> findAllByStartTimeBetween(LocalDateTime startInclusive, LocalDateTime endInclusive, Pageable pageable);
 }
