@@ -69,7 +69,7 @@ public class ReservationController {
 
     @GetMapping("/all")
     public ResponseEntity<Page<ReservationResponse>> findAll(@PageableDefault final Pageable pageable,
-                                                             final FindReservationRequest request) {
+                                                             @RequestBody final FindReservationRequest request) {
         final Page<ReservationResponse> reservations = reservationService.findAll(request, pageable);
 
         return ResponseEntity.ok(reservations);
