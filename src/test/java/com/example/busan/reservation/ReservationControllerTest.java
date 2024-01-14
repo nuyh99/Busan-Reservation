@@ -20,6 +20,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockHttpSession;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
@@ -202,17 +203,16 @@ class ReservationControllerTest extends ApiTest {
                         get("/reservations/all")
                                 .queryParam("page", "1")
                                 .queryParam("size", "10")
-                                .session(httpSession)
-                                .content(request)
-                                .contentType(APPLICATION_JSON))
+                                .queryParam("start", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME))
+                                .queryParam("end", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME))
+                                .session(httpSession))
                 .andDo(print())
                 .andDo(document("전체 회의실 예약 목록 최신 순으로 보기",
                         queryParameters(
                                 parameterWithName("page").description("페이지는 1부터 시작 (디폴트값 1)").optional(),
-                                parameterWithName("size").description("페이지별 사이즈 (디폴트값 10)").optional()),
-                        requestFields(
-                                fieldWithPath("start").description("시작 시각(포함)"),
-                                fieldWithPath("end").description("종료 시각(포함)")),
+                                parameterWithName("size").description("페이지별 사이즈 (디폴트값 10)").optional(),
+                                parameterWithName("start").description("시작 시각(포함)"),
+                                parameterWithName("end").description("종료 시각(포함)")),
                         responseFields(
                                 fieldWithPath("content.[].id").description("예약 ID"),
                                 fieldWithPath("content.[].status").description("예약 상태"),
