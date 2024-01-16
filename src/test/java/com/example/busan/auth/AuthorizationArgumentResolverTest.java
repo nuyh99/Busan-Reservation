@@ -10,6 +10,7 @@ import com.example.busan.auth.exception.UnauthorizedException;
 import com.example.busan.member.domain.Role;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -112,6 +113,8 @@ class AuthorizationArgumentResolverTest {
                 .when(methodParameter).getParameterType();
         given(request.getNativeRequest(HttpServletRequest.class))
                 .willReturn(httpServletRequest);
+        given(httpServletRequest.getSession())
+                .willReturn(mock(HttpSession.class));
         given(httpServletRequest.getCookies())
                 .willReturn(new Cookie[]{new Cookie(AutoLoginManager.AUTO_LOGIN_COOKIE_NAME, "fajselkfjalksej")});
 

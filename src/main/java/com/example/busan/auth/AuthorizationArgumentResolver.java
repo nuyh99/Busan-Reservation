@@ -42,6 +42,9 @@ public class AuthorizationArgumentResolver implements HandlerMethodArgumentResol
         }
 
         final HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
-        return autoLoginManager.getAuthentication(request);
+        final Authentication autoLoggedIn = autoLoginManager.getAuthentication(request);
+
+        request.getSession().setAttribute(AUTHORIZATION, autoLoggedIn);
+        return autoLoggedIn;
     }
 }
