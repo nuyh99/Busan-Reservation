@@ -18,3 +18,9 @@ phone:
   key: testesttstset
   secret: testtestesttestteststestsetstets
   sender: 01012345678
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
